@@ -2,7 +2,7 @@ import firebase from 'firebase';
 import firebaseui from 'firebaseui';
 
 // Required for side-effects
-// import 'firebase/firestore';
+import 'firebase/firestore';
 
 import ENV from 'ENV';
 
@@ -11,11 +11,6 @@ firebase.initializeApp({
   authDomain: ENV.SBA_NODE_FB_AUTHDOMAIN,
   projectId: ENV.SBA_NODE_FB_PROJECTID
 });
-
-//let db = firebase.firestore();
-//db.collection('texts').add({
-//  string: 'hoge'
-//})
 
 let initApp = () => {
   firebase.auth().onAuthStateChanged(user => {
@@ -31,6 +26,12 @@ let initApp = () => {
       user.getIdToken().then(accessToken => {
         console.log(accessToken)
       });
+
+      let db = firebase.firestore();
+      db.collection('texts').add({
+        string: 'hoge'
+      })
+
     } else {
       let uiConfig = {
         signInSuccessUrl: '/',
