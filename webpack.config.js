@@ -5,7 +5,7 @@ module.exports = {
   entry: './src/main.js',
   output: {
     filename: '[name].js',
-    path: __dirname + '/docs'
+    path: path.resolve(__dirname, 'docs')
   },
   module: {
     rules: [
@@ -20,5 +20,11 @@ module.exports = {
         }
       }
     ]
+  },
+  devServer: {
+    contentBase: path.resolve(__dirname, 'docs'),
+    watchContentBase: true,
+    compress: true,
+    port: 8080
   }
 }
