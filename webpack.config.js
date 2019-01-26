@@ -1,11 +1,11 @@
 const path = require('path');
 
-module.exports = {
+module.exports = env => ({
   mode: 'development',
   entry: './src/main.js',
   output: {
     filename: '[name].js',
-    path: path.resolve(__dirname, 'docs')
+    path: path.resolve(__dirname, 'docs'),
   },
   module: {
     rules: [
@@ -15,16 +15,21 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env']
-          }
-        }
-      }
-    ]
+            presets: ['@babel/preset-env'],
+          },
+        },
+      },
+    ],
+  },
+  resolve: {
+    alias: {
+      ENV: path.resolve(__dirname, `env/${env || 'development'}.js`),
+    },
   },
   devServer: {
     contentBase: path.resolve(__dirname, 'docs'),
     watchContentBase: true,
     compress: true,
-    port: 8080
-  }
-}
+    port: 8080,
+  },
+})
