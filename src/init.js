@@ -1,6 +1,11 @@
 import firebase from 'firebase';
 import firebaseui from 'firebaseui';
 
+import React from 'react'
+import ReactDOM from 'react-dom'
+
+import MainPage from './com'
+
 import ENV from 'ENV';
 
 firebase.initializeApp({
@@ -23,8 +28,10 @@ export default () => {
       user.getIdToken().then(accessToken => {
         console.log(accessToken)
       });
-
+      window.saveBrainAppFirebaseUser = user
+      ReactDOM.render(<MainPage />, document.getElementById('main'))
     } else {
+      window.saveBrainAppFirebaseUser = {}
       let uiConfig = {
         signInSuccessUrl: '/',
         signInOptions: [
