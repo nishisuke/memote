@@ -26,16 +26,15 @@ export default class MainPage extends React.Component {
   handleSubmit() {
     let db = firebase.firestore();
     let hoge = db.collection('texts').doc()
-    this.setState({ texts: [...this.state.texts, {string: this.state.value, id: hoge.id, write: false}]})
-
-    hoge.set({
+    let data = {
       string: this.state.value,
       user_id: window.saveBrainAppFirebaseUser.uid
-    }).then(() => {
-      let arr = this.state.texts.filter(text => (text.id != hoge.id))
-      let item = this.state.texts.find(text => (text.id == hoge.id))
-      this.setState({ texts: [...arr, {...item, write: true}]})
+    }
+
+    hoge.set(data).then(() => {
+      this.setState({ texts: [...this.state.texts, {...data, id: hoge.id}]})
     }).catch(e => {
+      console.log(e)
       console.log('text write fail')
     })
   }
