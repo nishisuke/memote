@@ -54,6 +54,20 @@ export default class MainPage extends React.Component {
       .catch(function(error) {
         console.log("Error getting documents: ", error);
       });
+
+    query.onSnapshot({includeMetadataChanges: true}, snapshot => {
+        snapshot.docChanges().forEach(change => {
+          if (change.type === "added") {
+            this.setState({ texts: [...this.state.texts, {...change.doc.data(), id: change.doc.id}]})
+
+            console.log(snapshot.metadata.hasPendingWrites)
+            
+          var source = snapshot.metadata.fromCache ? "local cache" : "server";
+          console.log("Data came from " + source);
+
+          }
+      });
+    })
   }
 
   render() {

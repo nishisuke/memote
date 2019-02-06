@@ -17,6 +17,19 @@ firebase.initializeApp({
   projectId: ENV.SBA_NODE_FB_PROJECTID
 });
 
+firebase.firestore().enablePersistence()
+  .catch(err => {
+    if (err.code == 'failed-precondition') {
+      console.log(err.code)
+      // Multiple tabs open, persistence can only be enabled
+      // in one tab at a a time.
+    } else if (err.code == 'unimplemented') {
+      console.log(err.code)
+      // The current browser does not support all of the
+      // features required to enable persistence
+    }
+  });
+
 export default () => {
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
