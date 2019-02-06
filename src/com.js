@@ -28,18 +28,19 @@ export default class MainPage extends React.Component {
       user_id: window.saveBrainAppFirebaseUser.uid
     }
 
-    hoge.set(data).then(() => {
-      this.setState({ texts: [...this.state.texts, {...data, id: hoge.id}]})
-    }).catch(e => {
-      console.log(e)
-      console.log('text write fail')
-    })
+    hoge.set(data)
+    //  .then(() => {
+    //  this.setState({ texts: [...this.state.texts, {...data, id: hoge.id}]})
+    //}).catch(e => {
+    //  console.log(e)
+    //  console.log('text write fail')
+    //})
   }
 
   componentDidMount() {
     let db = firebase.firestore();
-    let user = db.collection("texts").where("user_id", "==", window.saveBrainAppFirebaseUser.uid)
-      .get()
+    let query = db.collection("texts").where("user_id", "==", window.saveBrainAppFirebaseUser.uid)
+      query.get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
           // doc.data() is never undefined for query doc snapshots
