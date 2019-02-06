@@ -23,7 +23,7 @@ module.exports = env => ({
   },
   resolve: {
     alias: {
-      ENV: path.resolve(__dirname, `env/${env || 'development'}.js`),
+      ENV: path.resolve(__dirname, `env/${env.production ? 'production' : 'development'}.js`),
     },
   },
   devServer: {
