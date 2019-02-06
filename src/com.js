@@ -1,8 +1,5 @@
 import firebase from 'firebase';
 
-// Required for side-effects
-import 'firebase/firestore';
-
 import React from 'react'
 import Text from './text'
 

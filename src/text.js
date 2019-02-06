@@ -1,8 +1,4 @@
 import React from 'react'
-import firebase from 'firebase';
-
-// Required for side-effects
-import 'firebase/firestore';
 
 export default class Text extends React.Component {
    constructor(props) {

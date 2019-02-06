@@ -1,6 +1,9 @@
 import firebase from 'firebase';
 import firebaseui from 'firebaseui';
 
+// Required for side-effects
+import 'firebase/firestore';
+
 import React from 'react'
 import ReactDOM from 'react-dom'
 
