@@ -25,7 +25,8 @@ export default class MainPage extends React.Component {
     let hoge = db.collection('texts').doc()
     let data = {
       string: this.state.value,
-      user_id: window.saveBrainAppFirebaseUser.uid
+      user_id: window.saveBrainAppFirebaseUser.uid,
+      archived: false
     }
 
     hoge.set(data)
@@ -39,32 +40,25 @@ export default class MainPage extends React.Component {
 
   componentDidMount() {
     let db = firebase.firestore();
-    let query = db.collection("texts").where("user_id", "==", window.saveBrainAppFirebaseUser.uid)
-      query.get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          // doc.data() is never undefined for query doc snapshots
-          // console.log(doc.id, " => ", doc.data());
-
-          let arr = this.state.texts.filter(text => (text.id != doc.id))
-          this.setState({ texts: [...arr, {...doc.data(), write: true, id: doc.id}]})
-        });
-
-      })
-      .catch(function(error) {
-        console.log("Error getting documents: ", error);
-      });
+    let query = db.collection("texts")
+      .where("user_id", "==", window.saveBrainAppFirebaseUser.uid)
+      .where('archived', '==', false)
 
     query.onSnapshot({includeMetadataChanges: true}, snapshot => {
         snapshot.docChanges().forEach(change => {
+          console.log(change.type)
           if (change.type === "added") {
             this.setState({ texts: [...this.state.texts, {...change.doc.data(), id: change.doc.id}]})
 
-            console.log(snapshot.metadata.hasPendingWrites)
+            // console.log(snapshot.metadata.hasPendingWrites)
             
           var source = snapshot.metadata.fromCache ? "local cache" : "server";
-          console.log("Data came from " + source);
+      //    console.log("Data came from " + source);
 
+          }
+          if (change.type === "removed") {
+            let ho = this.state.texts.filter(t => (t.id != change.doc.id))
+            this.setState({ texts: [...ho]})
           }
       });
     })

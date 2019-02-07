@@ -42,7 +42,7 @@ export default () => {
       // let phoneNumber = user.phoneNumber;
       // let providerData = user.providerData;
       user.getIdToken().then(accessToken => {
-        console.log(accessToken)
+        // console.log(accessToken)
       });
       window.saveBrainAppFirebaseUser = user
       ReactDOM.render(<MainPage />, document.getElementById('main'))
