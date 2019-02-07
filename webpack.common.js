@@ -1,7 +1,6 @@
 const path = require('path');
 
-module.exports = env => ({
-  mode: 'development',
+module.exports = {
   entry: './src/main.js',
   output: {
     filename: '[name].js',
@@ -21,15 +20,4 @@ module.exports = env => ({
       },
     ],
   },
-  resolve: {
-    alias: {
-      ENV: path.resolve(__dirname, `env/${env.production ? 'production' : 'development'}.js`),
-    },
-  },
-  devServer: {
-    contentBase: path.resolve(__dirname, 'docs'),
-    watchContentBase: true,
-    compress: true,
-    port: 8080,
-  },
-})
+}
