@@ -2,6 +2,7 @@ import firebase from 'firebase';
 
 import React from 'react'
 import Text from './text'
+import Arc from './archived'
 
 export default class MainPage extends React.Component {
   constructor(props) {
@@ -70,6 +71,7 @@ export default class MainPage extends React.Component {
       { this.state.texts.map(text => <Text key={text.id} data={text}/>)}
       <textarea onChange={this.handleChange} value={this.value} />
       <button onClick={this.handleSubmit}>作成</button>
+      <Arc />
       </div>
     )
   }
