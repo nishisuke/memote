@@ -27,7 +27,8 @@ export default class MainPage extends React.Component {
     let data = {
       string: this.state.value,
       user_id: window.saveBrainAppFirebaseUser.uid,
-      archived: false
+      archived: false,
+      archivedAt: new Date(2099, 3),
     }
 
     hoge.set(data)

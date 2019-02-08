@@ -14,7 +14,7 @@ export default class Text extends React.Component {
   archive() {
     let db = firebase.firestore();
     let text = db.collection('texts').doc(this.props.data.id)
-    text.update({ archived: true })
+    text.update({ archived: true, archivedAt: new Date() })
   }
 
   componentDidMount() {
