@@ -16,3 +16,6 @@
 - db firestore
 - html, js, css
 - host -> firebase hosting
+
+## TODO
+prd deploy
