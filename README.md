@@ -9,3 +9,10 @@
 - [x] アーカイブ戻しできる  
 - [ ]   
 - [ ] カレンダーアサイン日今日以前が見れる  
+
+## arch
+- ios safari
+- pc chrome
+- db firestore
+- html, js, css
+- host -> firebase hosting
