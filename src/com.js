@@ -1,5 +1,6 @@
 import firebase from 'firebase/app';
 
+import 'bulma/css/bulma.css'
 import React from 'react'
 import Text from './text'
 import Arc from './archived'
@@ -69,6 +70,12 @@ export default class MainPage extends React.Component {
   render() {
     return (
       <div>
+        <div className="modal is-active">
+          <div className="modal-background"></div>
+          <div className="modal-content">
+          </div>
+          <button className="modal-close is-large" aria-label="close"></button>
+        </div>
       { this.state.texts.map(text => <Text key={text.id} data={text}/>)}
       <textarea onChange={this.handleChange} value={this.value} />
       <button onClick={this.handleSubmit}>作成</button>
