@@ -33,6 +33,7 @@
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
+    "bulma": "^0.7.4",
     "firebase": "^5.8.1",
     "firebaseui": "^3.5.2",
     "react": "^16.7.0",
