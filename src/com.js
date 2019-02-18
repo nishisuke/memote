@@ -23,6 +23,7 @@ export default class MainPage extends React.Component {
 
   hideModal() {
     this.setState({showModal: false});
+    this.handleSubmit()
   }
 
   showModal() {
@@ -83,13 +84,11 @@ export default class MainPage extends React.Component {
         <div className={`modal${this.state.showModal ? ' is-active' : ''}`}>
         <div className="modal-background"></div>
         <div className="modal-content">
-        <textarea  onBlur={this.hideModal} className='is-size-6' />
+        <textarea onChange={this.handleChange} value={this.value} onBlur={this.hideModal} className='is-size-6' />
         </div>
         <button className="modal-close is-large" onClick={this.hideModal} aria-label="close"></button>
         </div>
         { this.state.texts.map(text => <Text key={text.id} data={text}/>)}
-        <textarea onChange={this.handleChange} value={this.value} />
-        <button onClick={this.handleSubmit}>作成</button>
       <div className='has-text-centered'>
         <button className='button is-medium hoge' onClick={this.showModal}>memo</button>
       </div>
