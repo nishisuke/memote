@@ -83,6 +83,7 @@ export default class MainPage extends React.Component {
         <div className={`modal${this.state.showModal ? ' is-active' : ''}`}>
         <div className="modal-background"></div>
         <div className="modal-content">
+        <textarea />
         </div>
         <button className="modal-close is-large" onClick={this.hideModal} aria-label="close"></button>
         </div>
