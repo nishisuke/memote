@@ -11,11 +11,22 @@ export default class MainPage extends React.Component {
 
     this.state = {
       value: '',
-      texts: []
+      texts: [],
+      showModal: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.showModal = this.showModal.bind(this);
+    this.hideModal = this.hideModal.bind(this);
+  }
+
+  hideModal() {
+    this.setState({showModal: false});
+  }
+
+  showModal() {
+    this.setState({showModal: true});
   }
 
   handleChange(event) {
@@ -48,21 +59,20 @@ export default class MainPage extends React.Component {
       .where('archived', '==', false)
 
     query.onSnapshot({includeMetadataChanges: true}, snapshot => {
-        snapshot.docChanges().forEach(change => {
-          console.log(change.type)
-          if (change.type === "added") {
-            this.setState({ texts: [...this.state.texts, {...change.doc.data(), id: change.doc.id}]})
+      snapshot.docChanges().forEach(change => {
+        if (change.type === "added") {
+          this.setState({ texts: [...this.state.texts, {...change.doc.data(), id: change.doc.id}]})
 
-            // console.log(snapshot.metadata.hasPendingWrites)
-            
+          // console.log(snapshot.metadata.hasPendingWrites)
+
           var source = snapshot.metadata.fromCache ? "local cache" : "server";
-      //    console.log("Data came from " + source);
+          //    console.log("Data came from " + source);
 
-          }
-          if (change.type === "removed") {
-            let ho = this.state.texts.filter(t => (t.id != change.doc.id))
-            this.setState({ texts: [...ho]})
-          }
+        }
+        if (change.type === "removed") {
+          let ho = this.state.texts.filter(t => (t.id != change.doc.id))
+          this.setState({ texts: [...ho]})
+        }
       });
     })
   }
@@ -70,16 +80,19 @@ export default class MainPage extends React.Component {
   render() {
     return (
       <div>
-        <div className="modal is-active">
-          <div className="modal-background"></div>
-          <div className="modal-content">
-          </div>
-          <button className="modal-close is-large" aria-label="close"></button>
+        <div className={`modal${this.state.showModal ? ' is-active' : ''}`}>
+        <div className="modal-background"></div>
+        <div className="modal-content">
         </div>
-      { this.state.texts.map(text => <Text key={text.id} data={text}/>)}
-      <textarea onChange={this.handleChange} value={this.value} />
-      <button onClick={this.handleSubmit}>作成</button>
-      <Arc />
+        <button className="modal-close is-large" onClick={this.hideModal} aria-label="close"></button>
+        </div>
+        { this.state.texts.map(text => <Text key={text.id} data={text}/>)}
+        <textarea onChange={this.handleChange} value={this.value} />
+        <button onClick={this.handleSubmit}>作成</button>
+      <div className='has-text-centered'>
+        <button className='button is-medium hoge' onClick={this.showModal}>memo</button>
+      </div>
+        <Arc />
       </div>
     )
   }
