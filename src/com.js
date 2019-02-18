@@ -35,7 +35,7 @@ export default class MainPage extends React.Component {
 
   handleSubmit() {
     let db = firebase.firestore();
-    let hoge = db.collection('texts').doc()
+    let doc = db.collection('texts').doc()
     let data = {
       string: this.state.value,
       user_id: window.saveBrainAppFirebaseUser.uid,
@@ -43,7 +43,7 @@ export default class MainPage extends React.Component {
       archivedAt: new Date(2099, 3),
     }
 
-    hoge.set(data)
+    doc.set(data)
     //  .then(() => {
     //  this.setState({ texts: [...this.state.texts, {...data, id: hoge.id}]})
     //}).catch(e => {
@@ -83,7 +83,7 @@ export default class MainPage extends React.Component {
         <div className={`modal${this.state.showModal ? ' is-active' : ''}`}>
         <div className="modal-background"></div>
         <div className="modal-content">
-        <textarea className='is-size-6' />
+        <textarea  onBlur={this.hideModal} className='is-size-6' />
         </div>
         <button className="modal-close is-large" onClick={this.hideModal} aria-label="close"></button>
         </div>
