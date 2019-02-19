@@ -19,6 +19,15 @@ export default class MainPage extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
+    this.out = this.out.bind(this);
+  }
+
+  out() {
+    firebase.auth().signOut().then(function() {
+      // Sign-out successful.
+    }).catch(function(error) {
+      // An error happened.
+    });
   }
 
   hideModal() {
@@ -81,6 +90,7 @@ export default class MainPage extends React.Component {
   render() {
     return (
       <div>
+        <button className='button is-medium' onClick={this.out}>out</button>
         <div className={`modal${this.state.showModal ? ' is-active' : ''}`}>
         <div className="modal-background"></div>
         <div className="modal-content">
