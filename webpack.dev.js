@@ -4,8 +4,12 @@ const path = require('path');
 
 module.exports = merge(common, {
   mode: 'development',
+  output: {
+    filename: '[name].js',
+    path: path.resolve(__dirname, 'dev'),
+  },
   devServer: {
-    contentBase: path.resolve(__dirname, 'docs'),
+    contentBase: path.resolve(__dirname, 'dev'),
     watchContentBase: true,
     compress: true,
     port: 8080,
