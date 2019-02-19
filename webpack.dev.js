@@ -1,6 +1,8 @@
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = merge(common, {
   mode: 'development',
@@ -14,6 +16,12 @@ module.exports = merge(common, {
     compress: true,
     port: 8080,
   },
+  plugins: [
+    new CleanWebpackPlugin(['dev']),
+    new HtmlWebpackPlugin({
+      template: 'src/index.html',
+    }),
+  ],
   resolve: {
     alias: {
       ENV: path.resolve(__dirname, `env/development.js`),
