@@ -102,7 +102,7 @@ export default class MainPage extends React.Component {
         </div>
         { this.state.texts.map(text => <Text key={text.id} data={text}/>)}
       <div className='has-text-centered'>
-        <button className='button is-medium hoge' onClick={this.showModal}>memo</button>
+        <button className='button is-medium ab' onClick={this.showModal}>memo</button>
       </div>
         <Arc />
       </div>
