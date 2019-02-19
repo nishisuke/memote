@@ -34,7 +34,6 @@ module.exports = {
   devServer: {
     contentBase: path.resolve(__dirname, 'dev'),
     watchContentBase: true,
-    compress: true,
     port: 8080,
   },
   plugins: [
