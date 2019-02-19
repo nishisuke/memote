@@ -18,5 +18,5 @@
 - host -> firebase hosting
 
 ## TODO
-hash to file suffix firebase hosting cache js 1hour default
-this is for invalidate cache at deploying
+- [ ] css modules
+- [ ] html div -> js div createelement
