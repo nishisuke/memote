@@ -1,9 +1,7 @@
-const merge = require('webpack-merge');
-const common = require('./webpack.common.js');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = merge(common, {
+module.exports = {
   mode: 'development',
   entry: {
     js: './src/main.js',
@@ -49,4 +47,4 @@ module.exports = merge(common, {
       ENV: path.resolve(__dirname, `env/development.js`),
     },
   },
-})
+}
