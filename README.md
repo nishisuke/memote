@@ -18,4 +18,5 @@
 - host -> firebase hosting
 
 ## TODO
-prd deploy
+hash to file suffix firebase hosting cache js 1hour default
+this is for invalidate cache at deploying
