@@ -1,7 +1,10 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/main.js',
+  entry: {
+    mainJs: './src/main.js',
+    mainCss: './src/main.css',
+  },
   module: {
     rules: [
       {

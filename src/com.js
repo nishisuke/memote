@@ -1,6 +1,5 @@
 import firebase from 'firebase/app';
 
-import 'bulma/css/bulma.css'
 import React from 'react'
 import Text from './text'
 import Arc from './archived'
