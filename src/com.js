@@ -89,14 +89,16 @@ export default class MainPage extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className='scroll'>
         <button className='button is-medium' onClick={this.out}>out</button>
         <div className={`modal${this.state.showModal ? ' is-active' : ''}`}>
-        <div className="modal-background"></div>
-        <div className="modal-content">
-        <textarea onChange={this.handleChange} value={this.value} onBlur={this.hideModal} className='is-size-6' />
-        </div>
-        <button className="modal-close is-large" onClick={this.hideModal} aria-label="close"></button>
+          <div className="modal-background"></div>
+          <div className="modal-content">
+            <div className='control is-loading'>
+              <textarea onChange={this.handleChange} value={this.value} onBlur={this.hideModal} className='textarea' rows='12' />
+            </div>
+          </div>
+          <button className="modal-close is-large" onClick={this.hideModal} aria-label="close"></button>
         </div>
         { this.state.texts.map(text => <Text key={text.id} data={text}/>)}
       <div className='has-text-centered'>
