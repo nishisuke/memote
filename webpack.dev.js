@@ -9,7 +9,7 @@ module.exports = {
   },
   output: {
     filename: chunkData => {
-      return chunkData.chunk.name === 'js' ? 'main.js' : 'main.css'
+      return chunkData.chunk.name === 'js' ? 'main.js' : 'css.js'
     },
     path: path.resolve(__dirname, 'dev'),
   },
@@ -32,8 +32,6 @@ module.exports = {
     ],
   },
   devServer: {
-    contentBase: path.resolve(__dirname, 'dev'),
-    watchContentBase: true,
     port: 8080,
   },
   plugins: [
