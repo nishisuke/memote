@@ -1,3 +1,4 @@
+import './main.css'
 import firebase from 'firebase/app';
 import 'firebase/firestore'; // Required for side-effects
 import firebaseui from 'firebaseui';
