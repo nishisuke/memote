@@ -3,14 +3,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: 'development',
-  entry: {
-    js: './src/main.js',
-    css: './src/main.css',
-  },
+  entry: './src/main.js',
   output: {
-    filename: chunkData => {
-      return chunkData.chunk.name === 'js' ? 'main.js' : 'css.js'
-    },
+    filename: '[name].js',
     path: path.resolve(__dirname, 'dev'),
   },
   module: {
