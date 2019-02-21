@@ -6,8 +6,8 @@ export default class Text extends React.Component {
     super(props);
 
     this.state = {
-      pageX: props.data.pageX,
-      pageY: props.data.pageY,
+      pageX: props.data.pageXRate * window.innerWidth,
+      pageY: props.data.pageYRate * window.innerHeight,
     };
 
     this.archive = this.archive.bind(this);
@@ -63,7 +63,7 @@ export default class Text extends React.Component {
   storePoint() {
     let db = firebase.firestore();
     let text = db.collection('texts').doc(this.props.data.id)
-    text.update({ pageX: this.state.pageX, pageY: this.state.pageY })
+    text.update({ pageXRate: this.state.pageX / window.innerWidth, pageYRate: this.state.pageY / window.innerHeight })
   }
 
 //  <button onClick={this.archive}>x</button>
