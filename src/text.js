@@ -17,13 +17,10 @@ export default class Text extends React.Component {
     text.update({ archived: true, archivedAt: new Date() })
   }
 
-  componentDidMount() {
-  }
-
   render() {
     return (
       <div>
-      {`${this.props.data.write}: ${this.props.data.string}`}
+      {this.props.data.string}
       <button onClick={this.archive}>x</button>
       </div>
     )
