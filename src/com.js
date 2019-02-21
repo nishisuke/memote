@@ -77,11 +77,10 @@ export default class MainPage extends React.Component {
 //        <p>{screen.availHeight}</p>
 //        <p>{document.body.clientHeight}</p>
 //        <p>{document.documentElement.clientHeight}</p>
+//        <p>{window.innerHeight}</p>
   render() {
     return (
       <div className='scroll'>
-        <p>{window.innerHeight}</p>
-      
         <button className='button is-medium' onClick={this.out}>out</button>
         { this.state.showModal ? <OpenedModal unmountMe={this.hideModal} docID={this.state.modalID} docData={this.state.modalDoc}/> : ''}
         { this.state.texts.map(text => <Text key={text.id} data={text} edit={this.showModal(text.id, text)}/>)}
