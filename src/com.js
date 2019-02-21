@@ -61,6 +61,12 @@ export default class MainPage extends React.Component {
     //})
   }
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (document.getElementsByClassName('modal is-active')[0]) {
+    document.getElementById('ta').focus()
+    }
+  }
+
   componentDidMount() {
     let db = firebase.firestore();
     let query = db.collection("texts")
@@ -101,7 +107,8 @@ export default class MainPage extends React.Component {
           <div className="modal-background"></div>
           <div className="modal-content">
             <div className='control is-loading'>
-              <textarea onChange={this.handleChange} value={this.value} onBlur={this.hideModal} className='textarea' rows='12' />
+
+              <textarea id='ta' onChange={this.handleChange} value={this.value} onBlur={this.hideModal} className='textarea' rows='12' />
             </div>
           </div>
           <button className="modal-close is-large" onClick={this.hideModal} aria-label="close"></button>
