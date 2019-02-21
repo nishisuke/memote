@@ -1,0 +1,6 @@
+{
+  "short_name": "SBA",
+  "name": "Save brain app",
+  "display": "standalone",
+  "start_url": "/"
+}
