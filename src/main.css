@@ -10,9 +10,8 @@
 }
 .scroll {
   height: 100%;
-  overflow-y: scroll;
   width: 100vw;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 .moveabs {
   position: absolute;
