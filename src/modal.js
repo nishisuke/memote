@@ -6,7 +6,7 @@ export default class Modal extends React.Component {
     super(props);
 
     this.state = {
-      value: '',
+      value: props.docData.string || '',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -20,7 +20,8 @@ export default class Modal extends React.Component {
 
   handleSubmit() {
     let db = firebase.firestore();
-    let doc = db.collection('texts').doc()
+    let col = db.collection('texts')
+    let doc = this.props.docID ? col.doc(this.props.docID) : col.doc()
     let data = {
       string: this.state.value,
       user_id: window.saveBrainAppFirebaseUser.uid,

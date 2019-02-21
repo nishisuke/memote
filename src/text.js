@@ -2,13 +2,18 @@ import React from 'react'
 import firebase from 'firebase/app';
 
 export default class Text extends React.Component {
-   constructor(props) {
+  constructor(props) {
     super(props);
 
     this.state = {
     };
 
     this.archive = this.archive.bind(this);
+    this.hoge = this.hoge.bind(this);
+  }
+
+  hoge() {
+    this.props.edit()
   }
 
   archive() {
@@ -17,11 +22,11 @@ export default class Text extends React.Component {
     text.update({ archived: true, archivedAt: new Date() })
   }
 
+//  <button onClick={this.archive}>x</button>
   render() {
     return (
-      <div>
+      <div onClick={this.hoge}>
       {this.props.data.string.split('\n')[0]}
-      <button onClick={this.archive}>x</button>
       </div>
     )
   }

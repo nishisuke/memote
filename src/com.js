@@ -31,8 +31,14 @@ export default class MainPage extends React.Component {
     this.setState({showModal: false});
   }
 
-  showModal() {
-    this.setState({showModal: true});
+  showModal(id, doc) {
+    return () => {
+      this.setState({
+        modalID: id,
+        modalDoc: doc,
+        showModal: true,
+      });
+    }
   }
 
   componentDidMount() {
@@ -71,10 +77,10 @@ export default class MainPage extends React.Component {
         <p>{window.innerHeight}</p>
       
         <button className='button is-medium' onClick={this.out}>out</button>
-        { this.state.showModal ? <OpenedModal unmountMe={this.hideModal} /> : ''}
-        { this.state.texts.map(text => <Text key={text.id} data={text}/>)}
+        { this.state.showModal ? <OpenedModal unmountMe={this.hideModal} docID={this.state.modalID} docData={this.state.modalDoc}/> : ''}
+        { this.state.texts.map(text => <Text key={text.id} data={text} edit={this.showModal(text.id, text)}/>)}
         <div className='has-text-centered'>
-          <button className='button is-medium ab' onClick={this.showModal}>memo</button>
+          <button className='button is-medium ab' onClick={this.showModal(null, {})}>memo</button>
         </div>
         <Arc />
       </div>
