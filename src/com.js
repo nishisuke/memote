@@ -2,6 +2,7 @@ import firebase from 'firebase/app';
 
 import React from 'react'
 import Text from './text'
+import OpenedModal from './modal'
 import Arc from './archived'
 
 export default class MainPage extends React.Component {
@@ -9,13 +10,10 @@ export default class MainPage extends React.Component {
     super(props);
 
     this.state = {
-      value: '',
       texts: [],
       showModal: false,
     };
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
     this.out = this.out.bind(this);
@@ -31,40 +29,10 @@ export default class MainPage extends React.Component {
 
   hideModal() {
     this.setState({showModal: false});
-    this.handleSubmit()
   }
 
   showModal() {
     this.setState({showModal: true});
-  }
-
-  handleChange(event) {
-    this.setState({value: event.target.value});
-  }
-
-  handleSubmit() {
-    let db = firebase.firestore();
-    let doc = db.collection('texts').doc()
-    let data = {
-      string: this.state.value,
-      user_id: window.saveBrainAppFirebaseUser.uid,
-      archived: false,
-      archivedAt: new Date(2099, 3),
-    }
-
-    doc.set(data)
-    //  .then(() => {
-    //  this.setState({ texts: [...this.state.texts, {...data, id: hoge.id}]})
-    //}).catch(e => {
-    //  console.log(e)
-    //  console.log('text write fail')
-    //})
-  }
-
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (document.getElementsByClassName('modal is-active')[0]) {
-    document.getElementById('ta').focus()
-    }
   }
 
   componentDidMount() {
@@ -103,20 +71,11 @@ export default class MainPage extends React.Component {
         <p>{window.innerHeight}</p>
       
         <button className='button is-medium' onClick={this.out}>out</button>
-        <div className={`modal${this.state.showModal ? ' is-active' : ''}`}>
-          <div className="modal-background"></div>
-          <div className="modal-content">
-            <div className='control is-loading'>
-
-              <textarea id='ta' onChange={this.handleChange} value={this.value} onBlur={this.hideModal} className='textarea' rows='12' />
-            </div>
-          </div>
-          <button className="modal-close is-large" onClick={this.hideModal} aria-label="close"></button>
-        </div>
+        { this.state.showModal ? <OpenedModal unmountMe={this.hideModal} /> : ''}
         { this.state.texts.map(text => <Text key={text.id} data={text}/>)}
-      <div className='has-text-centered'>
-        <button className='button is-medium ab' onClick={this.showModal}>memo</button>
-      </div>
+        <div className='has-text-centered'>
+          <button className='button is-medium ab' onClick={this.showModal}>memo</button>
+        </div>
         <Arc />
       </div>
     )
