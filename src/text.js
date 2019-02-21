@@ -20,7 +20,7 @@ export default class Text extends React.Component {
   render() {
     return (
       <div>
-      {this.props.data.string}
+      {this.props.data.string.split('\n')[0]}
       <button onClick={this.archive}>x</button>
       </div>
     )
