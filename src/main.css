@@ -1,1 +1,17 @@
 @import url('~bulma/css/bulma.css');
+
+.ab {
+  position: absolute;
+  bottom: 32px;
+}
+.fixed-app {
+  height: 100%;
+  overflow: hidden;
+}
+.scroll {
+  height: 100%;
+  overflow: scroll;
+}
+.moveabs {
+  position: absolute;
+}
