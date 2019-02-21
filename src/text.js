@@ -31,13 +31,23 @@ export default class Text extends React.Component {
       if (event.targetTouches.length == 1) {
         let touch = event.targetTouches[0]
         this.setState({ pageX: touch.pageX + 'px', pageY: touch.pageY + 'px' })
+        if (touch.pageX < 40 && touch.pageY > 400) {
+          ele.style.color = 'red'
+        } else {
+          ele.style.color = 'black'
+        }
       }
     }, { passive: true })
     // ele.addEventListener('touchstart', event => {
     // }, { passive: true })
     ele.addEventListener('touchend', event => {
       if (event.targetTouches.length == 0) {
+        let touch = event.changedTouches[0]
+        if (touch.pageX < 40 && touch.pageY > 400) {
+          this.archive()
+        } else {
         this.storePoint()
+        }
       }
     }, { passive: true })
   }
