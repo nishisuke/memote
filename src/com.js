@@ -3,7 +3,7 @@ import firebase from 'firebase/app';
 import React from 'react'
 import Text from './text'
 import OpenedModal from './modal'
-import Arc from './archived'
+import Menu from './menu'
 
 export default class MainPage extends React.Component {
   constructor(props) {
@@ -12,23 +12,36 @@ export default class MainPage extends React.Component {
     this.state = {
       texts: [],
       showModal: false,
+      showMenu: false,
+      modalID: null,
+      modalDoc: {},
     };
 
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
-    this.out = this.out.bind(this);
-  }
-
-  out() {
-    firebase.auth().signOut().then(function() {
-      // Sign-out successful.
-    }).catch(function(error) {
-      // An error happened.
-    });
+    this.showMenu = this.showMenu.bind(this);
+    this.hideMenu = this.hideMenu.bind(this);
   }
 
   hideModal() {
-    this.setState({showModal: false});
+    this.setState({
+      showModal: false,
+      modalID: null,
+      modalDoc: {},
+    });
+  }
+
+  hideMenu() {
+    this.setState({ showMenu: false });
+  }
+
+  showMenu() {
+    this.setState({
+      showMenu: true,
+      showModal: false,
+      modalID: null,
+      modalDoc: {},
+    });
   }
 
   showModal(id, doc) {
@@ -37,6 +50,7 @@ export default class MainPage extends React.Component {
         modalID: id,
         modalDoc: doc,
         showModal: true,
+        showMenu: false,
       });
     }
   }
@@ -81,13 +95,19 @@ export default class MainPage extends React.Component {
   render() {
     return (
       <div className='scroll'>
-        <button className='button is-medium' onClick={this.out}>out</button>
-        { this.state.showModal ? <OpenedModal unmountMe={this.hideModal} docID={this.state.modalID} docData={this.state.modalDoc}/> : ''}
+        { this.state.showModal ?
+          <OpenedModal unmountMe={this.hideModal} docID={this.state.modalID} docData={this.state.modalDoc}/>
+          : (this.state.showMenu ? 
+          <Menu close={this.hideMenu} />
+          : '')
+        }
+
         { this.state.texts.map(text => <Text key={text.id} data={text} edit={this.showModal(text.id, text)}/>)}
+
         <div className='has-text-centered'>
           <button className='button is-medium ab' onClick={this.showModal(null, {})}>memo</button>
         </div>
-        <Arc />
+        <button className='button is-medium' onClick={this.showMenu}>menu</button>
       </div>
     )
   }
