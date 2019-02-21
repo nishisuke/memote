@@ -19,6 +19,12 @@ export default class Text extends React.Component {
     this.props.edit()
   }
 
+  restrictedPoint(numX, numY) {
+    let x = numX < 0 ? 0 : (numX > 300 ? 300 : numX )
+    let y = numY < 0 ? 0 : (numY > 500 ? 500 : numY )
+    return { pageX: x, pageY: y }
+  }
+
   archive() {
     let db = firebase.firestore();
     let text = db.collection('texts').doc(this.props.data.id)
@@ -30,8 +36,10 @@ export default class Text extends React.Component {
     ele.addEventListener('touchmove', event => {
       if (event.targetTouches.length == 1) {
         let touch = event.targetTouches[0]
-        this.setState({ pageX: touch.pageX + 'px', pageY: touch.pageY + 'px' })
-        if (touch.pageX < 40 && touch.pageY > 400) {
+        let pageX = touch.pageX
+        let pageY = touch.pageY
+        this.setState(this.restrictedPoint(pageX, pageY))
+        if (pageX < 40 && pageY > 400) {
           ele.style.color = 'red'
         } else {
           ele.style.color = 'black'
@@ -46,7 +54,7 @@ export default class Text extends React.Component {
         if (touch.pageX < 40 && touch.pageY > 400) {
           this.archive()
         } else {
-        this.storePoint()
+          this.storePoint()
         }
       }
     }, { passive: true })
@@ -61,7 +69,7 @@ export default class Text extends React.Component {
 //  <button onClick={this.archive}>x</button>
   render() {
     return (
-      <div style={{ left: this.state.pageX, top: this.state.pageY }} className='moveabs' onClick={this.hoge} id={this.props.data.id}>
+      <div style={{ left: this.state.pageX + 'px', top: this.state.pageY + 'px' }} className='moveabs' onClick={this.hoge} id={this.props.data.id}>
       {this.props.data.string.split('\n')[0]}
       </div>
     )
