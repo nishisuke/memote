@@ -58,6 +58,12 @@ export default class MainPage extends React.Component {
           //    console.log("Data came from " + source);
 
         }
+
+        if (change.type === 'modified') {
+          let ho = this.state.texts.filter(t => (t.id != change.doc.id))
+          this.setState({ texts: [...ho, {...change.doc.data(), id: change.doc.id }] })
+        }
+        
         if (change.type === "removed") {
           let ho = this.state.texts.filter(t => (t.id != change.doc.id))
           this.setState({ texts: [...ho]})
