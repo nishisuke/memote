@@ -86,17 +86,15 @@ export default class MainPage extends React.Component {
     })
   }
 
+//        <p>{window.outerHeight}</p>
+//        <p>{screen.height}</p>
+//        <p>{screen.availHeight}</p>
+//        <p>{document.body.clientHeight}</p>
+//        <p>{document.documentElement.clientHeight}</p>
   render() {
     return (
       <div className='scroll'>
         <p>{window.innerHeight}</p>
-        <p>{window.outerHeight}</p>
-        <p>{window.parent.screen.height}</p>
-        <p>{window.parent.screen.availHeight}</p>
-        <p>{screen.height}</p>
-        <p>{screen.availHeight}</p>
-        <p>{document.body.clientHeight}</p>
-        <p>{document.documentElement.clientHeight}</p>
       
         <button className='button is-medium' onClick={this.out}>out</button>
         <div className={`modal${this.state.showModal ? ' is-active' : ''}`}>
