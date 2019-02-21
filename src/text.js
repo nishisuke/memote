@@ -6,10 +6,13 @@ export default class Text extends React.Component {
     super(props);
 
     this.state = {
+      pageX: props.data.pageX,
+      pageY: props.data.pageY,
     };
 
     this.archive = this.archive.bind(this);
     this.hoge = this.hoge.bind(this);
+    this.storePoint = this.storePoint.bind(this);
   }
 
   hoge() {
@@ -22,10 +25,33 @@ export default class Text extends React.Component {
     text.update({ archived: true, archivedAt: new Date() })
   }
 
+  componentDidMount() {
+    let ele = document.getElementById(this.props.data.id)
+    ele.addEventListener('touchmove', event => {
+      if (event.targetTouches.length == 1) {
+        let touch = event.targetTouches[0]
+        this.setState({ pageX: touch.pageX + 'px', pageY: touch.pageY + 'px' })
+      }
+    }, { passive: true })
+    // ele.addEventListener('touchstart', event => {
+    // }, { passive: true })
+    ele.addEventListener('touchend', event => {
+      if (event.targetTouches.length == 0) {
+        this.storePoint()
+      }
+    }, { passive: true })
+  }
+
+  storePoint() {
+    let db = firebase.firestore();
+    let text = db.collection('texts').doc(this.props.data.id)
+    text.update({ pageX: this.state.pageX, pageY: this.state.pageY })
+  }
+
 //  <button onClick={this.archive}>x</button>
   render() {
     return (
-      <div onClick={this.hoge}>
+      <div style={{ left: this.state.pageX, top: this.state.pageY }} className='moveabs' onClick={this.hoge} id={this.props.data.id}>
       {this.props.data.string.split('\n')[0]}
       </div>
     )
