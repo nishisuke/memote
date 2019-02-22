@@ -10,6 +10,7 @@ export default class Archived extends React.Component {
     this.state = {
       texts: [],
     };
+
     this.toggleArchiveFunc = this.toggleArchiveFunc.bind(this);
   }
 
@@ -44,13 +45,12 @@ export default class Archived extends React.Component {
   render() {
     return (
       <div>
-      { this.state.texts.map(t => (
+      { this.state.texts.map(t => 
         <div key={t.id}>
-        <p>{t.string}<span>{moment.unix(t.archivedAt.seconds).fromNow()}</span></p>
-        
-        <button onClick={this.toggleArchiveFunc(t.id)}>x</button>
+          <p>{t.string}<small>{moment.unix(t.archivedAt.seconds).fromNow()}</small></p>
+          <button onClick={this.toggleArchiveFunc(t.id)}>x</button>
         </div>
-      )) }
+      ) }
       </div>
     )
   }
