@@ -51,6 +51,7 @@ export default class Archived extends React.Component {
           <button onClick={this.toggleArchiveFunc(t.id)}>x</button>
         </div>
       ) }
+      <button onClick={this.props.navigator.goMain}>back</button>
       </div>
     )
   }
