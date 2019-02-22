@@ -21,11 +21,10 @@ export default class Text extends React.Component {
   render() {
     return (
       <div className={`modal is-active`}>
-        <div className="modal-background" id='menubg'></div>
+        <div className='modal-background'></div>
         <div className="modal-content">
-          hoge
-        <button className='button is-medium' onClick={this.out}>out</button>
-        <Arc />
+          <button className='button is-medium' onClick={this.out}>sign out</button>
+          <Arc />
         </div>
         <button className="modal-close is-large" onClick={this.props.close} aria-label="close"></button>
       </div>
