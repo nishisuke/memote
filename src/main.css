@@ -24,3 +24,10 @@
 .moveabs {
   position: absolute;
 }
+.label {
+  width: 160px;
+  background-color: gray;
+  height: 28px;
+  line-height: 28px;
+  padding-left: 8px;
+}
