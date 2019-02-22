@@ -36,11 +36,17 @@ export default class Text extends React.Component {
 
   componentDidMount() {
     let ele = document.getElementById(this.props.data.id)
+    ele.addEventListener('touchstart', event => {
+      if (event.targetTouches.length == 1) {
+        let touch = event.targetTouches[0]
+        this.setState({ offsetX: touch.pageX - this.state.pageX, offsetY: touch.pageY - this.state.pageY })
+      }
+    }, { passive: true })
     ele.addEventListener('touchmove', event => {
       if (event.targetTouches.length == 1) {
         let touch = event.targetTouches[0]
-        let pageX = touch.pageX
-        let pageY = touch.pageY
+        let pageX = touch.pageX - (this.state.offsetX || 0)
+        let pageY = touch.pageY - (this.state.offsetY || 0)
         this.setState(this.restrictedPoint(pageX, pageY))
         if (pageX < 40 && pageY > 400) {
           ele.style.color = 'red'
