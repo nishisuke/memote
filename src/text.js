@@ -5,9 +5,10 @@ export default class Text extends React.Component {
   constructor(props) {
     super(props);
 
+      let p = this.restrictedPoint((props.data.pageXRate || 0) * window.innerWidth, (props.data.pageYRate || 0) * window.innerHeight)
     this.state = {
-      pageX: props.data.pageXRate * window.innerWidth,
-      pageY: props.data.pageYRate * window.innerHeight,
+      pageX: p.pageX,
+      pageY: p.pageY,
     };
 
     this.archive = this.archive.bind(this);
