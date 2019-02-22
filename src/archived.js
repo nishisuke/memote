@@ -45,13 +45,13 @@ export default class Archived extends React.Component {
   render() {
     return (
       <div>
-      { this.state.texts.map(t => 
-        <div key={t.id}>
-          <p>{t.string}<small>{moment.unix(t.archivedAt.seconds).fromNow()}</small></p>
-          <button onClick={this.toggleArchiveFunc(t.id)}>x</button>
-        </div>
-      ) }
-      <button onClick={this.props.navigator.goMain}>back</button>
+        { this.state.texts.map(t =>
+          <div key={t.id}>
+            <p>{t.string}<small>{moment.unix(t.archivedAt.seconds).fromNow()}</small></p>
+            <button onClick={this.toggleArchiveFunc(t.id)}>x</button>
+          </div>
+        ) }
+        <button className='button is-medium' onClick={this.props.navigator.goMain}>back</button>
       </div>
     )
   }
