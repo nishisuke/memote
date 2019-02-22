@@ -7,15 +7,11 @@ export default class Archived extends React.Component {
     super(props);
 
     this.state = {
-      showArchived: false,
       texts: [],
     };
     this.toggleArchiveFunc = this.toggleArchiveFunc.bind(this);
-    this.toggleShowArchive = this.toggleShowArchive.bind(this);
   }
-toggleShowArchive() {
-  this.setState({showArchived: !this.state.showArchived})
-}
+
   toggleArchiveFunc(id) {
     return () => {
     let db = firebase.firestore();
@@ -51,7 +47,6 @@ toggleShowArchive() {
     return (
       <div>
       <button onClick={this.toggleShowArchive}>archive</button>
-      <p>{ this.state.showArchived ? 'ge' : 'ho'}</p>
       { this.state.texts.map(t => (
         <div key={t.id}>
         <p>{t.string}</p>
