@@ -1,4 +1,5 @@
 import firebase from 'firebase/app';
+import moment from 'moment'
 
 import React from 'react'
 
@@ -45,7 +46,8 @@ export default class Archived extends React.Component {
       <div>
       { this.state.texts.map(t => (
         <div key={t.id}>
-        <p>{t.string}</p>
+        <p>{t.string}<span>{moment.unix(t.archivedAt.seconds).fromNow()}</span></p>
+        
         <button onClick={this.toggleArchiveFunc(t.id)}>x</button>
         </div>
       )) }
