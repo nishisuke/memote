@@ -104,10 +104,8 @@ export default class MainPage extends React.Component {
 
         { this.state.texts.map(text => <Text key={text.id} data={text} edit={this.showModal(text.id, text)}/>)}
 
-        <div className='has-text-centered'>
-          <button className='button is-medium ab' onClick={this.showModal(null, {})}>memo</button>
-        </div>
-        <button className='button is-medium' onClick={this.showMenu}>menu</button>
+        <button className='button is-medium ab' onClick={this.showModal(null, {})}>memo</button>
+        <button className='button is-medium menu' onClick={this.showMenu}>menu</button>
       </div>
     )
   }

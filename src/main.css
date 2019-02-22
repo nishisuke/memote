@@ -2,8 +2,16 @@
 
 .ab {
   position: absolute;
+  left: 144px;
   bottom: 32px;
 }
+
+.menu {
+  position: absolute;
+  right: 32px;
+  bottom: 32px;
+}
+
 .fixed-app {
   height: 100%;
   overflow: hidden;
