@@ -18,5 +18,3 @@
 - host -> firebase hosting
 
 ## TODO
-- [ ] css modules
-- [ ] html div -> js div createelement
