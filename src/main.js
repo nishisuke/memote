@@ -6,7 +6,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import ENV from 'ENV';
-import MainPage from './com'
+import SignedInContainer from './signed_in_container'
 
 firebase.initializeApp({
   apiKey: ENV.SBA_NODE_FB_APIKEY,
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // console.log(accessToken)
       });
       window.saveBrainAppFirebaseUser = user
-      ReactDOM.render(<MainPage />, document.getElementById('main'))
+      ReactDOM.render(<SignedInContainer />, document.getElementById('main'))
     } else {
       window.saveBrainAppFirebaseUser = {}
       let uiConfig = {

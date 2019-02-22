@@ -5,7 +5,7 @@ import Text from './text'
 import OpenedModal from './modal'
 import Menu from './menu'
 
-export default class MainPage extends React.Component {
+export default class SignedInContainer extends React.Component {
   constructor(props) {
     super(props);
 
