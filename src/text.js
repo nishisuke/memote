@@ -14,6 +14,7 @@ export default class Text extends React.Component {
     this.archive = this.archive.bind(this);
     this.hoge = this.hoge.bind(this);
     this.storePoint = this.storePoint.bind(this);
+    this.touchDangerArea = this.touchDangerArea.bind(this);
   }
 
   hoge() {
@@ -34,6 +35,10 @@ export default class Text extends React.Component {
     text.update({ archived: true, archivedAt: new Date() })
   }
 
+  touchDangerArea(x, y) {
+    return (x < 96 && window.innerHeight - y < 96)
+  }
+
   componentDidMount() {
     let ele = document.getElementById(this.props.data.id)
     ele.addEventListener('touchstart', event => {
@@ -48,7 +53,7 @@ export default class Text extends React.Component {
         let pageX = touch.pageX - (this.state.offsetX || 0)
         let pageY = touch.pageY - (this.state.offsetY || 0)
         this.setState(this.restrictedPoint(pageX, pageY))
-        if (pageX < 40 && pageY > 400) {
+        if (this.touchDangerArea(touch.pageX, touch.pageY)) {
           ele.style.color = 'red'
         } else {
           ele.style.color = 'black'
@@ -60,7 +65,7 @@ export default class Text extends React.Component {
     ele.addEventListener('touchend', event => {
       if (event.targetTouches.length == 0) {
         let touch = event.changedTouches[0]
-        if (touch.pageX < 40 && touch.pageY > 400) {
+        if (this.touchDangerArea(touch.pageX, touch.pageY)) {
           this.archive()
         } else {
           this.storePoint()
