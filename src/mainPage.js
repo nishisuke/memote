@@ -98,7 +98,7 @@ export default class Main extends React.Component {
         { this.state.showModal ?
           <OpenedModal unmountMe={this.hideModal} docID={this.state.modalID} docData={this.state.modalDoc}/>
           : (this.state.showMenu ? 
-          <Menu close={this.hideMenu} />
+          <Menu close={this.hideMenu} navigator={this.props.navigator} />
           : '')
         }
 

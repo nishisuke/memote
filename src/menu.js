@@ -23,6 +23,7 @@ export default class Text extends React.Component {
         <div className='modal-background'></div>
         <div className="modal-content">
           <button className='button is-medium' onClick={this.out}>sign out</button>
+          <button className='button is-medium' onClick={this.props.navigator.goArchive}>archive</button>
         </div>
         <button className="modal-close is-large" onClick={this.props.close} aria-label="close"></button>
       </div>

@@ -11,6 +11,8 @@ export default class SignedInContainer extends React.Component {
       innerPath: this.props.path || '/main',
     }
 
+    this.navigator = this.navigator.bind(this);
+
     this.isMain = this.isMain.bind(this);
     this.goMain = this.goMain.bind(this);
     this.isArchive = this.isArchive.bind(this);
@@ -21,10 +23,16 @@ export default class SignedInContainer extends React.Component {
   goMain() { this.setState({ innerPath: '/main' }) }
   isArchive() { return this.state.innerPath === '/archive' }
   goArchive() { this.setState({ innerPath: '/archive' }) }
+  navigator() {
+    let nav = {}
+    nav.goMain = this.goMain
+    nav.goArchive = this.goArchive
+    return nav
+  }
 
   render() {
-    return this.isMain() ? <Main />
-      : (this.isArchive() ? <Archive />
+    return this.isMain() ? <Main navigator={this.navigator()} />
+      : (this.isArchive() ? <Archive navigator={this.navigator()} />
         : '')
   }
 }
