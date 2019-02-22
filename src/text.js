@@ -48,6 +48,7 @@ export default class Text extends React.Component {
       }
     }, { passive: true })
     ele.addEventListener('touchmove', event => {
+      event.preventDefault() // 動かすときにbodyのスクロールできないエフェクトをそし
       if (event.targetTouches.length == 1) {
         let touch = event.targetTouches[0]
         let pageX = touch.pageX - (this.state.offsetX || 0)
@@ -59,7 +60,7 @@ export default class Text extends React.Component {
           ele.style.color = 'black'
         }
       }
-    }, { passive: true })
+    }, { passive: false })
     // ele.addEventListener('touchstart', event => {
     // }, { passive: true })
     ele.addEventListener('touchend', event => {
