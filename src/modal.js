@@ -19,6 +19,8 @@ export default class Modal extends React.Component {
   }
 
   handleSubmit() {
+    if (this.state.value === '' && !this.props.docID) return;
+
     let db = firebase.firestore();
     let col = db.collection('texts')
     let doc = this.props.docID ? col.doc(this.props.docID) : col.doc()
