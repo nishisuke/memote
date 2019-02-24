@@ -1,5 +1,5 @@
 import React from 'react'
-import firebase from 'firebase/app';
+import db from './db';
 
 export default class Text extends React.Component {
   constructor(props) {
@@ -30,9 +30,7 @@ export default class Text extends React.Component {
   }
 
   archive() {
-    let db = firebase.firestore();
-    let text = db.collection('texts').doc(this.props.data.id)
-    text.update({ archived: true, archivedAt: new Date() })
+    db.archiveMemo(this.props.data.id)
   }
 
   touchDangerArea(x, y) {

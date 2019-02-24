@@ -45,6 +45,11 @@ class FirestoreDB {
 
     doc.set(data)
   }
+
+  archiveMemo(memoID) {
+    let text = this.firestore.collection('texts').doc(memoID)
+    text.update({ archived: true, archivedAt: new Date() })
+  }
 }
 
 export default new FirestoreDB()
