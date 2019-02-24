@@ -14,6 +14,20 @@ class FirestoreDB {
         })
       })
   }
+
+  fetchArchivedMemos(userID, eachCallback) {
+    let today = new Date()
+    let query = this.firestore.collection('texts')
+      .where('user_id', '==', userID)
+      .where('archived', '==', true)
+      .where('archivedAt', '<=', new Date(today.getFullYear() + 1, 2))
+      .orderBy('archivedAt', 'desc')
+      .limit(10)
+
+    query.get().then(snapshot => {
+      snapshot.forEach(d => eachCallback(d.id, d.data()))
+    })
+  }
 }
 
 export default new FirestoreDB()
