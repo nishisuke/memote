@@ -28,6 +28,10 @@ class FirestoreDB {
       snapshot.forEach(d => eachCallback(d.id, d.data()))
     })
   }
+
+  archiveMemo(id) {
+    db.collection('texts').doc(id).update({ archived: false, archivedAt: new Date(2099, 3) })
+  }
 }
 
 export default new FirestoreDB()

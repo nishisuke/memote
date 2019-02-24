@@ -16,9 +16,7 @@ export default class Archived extends React.Component {
 
   toggleArchiveFunc(id) {
     return () => {
-      let db = firebase.firestore();
-      let text = db.collection('texts').doc(id)
-      text.update({ archived: false, archivedAt: new Date(2099, 3) })
+      db.archiveMemo(id)
 
       let arr = this.state.texts.filter(t => (t.id != id))
       this.setState({texts: [...arr]})
