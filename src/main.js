@@ -1,6 +1,5 @@
 import './main.css'
 import firebase from 'firebase/app';
-import 'firebase/firestore'; // Required for side-effects
 import firebaseui from 'firebaseui';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -13,6 +12,9 @@ firebase.initializeApp({
   authDomain: ENV.SBA_NODE_FB_AUTHDOMAIN,
   projectId: ENV.SBA_NODE_FB_PROJECTID
 });
+
+import db from './db'
+db.setup()
 
 firebase.firestore().enablePersistence()
   .catch(err => {

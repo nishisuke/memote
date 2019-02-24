@@ -1,9 +1,9 @@
 import React from 'react'
-import firebase from 'firebase/app';
 
 import OpenedModal from './modal'
 import Text from './text'
 import Menu from './menu'
+import db from './db'
 
 export default class Main extends React.Component {
   constructor(props) {
@@ -56,33 +56,10 @@ export default class Main extends React.Component {
   }
 
   componentDidMount() {
-    let db = firebase.firestore();
-    let query = db.collection("texts")
-      .where("user_id", "==", window.saveBrainAppFirebaseUser.uid)
-      .where('archived', '==', false)
-
-    query.onSnapshot({includeMetadataChanges: true}, snapshot => {
-      snapshot.docChanges().forEach(change => {
-        if (change.type === "added") {
-          this.setState({ texts: [...this.state.texts, {...change.doc.data(), id: change.doc.id}]})
-
-          // console.log(snapshot.metadata.hasPendingWrites)
-
-          var source = snapshot.metadata.fromCache ? "local cache" : "server";
-          //    console.log("Data came from " + source);
-
-        }
-
-        if (change.type === 'modified') {
-          let ho = this.state.texts.filter(t => (t.id != change.doc.id))
-          this.setState({ texts: [...ho, {...change.doc.data(), id: change.doc.id }] })
-        }
-        
-        if (change.type === "removed") {
-          let ho = this.state.texts.filter(t => (t.id != change.doc.id))
-          this.setState({ texts: [...ho]})
-        }
-      });
+    db.subscribeMemos(window.saveBrainAppFirebaseUser.uid, (id, data, isRemoved, meta) => {
+      let removed = this.state.texts.filter(t => (t.id != id))
+      if (!isRemoved) { removed.push({...data, id: id }) }
+      this.setState({ texts: removed })
     })
   }
 
