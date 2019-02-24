@@ -74,9 +74,7 @@ export default class Text extends React.Component {
   }
 
   storePoint() {
-    let db = firebase.firestore();
-    let text = db.collection('texts').doc(this.props.data.id)
-    text.update({ pageXRate: this.state.pageX / window.innerWidth, pageYRate: this.state.pageY / window.innerHeight })
+    db.updatePoint(this.props.data.id, this.state.pageX / window.innerWidth, this.state.pageY / window.innerHeight)
   }
 
 //  <button onClick={this.archive}>x</button>

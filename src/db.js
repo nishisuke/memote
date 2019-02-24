@@ -50,6 +50,11 @@ class FirestoreDB {
     let text = this.firestore.collection('texts').doc(memoID)
     text.update({ archived: true, archivedAt: new Date() })
   }
+
+  updatePoint(id, x, y) {
+    let text = this.firestore.collection('texts').doc(id)
+    text.update({ pageXRate: x, pageYRate: y })
+  }
 }
 
 export default new FirestoreDB()
