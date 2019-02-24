@@ -1,13 +1,13 @@
 @import url('~bulma/css/bulma.css');
 
 .ab {
-  position: absolute;
+  position: fixed;
   left: 144px;
   bottom: 32px;
 }
 
 .menu {
-  position: absolute;
+  position: fixed;
   right: 32px;
   bottom: 32px;
 }
@@ -22,7 +22,7 @@
   overflow: hidden;
 }
 .moveabs {
-  position: absolute;
+  position: fixed;
 }
 .label {
   width: 160px;
