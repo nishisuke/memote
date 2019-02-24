@@ -29,8 +29,8 @@ class FirestoreDB {
     })
   }
 
-  archiveMemo(id) {
-    db.collection('texts').doc(id).update({ archived: false, archivedAt: new Date(2099, 3) })
+  activateMemo(id) {
+    this.firestore.collection('texts').doc(id).update({ archived: false, archivedAt: new Date(2099, 3) })
   }
 
   persistMemo(userID, memoID, text) {

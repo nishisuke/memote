@@ -16,7 +16,7 @@ export default class Archived extends React.Component {
 
   toggleArchiveFunc(id) {
     return () => {
-      db.archiveMemo(id)
+      db.activateMemo(id)
 
       let arr = this.state.texts.filter(t => (t.id != id))
       this.setState({texts: [...arr]})
