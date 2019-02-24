@@ -56,11 +56,16 @@ export default class Main extends React.Component {
   }
 
   componentDidMount() {
-    db.subscribeMemos(window.saveBrainAppFirebaseUser.uid, (id, data, isRemoved, meta) => {
+    let unsubscribe = db.subscribeMemos(window.saveBrainAppFirebaseUser.uid, (id, data, isRemoved, meta) => {
       let removed = this.state.texts.filter(t => (t.id != id))
       if (!isRemoved) { removed.push({...data, id: id }) }
       this.setState({ texts: removed })
     })
+    this.setState({ unsubscribeFunc: unsubscribe })
+  }
+
+  componentWillUnmount() {
+    if (this.state.unsubscribeFunc) { this.state.unsubscribeFunc() }
   }
 
 //        <p>{window.outerHeight}</p>

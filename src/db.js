@@ -24,7 +24,7 @@ class FirestoreDB {
   }
 
   subscribeMemos(userID, onChanged) {
-    this.firestore.collection('texts').where('user_id', '==', userID).where('archived', '==', false)
+    return this.firestore.collection('texts').where('user_id', '==', userID).where('archived', '==', false)
       .onSnapshot({ includeMetadataChanges: true }, snapshot => {
         snapshot.docChanges().forEach(change => {
           onChanged(change.doc.id, change.doc.data(), change.type == 'removed', change.doc.metadata)
