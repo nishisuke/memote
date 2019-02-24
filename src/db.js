@@ -3,7 +3,24 @@ import 'firebase/firestore'; // Required for side-effects
 
 class FirestoreDB {
   setup() {
-    if (!this.firestore) this.firestore = firebase.firestore();
+    if (this.firestore) return;
+
+    let firestore = firebase.firestore()
+
+    firestore.enablePersistence()
+      .catch(err => {
+        if (err.code == 'failed-precondition') {
+          console.log(err.code)
+          // Multiple tabs open, persistence can only be enabled
+          // in one tab at a a time.
+        } else if (err.code == 'unimplemented') {
+          console.log(err.code)
+          // The current browser does not support all of the
+          // features required to enable persistence
+        }
+      });
+
+    this.firestore = firestore
   }
 
   subscribeMemos(userID, onChanged) {
