@@ -63,3 +63,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }, console.error);
 });
+
+import runtime from 'serviceworker-webpack-plugin/lib/runtime';
+
+if ('serviceWorker' in navigator) {
+  const registration = runtime.register();
+}
