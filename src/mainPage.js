@@ -69,7 +69,7 @@ export default class Main extends React.Component {
           <div className='modal-background'></div>
           <div className="modal-content">
             { this.state.modalPath == '/new' ?
-              <OpenedModal unmountMe={this.hide} docID={this.state.modalData.id} docData={this.state.modalData}/>
+              <OpenedModal unmountMe={this.hide} docData={this.state.modalData}/>
               : (this.state.modalPath == '/menu' ?
               <Menu close={this.hide} navigator={this.props.navigator} />
               : '')
