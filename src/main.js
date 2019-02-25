@@ -31,7 +31,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // console.log(accessToken)
       });
       window.saveBrainAppFirebaseUser = user
-      ReactDOM.render(<SignedInContainer />, document.getElementById('main'))
+      if (window.innerWidth < 560) {
+        ReactDOM.render(<SignedInContainer />, document.getElementById('main'))
+      } else {
+      }
     } else {
       window.saveBrainAppFirebaseUser = {}
       let uiConfig = {
