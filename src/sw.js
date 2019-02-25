@@ -6,6 +6,8 @@ var staticPathsToCache = [
 var dynamicPathsToCache = serviceWorkerOption.assets
 
 self.addEventListener('install', function(event) {
+  self.skipWaiting();
+
   event.waitUntil(
     caches.open(cacheName)
       .then(function(cache) {
