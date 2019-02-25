@@ -65,12 +65,18 @@ export default class Main extends React.Component {
   render() {
     return (
       <div className='scroll'>
-        { this.state.modalPath == '/new' ?
-          <OpenedModal unmountMe={this.hide} docID={this.state.modalData.id} docData={this.state.modalData}/>
-          : (this.state.modalPath == '/menu' ? 
-          <Menu close={this.hide} navigator={this.props.navigator} />
-          : '')
-        }
+        <div className={`modal ${this.state.modalPath != '' ? 'is-active' : ''}`}>
+          <div className='modal-background'></div>
+          <div className="modal-content">
+            { this.state.modalPath == '/new' ?
+              <OpenedModal unmountMe={this.hide} docID={this.state.modalData.id} docData={this.state.modalData}/>
+              : (this.state.modalPath == '/menu' ?
+              <Menu close={this.hide} navigator={this.props.navigator} />
+              : '')
+            }
+          </div>
+          <button className="modal-close is-large" onClick={this.props.close} aria-label="close"></button>
+        </div>
 
         { this.state.texts.map(text => <Text key={text.id} data={text} edit={this.showModal(text)}/>)}
 
