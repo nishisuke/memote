@@ -11,46 +11,34 @@ export default class Main extends React.Component {
 
     this.state = {
       texts: [],
-      showModal: false,
-      showMenu: false,
-      modalID: null,
-      modalDoc: {},
+      modalPath: '',
+      modalData: {},
     };
 
     this.showModal = this.showModal.bind(this);
-    this.hideModal = this.hideModal.bind(this);
+    this.hide = this.hide.bind(this);
     this.showMenu = this.showMenu.bind(this);
-    this.hideMenu = this.hideMenu.bind(this);
   }
 
-  hideModal() {
+  hide() {
     this.setState({
-      showModal: false,
-      modalID: null,
-      modalDoc: {},
+      modalPath: '',
+      modalData: {},
     });
-  }
-
-  hideMenu() {
-    this.setState({ showMenu: false });
   }
 
   showMenu() {
     this.setState({
-      showMenu: true,
-      showModal: false,
-      modalID: null,
-      modalDoc: {},
+      modalPath: '/menu',
+      modalData: {},
     });
   }
 
-  showModal(id, doc) {
+  showModal(doc) {
     return () => {
       this.setState({
-        modalID: id,
-        modalDoc: doc,
-        showModal: true,
-        showMenu: false,
+        modalPath: '/new',
+        modalData: { ...doc },
       });
     }
   }
@@ -77,14 +65,14 @@ export default class Main extends React.Component {
   render() {
     return (
       <div className='scroll'>
-        { this.state.showModal ?
-          <OpenedModal unmountMe={this.hideModal} docID={this.state.modalID} docData={this.state.modalDoc}/>
-          : (this.state.showMenu ? 
-          <Menu close={this.hideMenu} navigator={this.props.navigator} />
+        { this.state.modalPath == '/new' ?
+          <OpenedModal unmountMe={this.hide} docID={this.state.modalData.id} docData={this.state.modalData}/>
+          : (this.state.modalPath == '/menu' ? 
+          <Menu close={this.hide} navigator={this.props.navigator} />
           : '')
         }
 
-        { this.state.texts.map(text => <Text key={text.id} data={text} edit={this.showModal(text.id, text)}/>)}
+        { this.state.texts.map(text => <Text key={text.id} data={text} edit={this.showModal(text)}/>)}
 
         <button className='button is-medium ab' onClick={this.showModal(null, {})}>memo</button>
         <button className='button is-medium menu' onClick={this.showMenu}>menu</button>
