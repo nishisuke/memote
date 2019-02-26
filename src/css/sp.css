@@ -1,0 +1,32 @@
+@media (max-width: 559px) {
+  .ab {
+    position: fixed;
+    left: 144px;
+    bottom: 32px;
+  }
+
+  .menu {
+    position: fixed;
+    right: 32px;
+    bottom: 32px;
+  }
+
+  .mainContainer {
+    height: 100%;
+    width: 100vw;
+    overflow: hidden;
+  }
+
+  .moveabs {
+    position: fixed;
+  }
+
+  .textlabel {
+    width: 160px;
+    background-color: lightgray;
+    height: 28px;
+    line-height: 28px;
+    padding-left: 8px;
+    overflow: hidden;
+  }
+}
