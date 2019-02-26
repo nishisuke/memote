@@ -64,13 +64,8 @@ export default class Main extends React.Component {
         </div>
 
         <div className='inputContainer'>
-          <div className='editorContainer'>
-            <textarea className='editor is-size-6' />
-          </div>
-          <div className='actionContainer'>
-            <button className='button is-medium ab' onClick={this.showModal(null, {})}>memo</button>
-            <button className='button is-medium menu' onClick={this.showMenu}>menu</button>
-          </div>
+          <textarea className='editor is-size-6' />
+          <button className='button is-medium menu' onClick={this.showMenu}>menu</button>
         </div>
 
         <div className={`modal ${this.state.modalPath != '' ? 'is-active' : ''}`}>
