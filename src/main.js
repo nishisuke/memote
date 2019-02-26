@@ -5,8 +5,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import ENV from 'ENV';
-import SignedInContainer from './signed_in_container'
-import PC from './pc'
+import SignedInContainer from './sp/signed_in_container'
+import PC from './pc/pc'
 
 firebase.initializeApp({
   apiKey: ENV.SBA_NODE_FB_APIKEY,

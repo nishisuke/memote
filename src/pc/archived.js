@@ -1,7 +1,7 @@
 import moment from 'moment'
 
 import React from 'react'
-import db from './db'
+import db from '../db'
 
 export default class Archived extends React.Component {
   constructor(props) {

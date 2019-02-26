@@ -1,5 +1,5 @@
 import React from 'react'
-import db from './db'
+import db from '../db'
 
 export default class Modal extends React.Component {
   constructor(props) {

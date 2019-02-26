@@ -3,7 +3,7 @@ import React from 'react'
 import OpenedModal from './modal'
 import Text from './text'
 import Menu from './menu'
-import db from './db'
+import db from '../db'
 
 export default class Main extends React.Component {
   constructor(props) {

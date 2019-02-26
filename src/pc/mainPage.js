@@ -3,7 +3,7 @@ import React from 'react'
 import OpenedModal from './modal'
 import Text from './text'
 import Menu from './menu'
-import db from './db'
+import db from '../db'
 
 export default class Main extends React.Component {
   constructor(props) {
@@ -56,23 +56,15 @@ export default class Main extends React.Component {
     if (this.state.unsubscribeFunc) { this.state.unsubscribeFunc() }
   }
 
+//        <p>{window.outerHeight}</p>
+//        <p>{screen.height}</p>
+//        <p>{screen.availHeight}</p>
+//        <p>{document.body.clientHeight}</p>
+//        <p>{document.documentElement.clientHeight}</p>
+//        <p>{window.innerHeight}</p>
   render() {
     return (
-      <div className='mainContainer'>
-        <div className='textContainer'>
-          { this.state.texts.map(text => <Text key={text.id} data={text} edit={this.showModal(text)}/>)}
-        </div>
-
-        <div className='inputContainer'>
-          <div className='editorContainer'>
-            <textarea className='editor is-size-6' />
-          </div>
-          <div className='actionContainer'>
-            <button className='button is-medium ab' onClick={this.showModal(null, {})}>memo</button>
-            <button className='button is-medium menu' onClick={this.showMenu}>menu</button>
-          </div>
-        </div>
-
+      <div className='scroll'>
         <div className={`modal ${this.state.modalPath != '' ? 'is-active' : ''}`}>
           <div className='modal-background'></div>
           <div className="modal-content">
@@ -85,6 +77,11 @@ export default class Main extends React.Component {
           </div>
           <button className="modal-close is-large" onClick={this.props.close} aria-label="close"></button>
         </div>
+
+        { this.state.texts.map(text => <Text key={text.id} data={text} edit={this.showModal(text)}/>)}
+
+        <button className='button is-medium ab' onClick={this.showModal(null, {})}>memo</button>
+        <button className='button is-medium menu' onClick={this.showMenu}>menu</button>
       </div>
     )
   }
