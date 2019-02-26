@@ -24,7 +24,8 @@ class FirestoreDB {
   }
 
   get userID() {
-    return firebase.auth().currentUser.uid || '';
+    let u = firebase.auth().currentUser
+    return u ? u.uid : ''
   }
 
   subscribeMemos(onChanged) {
@@ -33,6 +34,8 @@ class FirestoreDB {
         snapshot.docChanges().forEach(change => {
           onChanged(change.doc.id, change.doc.data(), change.type == 'removed', change.doc.metadata)
         })
+      }, e => {
+        // nothing
       })
   }
 
