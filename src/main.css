@@ -1,34 +1,3 @@
 @import url('~bulma/css/bulma.css');
-
-.ab {
-  position: fixed;
-  left: 144px;
-  bottom: 32px;
-}
-
-.menu {
-  position: fixed;
-  right: 32px;
-  bottom: 32px;
-}
-
-.fixed-app {
-  height: 100%;
-  overflow: hidden;
-}
-.scroll {
-  height: 100%;
-  width: 100vw;
-  overflow: hidden;
-}
-.moveabs {
-  position: fixed;
-}
-.label {
-  width: 160px;
-  background-color: lightgray;
-  height: 28px;
-  line-height: 28px;
-  padding-left: 8px;
-  overflow: hidden;
-}
+@import url('css/sp.css');
+@import url('css/pc.css');
