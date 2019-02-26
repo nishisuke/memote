@@ -17,6 +17,12 @@ firebase.initializeApp({
 import db from './db'
 db.setup()
 
+if (window.innerWidth < 560) {
+  ReactDOM.render(<SignedInContainer />, document.getElementById('main'))
+} else {
+  ReactDOM.render(<PC />, document.getElementById('main'))
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
@@ -28,14 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
       // let uid = user.uid;
       // let phoneNumber = user.phoneNumber;
       // let providerData = user.providerData;
-      user.getIdToken().then(accessToken => {
+      // user.getIdToken().then(accessToken => {
         // console.log(accessToken)
-      });
-      if (window.innerWidth < 560) {
-        ReactDOM.render(<SignedInContainer />, document.getElementById('main'))
-      } else {
-        ReactDOM.render(<PC />, document.getElementById('main'))
-      }
+      // });
     } else {
       let uiConfig = {
         signInSuccessUrl: '/',
