@@ -31,14 +31,12 @@ document.addEventListener('DOMContentLoaded', () => {
       user.getIdToken().then(accessToken => {
         // console.log(accessToken)
       });
-      window.saveBrainAppFirebaseUser = user
       if (window.innerWidth < 560) {
         ReactDOM.render(<SignedInContainer />, document.getElementById('main'))
       } else {
         ReactDOM.render(<PC />, document.getElementById('main'))
       }
     } else {
-      window.saveBrainAppFirebaseUser = {}
       let uiConfig = {
         signInSuccessUrl: '/',
         signInOptions: [

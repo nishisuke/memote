@@ -44,7 +44,7 @@ export default class Main extends React.Component {
   }
 
   componentDidMount() {
-    let unsubscribe = db.subscribeMemos(window.saveBrainAppFirebaseUser.uid, (id, data, isRemoved, meta) => {
+    let unsubscribe = db.subscribeMemos((id, data, isRemoved, meta) => {
       let removed = this.state.texts.filter(t => (t.id != id))
       if (!isRemoved) { removed.push({...data, id: id }) }
       this.setState({ texts: removed })

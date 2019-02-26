@@ -21,7 +21,7 @@ export default class Modal extends React.Component {
   handleSubmit() {
     if (this.state.value === '' && !this.props.docData.id) return;
 
-    db.persistMemo(window.saveBrainAppFirebaseUser.uid, this.props.docData.id, this.state.value)
+    db.persistMemo(this.props.docData.id, this.state.value)
   }
 
   hideModal() {

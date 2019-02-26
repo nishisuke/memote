@@ -11,7 +11,6 @@ export default class Text extends React.Component {
 
   out() {
     firebase.auth().signOut().then(function() {
-      window.saveBrainAppFirebaseUser = {}
       // Sign-out successful.
     }).catch(function(error) {
       // An error happened.

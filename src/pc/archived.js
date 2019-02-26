@@ -24,7 +24,7 @@ export default class Archived extends React.Component {
   }
 
   componentDidMount() {
-    db.fetchArchivedMemos(window.saveBrainAppFirebaseUser.uid, (id, data) => {
+    db.fetchArchivedMemos((id, data) => {
       this.setState({texts: [...this.state.texts, {...data, id: id}]})
     })
   }

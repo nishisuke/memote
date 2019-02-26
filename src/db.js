@@ -23,8 +23,12 @@ class FirestoreDB {
     this.firestore = firestore
   }
 
-  subscribeMemos(userID, onChanged) {
-    return this.firestore.collection('texts').where('user_id', '==', userID).where('archived', '==', false)
+  get userID() {
+    return firebase.auth().currentUser.uid || '';
+  }
+
+  subscribeMemos(onChanged) {
+    return this.firestore.collection('texts').where('user_id', '==', this.userID).where('archived', '==', false)
       .onSnapshot({ includeMetadataChanges: true }, snapshot => {
         snapshot.docChanges().forEach(change => {
           onChanged(change.doc.id, change.doc.data(), change.type == 'removed', change.doc.metadata)
@@ -32,10 +36,10 @@ class FirestoreDB {
       })
   }
 
-  fetchArchivedMemos(userID, eachCallback) {
+  fetchArchivedMemos(eachCallback) {
     let today = new Date()
     let query = this.firestore.collection('texts')
-      .where('user_id', '==', userID)
+      .where('user_id', '==', this.userID)
       .where('archived', '==', true)
       .where('archivedAt', '<=', new Date(today.getFullYear() + 1, 2))
       .orderBy('archivedAt', 'desc')
@@ -50,12 +54,12 @@ class FirestoreDB {
     this.firestore.collection('texts').doc(id).update({ archived: false, archivedAt: new Date(2099, 3) })
   }
 
-  persistMemo(userID, memoID, text) {
+  persistMemo(memoID, text) {
     let col = this.firestore.collection('texts')
     let doc = memoID ? col.doc(memoID) : col.doc()
     let data = {
       string: text,
-      user_id: userID,
+      user_id: this.userID,
       archived: false,
       archivedAt: new Date(2099, 3),
     }
