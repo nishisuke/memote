@@ -34,6 +34,6 @@ export default class Main extends React.Component {
   }
 
   render() {
-    return <Texts texts={this.state.texts} />
+    return <Texts texts={this.state.texts} navigator={this.props.navigator} />
   }
 }
