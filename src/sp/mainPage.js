@@ -43,13 +43,19 @@ export default class Main extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidUpdate(prevProps) {
+    if (!prevProps.signedIn && this.props.signedIn) {
     let unsubscribe = db.subscribeMemos((id, data, isRemoved, meta) => {
       let removed = this.state.texts.filter(t => (t.id != id))
       if (!isRemoved) { removed.push({...data, id: id }) }
       this.setState({ texts: removed })
     })
     this.setState({ unsubscribeFunc: unsubscribe })
+    }
+
+    if (prevProps.signedIn && !this.props.signedIn) {
+      if (this.state.unsubscribeFunc) { this.state.unsubscribeFunc() }
+    }
   }
 
   componentWillUnmount() {

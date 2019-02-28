@@ -23,51 +23,6 @@ if (window.innerWidth < 560) {
   ReactDOM.render(<PC />, document.getElementById('main'))
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  firebase.auth().onAuthStateChanged(user => {
-    if (user) {
-      // User is signed in.
-      // let displayName = user.displayName;
-      // let email = user.email;
-      // let emailVerified = user.emailVerified;
-      // let photoURL = user.photoURL;
-      // let uid = user.uid;
-      // let phoneNumber = user.phoneNumber;
-      // let providerData = user.providerData;
-      // user.getIdToken().then(accessToken => {
-        // console.log(accessToken)
-      // });
-    } else {
-      let uiConfig = {
-        signInSuccessUrl: '/',
-        signInOptions: [
-          firebase.auth.EmailAuthProvider.PROVIDER_ID,
-          {
-            provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-            scopes: [
-              'https://www.googleapis.com/auth/calendar.events',
-            ],
-            customParameters: {
-              // Forces account selection even when one account
-              // is available.
-              prompt: 'select_account'
-            }
-          },
-        ],
-        tosUrl: '<your-tos-url>', // TODO set url
-        privacyPolicyUrl: () => {
-          window.location.assign('<your-privacy-policy-url>'); // TODO set url
-        }
-      };
-
-      let ui = new firebaseui.auth.AuthUI(firebase.auth());
-
-      // The start method will wait until the DOM is loaded.
-      ui.start('#firebaseui-auth-container', uiConfig);
-    }
-  }, console.error);
-});
-
 import runtime from 'serviceworker-webpack-plugin/lib/runtime';
 
 if ('serviceWorker' in navigator) {
