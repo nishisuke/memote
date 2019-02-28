@@ -1,10 +1,8 @@
 import React from 'react'
-import firebase from 'firebase/app'
 
 import OpenedModal from './modal'
 import Text from './text'
 import Menu from './menu'
-import db from '../db'
 
 export default class Main extends React.Component {
   constructor(props) {
@@ -59,7 +57,9 @@ export default class Main extends React.Component {
           <button className="modal-close is-large" onClick={this.props.close} aria-label="close"></button>
         </div>
 
-        { this.props.texts.map(text => <Text key={text.id} data={text} edit={this.showModal(text)}/>)}
+        <div className='textsContainer'>
+          { this.props.texts.map(text => <Text key={text.id} data={text} edit={this.showModal(text)}/>)}
+        </div>
 
         <button className='button is-medium ab' onClick={this.showModal(null, {})}>memo</button>
         <button className='button is-medium menu' onClick={this.showMenu}>menu</button>
