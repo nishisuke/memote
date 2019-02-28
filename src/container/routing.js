@@ -1,14 +1,14 @@
 import React from 'react'
 
 import Archive from './archived'
-import Main from './mainPage'
+import Texts from './texts'
 
 export default class Routing extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      innerPath: this.props.path || '/main',
+      innerPath: this.props.path || '/texts',
     }
 
     this.isMain = this.isMain.bind(this);
@@ -17,8 +17,8 @@ export default class Routing extends React.Component {
     this.goArchive = this.goArchive.bind(this);
   }
 
-  isMain() { return this.state.innerPath === '/main' }
-  goMain() { this.setState({ innerPath: '/main' }) }
+  isMain() { return this.state.innerPath === '/texts' }
+  goMain() { this.setState({ innerPath: '/texts' }) }
   isArchive() { return this.state.innerPath === '/archive' }
   goArchive() { this.setState({ innerPath: '/archive' }) }
   get navigator() {
@@ -29,7 +29,7 @@ export default class Routing extends React.Component {
   }
 
   render() {
-    return this.isMain() ? <Main navigator={this.navigator} />
+    return this.isMain() ? <Texts navigator={this.navigator} />
       : (this.isArchive() ? <Archive navigator={this.navigator} />
         : '')
   }
