@@ -49,14 +49,10 @@ db.setup()
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import SignedInContainer from './sp/signed_in_container'
+import SignedInContainer from './signed_in_container'
 import PC from './pc/pc'
 
-if (window.innerWidth < 560) {
-  ReactDOM.render(<SignedInContainer />, document.getElementById('main'))
-} else {
-  ReactDOM.render(<PC />, document.getElementById('main'))
-}
+ReactDOM.render(<SignedInContainer />, document.getElementById('main'))
 
 
 import './main.css'
