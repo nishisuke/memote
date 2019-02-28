@@ -3,15 +3,13 @@ import React from 'react'
 import Archive from './archived'
 import Main from './mainPage'
 
-export default class SignedInContainer extends React.Component {
+export default class Routing extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
       innerPath: this.props.path || '/main',
     }
-
-    this.navigator = this.navigator.bind(this);
 
     this.isMain = this.isMain.bind(this);
     this.goMain = this.goMain.bind(this);
@@ -23,7 +21,7 @@ export default class SignedInContainer extends React.Component {
   goMain() { this.setState({ innerPath: '/main' }) }
   isArchive() { return this.state.innerPath === '/archive' }
   goArchive() { this.setState({ innerPath: '/archive' }) }
-  navigator() {
+  get navigator() {
     let nav = {}
     nav.goMain = this.goMain
     nav.goArchive = this.goArchive
@@ -31,8 +29,8 @@ export default class SignedInContainer extends React.Component {
   }
 
   render() {
-    return this.isMain() ? <Main navigator={this.navigator()} />
-      : (this.isArchive() ? <Archive navigator={this.navigator()} />
+    return this.isMain() ? <Main navigator={this.navigator} />
+      : (this.isArchive() ? <Archive navigator={this.navigator} />
         : '')
   }
 }

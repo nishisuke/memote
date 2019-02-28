@@ -49,10 +49,10 @@ db.setup()
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import SignedInContainer from './signed_in_container'
+import Routing from './container/routing'
 import PC from './pc/pc'
 
-ReactDOM.render(<SignedInContainer />, document.getElementById('main'))
+ReactDOM.render(<Routing />, document.getElementById('main'))
 
 
 import './main.css'
