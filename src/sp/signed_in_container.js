@@ -11,7 +11,6 @@ export default class SignedInContainer extends React.Component {
 
     this.state = {
       innerPath: this.props.path || '/main',
-      signedIn: false,
     }
 
     this.navigator = this.navigator.bind(this);
@@ -25,7 +24,6 @@ export default class SignedInContainer extends React.Component {
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        this.setState({ signedIn: true })
         // User is signed in.
         // let displayName = user.displayName;
         // let email = user.email;
@@ -38,7 +36,6 @@ export default class SignedInContainer extends React.Component {
         // console.log(accessToken)
         // });
       } else {
-        this.setState({ signedIn: false })
 
         let uiConfig = {
           signInSuccessUrl: '/',
@@ -82,7 +79,7 @@ export default class SignedInContainer extends React.Component {
   }
 
   render() {
-    return this.isMain() ? <Main navigator={this.navigator()} signedIn={this.state.signedIn} />
+    return this.isMain() ? <Main navigator={this.navigator()} />
       : (this.isArchive() ? <Archive navigator={this.navigator()} />
         : '')
   }
