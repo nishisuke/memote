@@ -2,7 +2,7 @@ import React from 'react'
 import firebase from 'firebase/app'
 
 import db from '../db'
-import Hoge from './hoge'
+import Hoge from '../component/hoge'
 
 export default class Main extends React.Component {
   constructor(props) {
