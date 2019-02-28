@@ -61,8 +61,20 @@ export default class Main extends React.Component {
           { this.props.texts.map(text => <Text key={text.id} data={text} edit={this.showModal(text)}/>)}
         </div>
 
-        <button className='button is-medium ab' onClick={this.showModal(null, {})}>memo</button>
-        <button className='button is-medium menu' onClick={this.showMenu}>menu</button>
+        <div className='fixedActionContainer'>
+          <div>
+            <div>
+              <span className='icon is-medium'>
+                <i className='fas fa-archive fa-lg'></i>
+              </span>
+            </div>
+            <small className='archiveLabel'>
+              move here
+            </small>
+          </div>
+          <button className='button is-medium' onClick={this.showModal(null, {})}>new</button>
+          <button className='button is-medium' onClick={this.showMenu}>menu</button>
+        </div>
       </div>
     )
   }
