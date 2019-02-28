@@ -1,4 +1,5 @@
 import React from 'react'
+import firebase from 'firebase/app'
 
 import OpenedModal from './modal'
 import Text from './text'
@@ -43,19 +44,20 @@ export default class Main extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
-    if (!prevProps.signedIn && this.props.signedIn) {
-    let unsubscribe = db.subscribeMemos((id, data, isRemoved, meta) => {
-      let removed = this.state.texts.filter(t => (t.id != id))
-      if (!isRemoved) { removed.push({...data, id: id }) }
-      this.setState({ texts: removed })
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        let unsubscribe = db.subscribeMemos((id, data, isRemoved, meta) => {
+          let removed = this.state.texts.filter(t => (t.id != id))
+          if (!isRemoved) { removed.push({...data, id: id }) }
+          this.setState({ texts: removed })
+        })
+        this.setState({ unsubscribeFunc: unsubscribe })
+      } else {
+        if (this.state.unsubscribeFunc) { this.state.unsubscribeFunc() }
+        this.setState({ texts: [] })
+      }
     })
-    this.setState({ unsubscribeFunc: unsubscribe })
-    }
-
-    if (prevProps.signedIn && !this.props.signedIn) {
-      if (this.state.unsubscribeFunc) { this.state.unsubscribeFunc() }
-    }
   }
 
   componentWillUnmount() {
