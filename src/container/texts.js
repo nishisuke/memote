@@ -2,7 +2,7 @@ import React from 'react'
 import firebase from 'firebase/app'
 
 import db from '../db'
-import Hoge from '../component/hoge'
+import Texts from '../component/texts'
 
 export default class Main extends React.Component {
   constructor(props) {
@@ -34,6 +34,6 @@ export default class Main extends React.Component {
   }
 
   render() {
-    return <Hoge texts={this.state.texts} />
+    return <Texts texts={this.state.texts} />
   }
 }
