@@ -50,7 +50,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import Routing from './container/routing'
-import PC from './pc/pc'
 
 ReactDOM.render(<Routing />, document.getElementById('main'))
 
