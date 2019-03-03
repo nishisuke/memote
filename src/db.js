@@ -68,6 +68,8 @@ class FirestoreDB {
       user_id: this.userID,
       archived: false,
       archivedAt: new Date(2099, 3),
+      pageXRate: (Math.random() / 7) + (2 / 7),
+      pageYRate: (Math.random() / 5) + (3 / 5),
     }
 
     doc.set(data)
