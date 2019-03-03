@@ -3,4 +3,5 @@
   "name": "Save brain app",
   "display": "standalone",
   "start_url": "/"
+  "background_color": "#fff"
 }
