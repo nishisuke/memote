@@ -5,7 +5,8 @@ export default class Text extends React.Component {
   constructor(props) {
     super(props);
 
-      let p = this.restrictedPoint((props.data.pageXRate || 0) * window.innerWidth, (props.data.pageYRate || 0) * window.innerHeight)
+    let p = this.restrictedPoint((props.data.pageXRate || 0) * window.innerWidth, (props.data.pageYRate || 0) * window.innerHeight)
+
     this.state = {
       pageX: p.pageX,
       pageY: p.pageY,

@@ -57,9 +57,12 @@ class FirestoreDB {
     this.firestore.collection('texts').doc(id).update({ archived: false, archivedAt: new Date(2099, 3) })
   }
 
-  persistMemo(memoID, text) {
-    let col = this.firestore.collection('texts')
-    let doc = memoID ? col.doc(memoID) : col.doc()
+  updateText(memoID, text) {
+    this.firestore.collection('texts').doc(memoID).update({ string: text })
+  }
+
+  createMemo(text) {
+    let doc = this.firestore.collection('texts').doc()
     let data = {
       string: text,
       user_id: this.userID,
