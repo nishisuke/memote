@@ -16,17 +16,6 @@ firebase.auth().onAuthStateChanged(user => {
       signInSuccessUrl: '/',
       signInOptions: [
         firebase.auth.EmailAuthProvider.PROVIDER_ID,
-        {
-          provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-          scopes: [
-            'https://www.googleapis.com/auth/calendar.events',
-          ],
-          customParameters: {
-            // Forces account selection even when one account
-            // is available.
-            prompt: 'select_account'
-          }
-        },
       ],
       tosUrl: '<your-tos-url>', // TODO set url
       privacyPolicyUrl: () => {
