@@ -52,7 +52,7 @@ export default class Main extends React.Component {
             <Menu close={this.hide} navigator={this.props.navigator} />
             : '')
           }
-          <button className="modal-close is-large" onClick={this.props.close} aria-label="close"></button>
+          <button className='modal-close is-large' onClick={this.hide} aria-label="close"></button>
         </div>
 
         <div className='textsContainer'>
