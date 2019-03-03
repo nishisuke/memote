@@ -30,9 +30,7 @@ export default class Modal extends React.Component {
   }
 
   componentDidMount() {
-    if (document.getElementsByClassName('modal is-active')[0]) {
-      document.getElementById('ta').focus()
-    }
+    document.getElementById('ta').focus()
   }
 
   render() {
