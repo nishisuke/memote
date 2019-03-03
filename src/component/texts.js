@@ -62,7 +62,7 @@ export default class Main extends React.Component {
         </div>
 
         <div className='fixedActionContainer'>
-          <div>
+          <div id='archiveIcon'>
             <span className='icon is-medium'>
               <i className='fas fa-archive fa-lg'></i>
             </span>

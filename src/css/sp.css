@@ -33,4 +33,7 @@
     padding-left: 8px;
     overflow: hidden;
   }
+  .red {
+    color: red;
+  }
 }

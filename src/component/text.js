@@ -34,7 +34,7 @@ export default class Text extends React.Component {
   }
 
   touchDangerArea(x, y) {
-    return (x < 96 && window.innerHeight - y < 96)
+    return (x < 96 + ((window.innerWidth - 248) / 6) && window.innerHeight - y < 72)
   }
 
   componentDidMount() {
@@ -52,8 +52,10 @@ export default class Text extends React.Component {
         let pageY = touch.pageY - (this.state.offsetY || 0)
         this.setState(this.restrictedPoint(pageX, pageY))
         if (this.touchDangerArea(touch.pageX, touch.pageY)) {
+          document.getElementById('archiveIcon').classList.add('red')
           ele.style.color = 'red'
         } else {
+          document.getElementById('archiveIcon').classList.remove('red')
           ele.style.color = 'black'
         }
       }
