@@ -54,10 +54,10 @@ export default class Text extends React.Component {
         this.setState(this.restrictedPoint(pageX, pageY))
         if (this.touchDangerArea(touch.pageX, touch.pageY)) {
           document.getElementById('archiveIcon').classList.add('red')
-          ele.style.color = 'red'
+          ele.classList.add('willArchive')
         } else {
           document.getElementById('archiveIcon').classList.remove('red')
-          ele.style.color = 'black'
+          ele.classList.remove('willArchive')
         }
       }
     }, { passive: true })
