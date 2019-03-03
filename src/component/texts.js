@@ -63,11 +63,10 @@ export default class Main extends React.Component {
 
         <div className='fixedActionContainer'>
           <div>
-            <div>
-              <span className='icon is-medium'>
-                <i className='fas fa-archive fa-lg'></i>
-              </span>
-            </div>
+            <span className='icon is-medium'>
+              <i className='fas fa-archive fa-lg'></i>
+            </span>
+            <br/>
             <small className='archiveLabel'>
               move here
             </small>
