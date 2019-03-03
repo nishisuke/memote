@@ -46,14 +46,12 @@ export default class Main extends React.Component {
       <div className='scroll'>
         <div className={`modal ${this.state.modalPath != '' ? 'is-active' : ''}`}>
           <div className='modal-background'></div>
-          <div className="modal-content">
-            { this.state.modalPath == '/new' ?
-              <OpenedModal unmountMe={this.hide} docData={this.state.modalData}/>
-              : (this.state.modalPath == '/menu' ?
-              <Menu close={this.hide} navigator={this.props.navigator} />
-              : '')
-            }
-          </div>
+          { this.state.modalPath == '/new' ?
+            <OpenedModal unmountMe={this.hide} docData={this.state.modalData}/>
+            : (this.state.modalPath == '/menu' ?
+            <Menu close={this.hide} navigator={this.props.navigator} />
+            : '')
+          }
           <button className="modal-close is-large" onClick={this.props.close} aria-label="close"></button>
         </div>
 

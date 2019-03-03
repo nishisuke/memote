@@ -19,7 +19,7 @@ export default class Text extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className='modal-content'>
         <button className='button is-medium' onClick={this.out}>sign out</button>
         <button className='button is-medium' onClick={this.props.navigator.goArchive}>archive</button>
       </div>

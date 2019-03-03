@@ -37,7 +37,7 @@ export default class Modal extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className='modal-content'>
         <div className='control is-loading'>
           <textarea id='ta' onChange={this.handleChange} value={this.state.value} onBlur={this.hideModal} className='textarea' rows='12' />
         </div>
