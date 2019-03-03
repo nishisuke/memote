@@ -41,12 +41,14 @@ export default class Text extends React.Component {
   componentDidMount() {
     let ele = document.getElementById(this.props.data.id)
     ele.addEventListener('touchstart', event => {
+      event.preventDefault()
       if (event.targetTouches.length == 1) {
         let touch = event.targetTouches[0]
         this.setState({ offsetX: touch.pageX - this.state.pageX, offsetY: touch.pageY - this.state.pageY })
       }
-    }, { passive: true })
+    }, { passive: false })
     ele.addEventListener('touchmove', event => {
+      event.preventDefault()
       if (event.targetTouches.length == 1) {
         let touch = event.targetTouches[0]
         let pageX = touch.pageX - (this.state.offsetX || 0)
@@ -60,10 +62,11 @@ export default class Text extends React.Component {
           ele.classList.remove('willArchive')
         }
       }
-    }, { passive: true })
+    }, { passive: false })
     // ele.addEventListener('touchstart', event => {
     // }, { passive: true })
     ele.addEventListener('touchend', event => {
+      event.preventDefault()
       if (event.targetTouches.length == 0) {
         let touch = event.changedTouches[0]
         if (this.touchDangerArea(touch.pageX, touch.pageY)) {
@@ -73,7 +76,7 @@ export default class Text extends React.Component {
           this.storePoint()
         }
       }
-    }, { passive: true })
+    }, { passive: false })
   }
 
   storePoint() {
