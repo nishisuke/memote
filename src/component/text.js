@@ -68,6 +68,7 @@ export default class Text extends React.Component {
         let touch = event.changedTouches[0]
         if (this.touchDangerArea(touch.pageX, touch.pageY)) {
           this.archive()
+          document.getElementById('archiveIcon').classList.remove('red')
         } else {
           this.storePoint()
         }
