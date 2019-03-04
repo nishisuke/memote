@@ -13,6 +13,7 @@
   .mainContainer .textsContainer {
     width: 160px;
     border-right: solid medium gray;
+    overflow-y: scroll;
   }
 
   .mainContainer .inputContainer {
