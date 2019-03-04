@@ -29,4 +29,7 @@
   .red {
     color: red;
   }
+  .editor {
+    display: none;
+  }
 }
