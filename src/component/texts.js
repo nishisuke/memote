@@ -61,9 +61,7 @@ export default class Main extends React.Component {
           </div>
 
           <div className='inputContainer'>
-            <div className='editorContainer'>
-              <textarea />
-            </div>
+            <textarea className='editor' />
             <div className='fixedActionContainer'>
               <div id='archiveIcon'>
                 <span className='icon is-medium'>
