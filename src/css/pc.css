@@ -17,9 +17,16 @@
 
   .mainContainer .inputContainer {
     flex: 1;
+    display: flex;
+    flex-direction: column;
   }
 
-  .mainContainer .inputContainer .editor {
+  .mainContainer .inputContainer .editorContainer {
+    width: 100%;
+    flex: 1;
+  }
+
+  .mainContainer .inputContainer .editorContainer textarea {
     width: 100%;
     height: 100%;
     outline: none;
@@ -27,10 +34,11 @@
     border: none;
   }
 
-  .mainContainer .inputContainer .menu {
-    position: fixed;
-    bottom: 0;
-    right: 0;
+  .mainContainer .inputContainer .fixedActionContainer {
+    width: 100%;
+    display: flex;
+    text-align: center;
+    justify-content: space-around;
   }
 
   .textlabel {
