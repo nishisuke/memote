@@ -1,4 +1,8 @@
 @media (min-width: 560px) {
+  .rootContainer {
+    height: 100%;
+  }
+
   .mainContainer {
     height: 100%;
     width: 100vw;
@@ -6,7 +10,7 @@
     display: flex;
   }
 
-  .mainContainer .textContainer {
+  .mainContainer .textsContainer {
     width: 160px;
     border-right: solid medium gray;
   }
