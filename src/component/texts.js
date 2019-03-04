@@ -3,6 +3,7 @@ import React from 'react'
 import OpenedModal from './modal'
 import Text from './text'
 import Menu from './menu'
+import TextEditor from './textarea'
 
 export default class Main extends React.Component {
   constructor(props) {
@@ -11,11 +12,19 @@ export default class Main extends React.Component {
     this.state = {
       modalPath: '',
       modalData: {},
+      editingID: null,
     };
 
     this.showModal = this.showModal.bind(this);
     this.hide = this.hide.bind(this);
     this.showMenu = this.showMenu.bind(this);
+    this.setEditing = this.setEditing.bind(this);
+  }
+
+  setEditing(id) {
+    return () => {
+      this.setState({ editingID: id })
+    }
   }
 
   hide() {
@@ -42,6 +51,8 @@ export default class Main extends React.Component {
   }
 
   render() {
+    let editing = this.props.texts.find(t => t.id == this.state.editingID) || {}
+
     return (
       <div className='rootContainer'>
         <div className={`modal ${this.state.modalPath != '' ? 'is-active' : ''}`}>
@@ -57,11 +68,11 @@ export default class Main extends React.Component {
 
         <div className='mainContainer'>
           <div className='textsContainer'>
-            { this.props.texts.map(text => <Text key={text.id} data={text} edit={this.showModal(text)}/>)}
+            { this.props.texts.map(text => <Text setEdit={this.setEditing(text.id)} key={text.id} data={text} edit={this.showModal(text)}/>)}
           </div>
 
           <div className='inputContainer'>
-            <textarea className='editor' />
+            <TextEditor editing={editing} />
             <div className='fixedActionContainer'>
               <div id='archiveIcon'>
                 <span className='icon is-medium'>
