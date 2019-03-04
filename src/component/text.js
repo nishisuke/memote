@@ -41,12 +41,13 @@ export default class Text extends React.Component {
   componentDidMount() {
     let ele = document.getElementById(this.props.data.id)
     ele.addEventListener('touchstart', event => {
-      event.preventDefault()
       if (event.targetTouches.length == 1) {
         let touch = event.targetTouches[0]
         this.setState({ offsetX: touch.pageX - this.state.pageX, offsetY: touch.pageY - this.state.pageY })
       }
+      return false
     }, { passive: false })
+
     ele.addEventListener('touchmove', event => {
       event.preventDefault()
       if (event.targetTouches.length == 1) {
@@ -63,10 +64,8 @@ export default class Text extends React.Component {
         }
       }
     }, { passive: false })
-    // ele.addEventListener('touchstart', event => {
-    // }, { passive: true })
+
     ele.addEventListener('touchend', event => {
-      event.preventDefault()
       if (event.targetTouches.length == 0) {
         let touch = event.changedTouches[0]
         if (this.touchDangerArea(touch.pageX, touch.pageY)) {
@@ -76,6 +75,7 @@ export default class Text extends React.Component {
           this.storePoint()
         }
       }
+      return false
     }, { passive: false })
   }
 
@@ -83,7 +83,6 @@ export default class Text extends React.Component {
     db.updatePoint(this.props.data.id, this.state.pageX / window.innerWidth, this.state.pageY / window.innerHeight)
   }
 
-//  <button onClick={this.archive}>x</button>
   render() {
     return (
       <div style={{ left: this.state.pageX + 'px', top: this.state.pageY + 'px' }} className='moveabs textlabel is-size-7' onClick={this.hoge} id={this.props.data.id}>
