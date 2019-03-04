@@ -9,18 +9,6 @@
     justify-content: space-around;
   }
 
-  .menu {
-    position: fixed;
-    right: 32px;
-    bottom: 32px;
-  }
-
-  .mainContainer {
-    height: 100%;
-    width: 100vw;
-    overflow: hidden;
-  }
-
   .moveabs {
     position: fixed;
     z-index: 1;
