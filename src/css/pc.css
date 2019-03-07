@@ -22,12 +22,12 @@
     flex-direction: column;
   }
 
-  .mainContainer .inputContainer .editor {
-    width: 100%;
+  .mainContainer .inputContainer .editorContainer {
     flex: 1;
-    outline: none;
-    padding: 8px;
-    border: none;
+  }
+
+  .mainContainer .inputContainer .editor {
+    height: 100%;
   }
 
   .mainContainer .inputContainer .fixedActionContainer {

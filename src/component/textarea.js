@@ -12,6 +12,17 @@ export default class TA extends React.Component {
 
     this.store = this.store.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.colorClass = this.colorClass.bind(this);
+  }
+
+  colorClass() {
+    let s = this.state.storeState
+    if ('stored' === s) return 'is-success';
+    if ('shouldSaveImi' === s) return 'is-danger';
+    if ('timeoutExecuting' === s) return 'is-warning';
+    if ('setTimeout' === s) return 'is-warning';
+
+    return ''
   }
 
   handleChange(event) {
@@ -61,7 +72,9 @@ export default class TA extends React.Component {
 
   render() {
     return (
-      <textarea className='editor' onChange={this.handleChange} value={this.state.value} id='editor' />
+      <div className={`editorContainer control ${this.state.storeState === 'timeoutExecuting' ? 'is-loading' : ''}`}>
+        <textarea className={`textarea has-fixed-size editor ${this.colorClass()}`} onChange={this.handleChange} value={this.state.value} id='editor' />
+      </div>
     );
   }
 }
