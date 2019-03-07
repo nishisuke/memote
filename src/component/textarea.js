@@ -6,6 +6,7 @@ export default class TA extends React.Component {
     super(props);
 
     this.state = {
+      id: null,
       storeState: 'de',
       value: '',
       timeoutID: -1,
@@ -19,7 +20,6 @@ export default class TA extends React.Component {
     let s = this.state.storeState
     if ('stored' === s) return 'is-success';
     if ('shouldSaveImi' === s) return 'is-danger';
-    if ('timeoutExecuting' === s) return 'is-warning';
     if ('setTimeout' === s) return 'is-warning';
 
     return ''
@@ -35,18 +35,16 @@ export default class TA extends React.Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.props.editing.id && this.props.editing.id != prevProps.editing.id) {
       //全開のid 処理残ってないか確認したり
-      this.setState({value: this.props.editing.string, storeState: 'de', timeoutID: -1})
+      this.setState({id: this.props.editing.id, value: this.props.editing.string, storeState: 'de', timeoutID: -1})
       document.getElementById('editor').focus()
       return
     }
 
     if (this.state.storeState === 'shouldSave' || this.state.storeState === 'shouldSaveImi') {
       clearTimeout(this.state.timeoutID)
-      let id = this.props.editing.id
+      let id = this.state.id
       let text = this.state.value
       let timeoutID = setTimeout(() => {
-        this.setState({storeState: 'timeoutExecuting'})
-
         db.updateText(id, text)
           .then(() => {
             if (this.state.value === text) {
@@ -66,7 +64,7 @@ export default class TA extends React.Component {
 
   render() {
     return (
-      <div className={`editorContainer control ${this.state.storeState === 'timeoutExecuting' ? 'is-loading' : ''}`}>
+      <div className={`editorContainer control ${this.state.storeState === 'setTimeout' ? 'is-loading' : ''}`}>
         <textarea className={`textarea has-fixed-size editor ${this.colorClass()}`} onChange={this.handleChange} value={this.state.value} id='editor' />
       </div>
     );
