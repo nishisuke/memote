@@ -6,43 +6,56 @@ export default class TA extends React.Component {
     super(props);
 
     this.state = {
+      storeState: 'de',
       value: '',
     };
 
-    this.storeIfNeed = this.storeIfNeed.bind(this);
+    this.store = this.store.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(event) {
-    this.setState({ value: event.target.value, lastEdit: Date.now() });
+    this.setState({
+      value: event.target.value,
+      storeState: 'shouldSave',
+    });
   }
 
-  storeIfNeed() {
-    if (this.state.before == this.state.value) return;
-    if (!this.props.editing.id) return;
-    if (Date.now() - this.state.lastEdit < 1000) return;
-
-    let current = this.state.value
-    db.updateText(this.props.editing.id, current)
+  store() {
+    this.setState({
+      storeState: 'timeoutExecuting',
+    })
+    db.updateText(this.props.editing.id, this.state.value)
       .then(() => {
-        console.log('boom')
-        this.setState({ before: current })
+        this.setState({
+          storeState: 'stored',
+        })
       })
-      .catch(console.error);
+      .catch(() => {
+        this.setState({
+          storeState: 'shouldSaveImi',
+        })
+      });
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (!this.props.editing.id) {
-      if (this.setState.intervalID) {
-        clearInterval(this.setState.intervalID)
-        this.setState({intervalID: null, before: '', value: '', lastEdit: null})
-      }
-      
-      return;
-    } else if (this.props.editing.id != prevProps.editing.id) {
-      let intervalID = setInterval(this.storeIfNeed, 1500)
-      this.setState({intervalID: intervalID, before: this.props.editing.string, value: this.props.editing.string, lastEdit: Date.now()})
+      console.log(this.state.storeState)
+    if (this.props.editing.id && this.props.editing.id != prevProps.editing.id) {
+      console.log('change doc')
+      //全開のid 処理残ってないか確認したり
+      this.setState({value: this.props.editing.string, storeState: 'de'})
       document.getElementById('editor').focus()
+      return
+    }
+
+    if (this.state.storeState === 'shouldSave' || this.state.storeState === 'shouldSaveImi') {
+      console.log('set job')
+      clearTimeout(this.state.timeoutID)
+      let timeoutID = setTimeout(this.store, this.state.storeState === 'shouldSaveImi' ? 10 : 1500);
+      this.setState({
+        timeoutID: timeoutID,
+        storeState: 'setTimeout',
+      })
     }
   }
 
