@@ -83,7 +83,7 @@ export default class Main extends React.Component {
                   move here
                 </small>
               </div>
-              <button className='button is-medium' onClick={this.showModal(null, {})}>new</button>
+              <button className='button is-medium' onClick={this.showModal({})}>new</button>
               <button className='button is-medium' onClick={this.showMenu}>menu</button>
             </div>
           </div>
