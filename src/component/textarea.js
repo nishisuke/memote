@@ -8,9 +8,9 @@ export default class TA extends React.Component {
     this.state = {
       storeState: 'de',
       value: '',
+      timeoutID: -1,
     };
 
-    this.store = this.store.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.colorClass = this.colorClass.bind(this);
   }
@@ -32,37 +32,31 @@ export default class TA extends React.Component {
     });
   }
 
-  store() {
-    this.setState({
-      storeState: 'timeoutExecuting',
-    })
-    db.updateText(this.props.editing.id, this.state.value)
-      .then(() => {
-        this.setState({
-          storeState: 'stored',
-        })
-      })
-      .catch(() => {
-        this.setState({
-          storeState: 'shouldSaveImi',
-        })
-      });
-  }
-
   componentDidUpdate(prevProps, prevState, snapshot) {
-      console.log(this.state.storeState)
     if (this.props.editing.id && this.props.editing.id != prevProps.editing.id) {
-      console.log('change doc')
       //全開のid 処理残ってないか確認したり
-      this.setState({value: this.props.editing.string, storeState: 'de'})
+      this.setState({value: this.props.editing.string, storeState: 'de', timeoutID: -1})
       document.getElementById('editor').focus()
       return
     }
 
     if (this.state.storeState === 'shouldSave' || this.state.storeState === 'shouldSaveImi') {
-      console.log('set job')
       clearTimeout(this.state.timeoutID)
-      let timeoutID = setTimeout(this.store, this.state.storeState === 'shouldSaveImi' ? 10 : 1500);
+      let id = this.props.editing.id
+      let text = this.state.value
+      let timeoutID = setTimeout(() => {
+        this.setState({storeState: 'timeoutExecuting'})
+
+        db.updateText(id, text)
+          .then(() => {
+            if (this.state.value === text) {
+              this.setState({storeState: 'stored'})
+            }
+          })
+          .catch(() => {
+            this.setState({storeState: 'shouldSaveImi'})
+          });
+      }, this.state.storeState === 'shouldSaveImi' ? 10 : 1500);
       this.setState({
         timeoutID: timeoutID,
         storeState: 'setTimeout',
