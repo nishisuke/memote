@@ -58,7 +58,7 @@ class FirestoreDB {
   }
 
   updateText(memoID, text) {
-    this.firestore.collection('texts').doc(memoID).update({ string: text })
+    return this.firestore.collection('texts').doc(memoID).update({ string: text })
   }
 
   createMemo(text) {
