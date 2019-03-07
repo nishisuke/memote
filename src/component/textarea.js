@@ -32,11 +32,27 @@ export default class TA extends React.Component {
     });
   }
 
+  componentDidMount() {
+    window.addEventListener('beforeunload', e => {
+      if (this.state.storeState === 'de' || this.state.storeState === 'stored') {
+      } else {
+        e.returnValue = '本当にページ移動しますか？';
+      }
+    })
+  }
+
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.props.editing.id && this.props.editing.id != prevProps.editing.id) {
-      //全開のid 処理残ってないか確認したり
-      this.setState({id: this.props.editing.id, value: this.props.editing.string, storeState: 'de', timeoutID: -1})
       document.getElementById('editor').focus()
+
+      if (this.state.storeState === 'de' || this.state.storeState === 'stored') {
+        this.setState({id: this.props.editing.id, value: this.props.editing.string, storeState: 'de', timeoutID: -1})
+      } else {
+        // 処理中に変わった
+        // 処理失敗があるのでidなど変えたくない
+        alert('保存中です。')
+      }
+
       return
     }
 
