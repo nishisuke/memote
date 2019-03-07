@@ -1,5 +1,6 @@
 import React from 'react'
 
+import db from '../db'
 import OpenedModal from './modal'
 import Text from './text'
 import Menu from './menu'
@@ -19,6 +20,7 @@ export default class Main extends React.Component {
     this.hide = this.hide.bind(this);
     this.showMenu = this.showMenu.bind(this);
     this.setEditing = this.setEditing.bind(this);
+    this.createShowModal = this.createShowModal.bind(this);
   }
 
   setEditing(id) {
@@ -39,6 +41,15 @@ export default class Main extends React.Component {
       modalPath: '/menu',
       modalData: {},
     });
+  }
+
+  createShowModal() {
+    db.createMemo().then(doc => {
+      this.setState({
+        modalPath: '/new',
+        modalData: { id: doc.id },
+      });
+    })
   }
 
   showModal(doc) {
@@ -83,7 +94,7 @@ export default class Main extends React.Component {
                   move here
                 </small>
               </div>
-              <button className='button is-medium' onClick={this.showModal({})}>new</button>
+              <button className='button is-medium' onClick={this.createShowModal}>new</button>
               <button className='button is-medium' onClick={this.showMenu}>menu</button>
             </div>
           </div>

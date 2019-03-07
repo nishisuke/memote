@@ -19,13 +19,7 @@ export default class Modal extends React.Component {
   }
 
   handleSubmit() {
-    if (this.state.value === '' && !this.props.docData.id) return;
-
-    if (this.props.docData.id) {
-      db.updateText(this.props.docData.id, this.state.value)
-    } else {
-      db.createMemo(this.state.value)
-    }
+    db.updateText(this.props.docData.id, this.state.value)
   }
 
   hideModal() {

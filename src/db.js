@@ -61,18 +61,15 @@ class FirestoreDB {
     return this.firestore.collection('texts').doc(memoID).update({ string: text })
   }
 
-  createMemo(text) {
-    let doc = this.firestore.collection('texts').doc()
-    let data = {
-      string: text,
+  createMemo() {
+    return this.firestore.collection('texts').add({
+      string: '',
       user_id: this.userID,
       archived: false,
       archivedAt: new Date(2099, 3),
       pageXRate: (Math.random() / 7) + (2 / 7),
       pageYRate: (Math.random() / 5) + (3 / 5),
-    }
-
-    doc.set(data)
+    })
   }
 
   archiveMemo(memoID) {
