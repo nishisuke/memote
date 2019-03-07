@@ -94,7 +94,7 @@ export default class Main extends React.Component {
                   move here
                 </small>
               </div>
-              <button className='button is-medium' onClick={this.createShowModal}>new</button>
+              <button className={`button is-medium ${navigator.onLine ? 'is-primary' : 'is-warning'}`} onClick={this.createShowModal}>new</button>
               <button className='button is-medium' onClick={this.showMenu}>menu</button>
             </div>
           </div>
