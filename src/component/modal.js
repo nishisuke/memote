@@ -25,6 +25,7 @@ export default class Modal extends React.Component {
 
     return ''
   }
+
   handleChange(event) {
     this.setState({
       value: event.target.value,
@@ -35,43 +36,62 @@ export default class Modal extends React.Component {
   hideModal() {
     clearTimeout(this.state.timeoutID)
 
-    if (this.state.storeState === 'stored') {
+    if (this.state.storeState === 'stored' || this.state.storeState === 'de') {
       this.props.unmountMe()
-    } else if (this.state.storeState === 'de') {
-      db.delMemo(this.props.docData.id).then(this.props.unmountMe())
     } else {
-      db.updateText(this.props.docData.id, this.state.value).then(this.props.unmountMe)
+    let copy = {...this.props.docData}
+    let id = copy.id
+    delete copy.id
+    let text = this.state.value
+    Object.assign(copy, { string: text })
+
+    db.putMemo(id, copy)
+      .then(this.props.unmountMe)
+      .catch(() => {
+        alert(`save failed: ${text}`)
+this.props.unmountMe()
+      });
     }
+  }
+
+  queueCurrentCondition() {
+    clearTimeout(this.state.timeoutID)
+
+    let copy = {...this.props.docData}
+    let id = copy.id
+    delete copy.id
+    let text = this.state.value
+    Object.assign(copy, { string: text })
+
+    let timeoutID = setTimeout(() => {
+    db.putMemo(id, copy)
+      .then(() => {
+        if (this.state.value === text) {
+          this.setState({storeState: 'stored'})
+        }
+      })
+      .catch(() => {
+        this.setState({storeState: 'shouldSaveImi', failText: text})
+      });
+    }, this.state.storeState === 'shouldSaveImi' ? 100 : 1500);
+    this.setState({
+      timeoutID: timeoutID,
+      storeState: 'setTimeout',
+    })
   }
 
   componentDidMount() {
     document.getElementById('ta').focus()
   }
 
-  queueCurrentCondition() {
-      clearTimeout(this.state.timeoutID)
-      let id = this.props.docData.id
-      let text = this.state.value
-      let timeoutID = setTimeout(() => {
-        db.updateText(id, text)
-          .then(() => {
-            if (this.state.value === text) {
-              this.setState({storeState: 'stored'})
-            }
-          })
-          .catch(() => {
-            this.setState({storeState: 'shouldSaveImi'})
-          });
-      }, this.state.storeState === 'shouldSaveImi' ? 10 : 1500);
-      this.setState({
-        timeoutID: timeoutID,
-        storeState: 'setTimeout',
-      })
-  }
-
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.state.storeState === 'shouldSave' || this.state.storeState === 'shouldSaveImi') {
-      this.queueCurrentCondition()
+    switch(this.state.storeState) {
+      case  'shouldSave':
+        this.queueCurrentCondition()
+        break;
+      case 'shouldSaveImi':
+        this.queueCurrentCondition()
+        break;
     }
   }
 
