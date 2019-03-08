@@ -84,7 +84,7 @@ export default class Main extends React.Component {
           </div>
 
           <div className='inputContainer'>
-            <TextEditor editing={editing} />
+            <TextEditor id={editing.id} string={editing.string} />
             <div className='fixedActionContainer'>
               <div id='archiveIcon'>
                 <span className='icon is-medium'>

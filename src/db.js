@@ -65,9 +65,9 @@ class FirestoreDB {
     return this.firestore.collection('texts').doc(memoID).delete()
   }
 
-  createMemo() {
+  createMemo(text) {
     return this.firestore.collection('texts').add({
-      string: '',
+      string: text || '',
       user_id: this.userID,
       archived: false,
       archivedAt: new Date(2099, 3),

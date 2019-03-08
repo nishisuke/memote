@@ -42,17 +42,21 @@ export default class TA extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.props.editing.id && this.props.editing.id != prevProps.editing.id) {
+    if (this.props.id && !prevProps.id && this.state.storeState === 'shouldSave') {
+      db.createMemo(this.state.value).then(() => {
+        this.setState({id: this.props.id, value: this.props.string, storeState: 'de', timeoutID: -1})
+      })
+    } else if (this.props.id && this.props.id != prevProps.id) {
       document.getElementById('editor').focus()
 
       if (this.state.storeState === 'de' || this.state.storeState === 'stored') {
-        this.setState({id: this.props.editing.id, value: this.props.editing.string, storeState: 'de', timeoutID: -1})
+        this.setState({id: this.props.id, value: this.props.string, storeState: 'de', timeoutID: -1})
       } else {
         // 処理中にdoc変わった
         // 処理失敗があるのでidなど変えたくない
         alert('保存中です。')
       }
-    } else if (this.props.editing.id && (this.state.storeState === 'shouldSave' || this.state.storeState === 'shouldSaveImi')) {
+    } else if (this.state.id && (this.state.storeState === 'shouldSave' || this.state.storeState === 'shouldSaveImi')) {
       clearTimeout(this.state.timeoutID)
       let id = this.state.id
       let text = this.state.value
