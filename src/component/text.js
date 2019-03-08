@@ -15,7 +15,7 @@ export default class Text extends React.Component {
     this.archive = this.archive.bind(this);
     this.hoge = this.hoge.bind(this);
     this.storePoint = this.storePoint.bind(this);
-    this.touchDangerArea = this.touchDangerArea.bind(this);
+    this.shouldArchive = this.shouldArchive.bind(this);
   }
 
   hoge() {
@@ -38,8 +38,10 @@ export default class Text extends React.Component {
     db.archiveMemo(this.props.data.id)
   }
 
-  touchDangerArea(x, y) {
-    return (x < 96 + ((window.innerWidth - 248) / 6) && window.innerHeight - y < 72)
+  shouldArchive(touch) {
+    let left = touch.pageX - (this.state.offsetX || 0)
+    let bottom = touch.pageY - (this.state.offsetY || 0) + 28
+    return (left < 96 + ((window.innerWidth - 248) / 6) && window.innerHeight - bottom < 72)
   }
 
   componentDidMount() {
@@ -59,7 +61,7 @@ export default class Text extends React.Component {
         let pageX = touch.pageX - (this.state.offsetX || 0)
         let pageY = touch.pageY - (this.state.offsetY || 0)
         this.setState(this.restrictedPoint(pageX, pageY))
-        if (this.touchDangerArea(touch.pageX, touch.pageY)) {
+        if (this.shouldArchive(touch)) {
           document.getElementById('archiveIcon').classList.add('red')
           ele.classList.add('willArchive')
         } else {
@@ -72,7 +74,7 @@ export default class Text extends React.Component {
     ele.addEventListener('touchend', event => {
       if (event.targetTouches.length == 0) {
         let touch = event.changedTouches[0]
-        if (this.touchDangerArea(touch.pageX, touch.pageY)) {
+        if (this.shouldArchive(touch)) {
           this.archive()
           document.getElementById('archiveIcon').classList.remove('red')
         } else {
