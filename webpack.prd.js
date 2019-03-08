@@ -8,7 +8,14 @@ module.exports = {
   mode: 'production',
   entry: './src/main.js',
   output: {
-    filename: '[name].[contenthash].js',
+    filename: () => {
+      let n = new Date()
+      return ('0' + (n.getMonth() + 1)).slice(-2)
+        + ('0' + n.getDate()).slice(-2)
+        + ('0' + n.getHours()).slice(-2)
+        + ('0' + n.getMinutes()).slice(-2)
+        + '.[contenthash].js'
+    },
     path: path.resolve(__dirname, 'prd'),
   },
   module: {
