@@ -7,20 +7,25 @@ export default class TA extends React.Component {
 
     this.state = {
       id: null,
-      storeState: 'de',
+      innerState: 'waiting',
       value: '',
       timeoutID: -1,
+      failID: null,
+      failText: null,
     };
-
+ 
+    this.update = this.update.bind(this);
+    this.replaceUpdateJob = this.replaceUpdateJob.bind(this);
+    this.detectPropChange = this.detectPropChange.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.colorClass = this.colorClass.bind(this);
   }
 
   colorClass() {
-    let s = this.state.storeState
-    if ('stored' === s) return 'is-success';
-    if ('shouldSaveImi' === s) return 'is-danger';
-    if ('setTimeout' === s) return 'is-warning';
+    let s = this.state.innerState
+    if ('updated' === s) return 'is-success';
+    if ('updateFailed' === s) return 'is-danger';
+    if ('willUpdate' === s) return 'is-warning';
 
     return ''
   }
@@ -28,59 +33,93 @@ export default class TA extends React.Component {
   handleChange(event) {
     this.setState({
       value: event.target.value,
-      storeState: 'shouldSave',
+      innerState: 'shouldSave',
     });
   }
 
   componentDidMount() {
     window.addEventListener('beforeunload', e => {
-      if (this.state.storeState === 'de' || this.state.storeState === 'stored') {
+      if (this.state.innerState === 'waiting' || this.state.innerState === 'updated') {
       } else {
         e.returnValue = '本当にページ移動しますか？';
       }
     })
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.props.id && !prevProps.id && this.state.storeState === 'shouldSave') {
-      db.createMemo(this.state.value).then(() => {
-        this.setState({id: this.props.id, value: this.props.string, storeState: 'de', timeoutID: -1})
-      })
-    } else if (this.props.id && this.props.id != prevProps.id) {
-      document.getElementById('editor').focus()
+  detectPropChange() {
+    console.log('prop changed')
+    document.getElementById('editor').focus()
 
-      if (this.state.storeState === 'de' || this.state.storeState === 'stored') {
-        this.setState({id: this.props.id, value: this.props.string, storeState: 'de', timeoutID: -1})
-      } else {
-        // 処理中にdoc変わった
-        // 処理失敗があるのでidなど変えたくない
-        alert('保存中です。')
-      }
-    } else if (this.state.id && (this.state.storeState === 'shouldSave' || this.state.storeState === 'shouldSaveImi')) {
-      clearTimeout(this.state.timeoutID)
-      let id = this.state.id
-      let text = this.state.value
-      let timeoutID = setTimeout(() => {
-        db.updateText(id, text)
-          .then(() => {
-            if (this.state.value === text) {
-              this.setState({storeState: 'stored'})
-            }
+    switch(this.state.innerState) {
+      case 'shouldSave':
+        if (!this.state.id) {
+          db.createMemo(this.state.value).then(() => {
+            this.setState({id: this.props.id, value: this.props.string, innerState: 'waiting', timeoutID: -1})
           })
-          .catch(() => {
-            this.setState({storeState: 'shouldSaveImi'})
-          });
-      }, this.state.storeState === 'shouldSaveImi' ? 10 : 1500);
-      this.setState({
-        timeoutID: timeoutID,
-        storeState: 'setTimeout',
+        }
+        break;
+      case 'updateFailed':
+        alert(`not saved: "${this.state.failText}"`);
+        break;
+      default:
+        this.setState({id: this.props.id, value: this.props.string, innerState: 'waiting', timeoutID: -1})
+    }
+  }
+
+  update(id, t) {
+    db.updateText(id, t)
+      .then(() => {
+        if (id === this.state.id && this.state.value === t) {
+          this.setState({ innerState: 'updated' })
+        }
       })
+      .catch(e => {
+        console.error(e)
+        this.setState({innerState: 'updateFailed', failID: id, failText: t})
+      });
+  }
+
+  replaceUpdateJob() {
+    clearTimeout(this.state.timeoutID)
+    let id = this.state.id
+    let text = this.state.value
+    let timeoutID = setTimeout(() => {
+      this.update(id, text)
+    }, 1500);
+    this.setState({
+      timeoutID: timeoutID,
+      innerState: 'willUpdate',
+    })
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.id != this.props.id) {
+      this.detectPropChange()
+    } else if (prevProps.string == this.props.string) { // prop のstrの違いに反応しないように
+      console.log(this.state.innerState)
+      switch(this.state.innerState) {
+        case 'shouldSave':
+          if (this.state.id) {
+            this.replaceUpdateJob()
+          }
+          break;
+        case 'updateFailed':
+          let id = this.state.id
+          if (this.state.failID === id) {
+            let val = this.state.value
+            this.setState({ innerState: 'willUpdate' })
+            this.update(id, val)
+          } else {
+            alert(`update failed: "${this.state.failText}"`);
+          }
+          break;
+      }
     }
   }
 
   render() {
     return (
-      <div className={`editorContainer control ${this.state.storeState === 'setTimeout' ? 'is-loading' : ''}`}>
+      <div className={`editorContainer control ${this.state.innerState === 'willUpdate' ? 'is-loading' : ''}`}>
         <textarea className={`textarea has-fixed-size editor ${this.colorClass()}`} onChange={this.handleChange} value={this.state.value} id='editor' />
       </div>
     );
