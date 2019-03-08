@@ -71,9 +71,7 @@ class FirestoreDB {
 
   putMemo(id, data) {
     let v = Object.assign({}, this.defaultMemo, data)
-    let col = this.firestore.collection('texts')
-    let doc = id ? col.doc(id) : col.doc()
-    return doc.set(v)
+    return this.firestore.collection('texts').doc(id).set(v)
   }
 
   get defaultMemo() {
