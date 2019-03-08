@@ -61,6 +61,10 @@ class FirestoreDB {
     return this.firestore.collection('texts').doc(memoID).update({ string: text, updatedAt: Date.now() })
   }
 
+  delMemo(memoID) {
+    return this.firestore.collection('texts').doc(memoID).delete()
+  }
+
   createMemo() {
     return this.firestore.collection('texts').add({
       string: '',

@@ -35,8 +35,10 @@ export default class Modal extends React.Component {
   hideModal() {
     clearTimeout(this.state.timeoutID)
 
-    if (this.state.storeState === 'stored' || this.state.storeState === 'de') {
+    if (this.state.storeState === 'stored') {
       this.props.unmountMe()
+    } else if (this.state.storeState === 'de') {
+      db.delMemo(this.props.docData.id).then(this.props.unmountMe())
     } else {
       db.updateText(this.props.docData.id, this.state.value).then(this.props.unmountMe)
     }
