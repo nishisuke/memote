@@ -53,6 +53,10 @@ class FirestoreDB {
     })
   }
 
+  newMemo() {
+    return this.firestore.collection('texts').doc()
+  }
+
   activateMemo(id) {
     this.firestore.collection('texts').doc(id).update({ archived: false, archivedAt: new Date(2099, 3) })
   }
@@ -63,6 +67,25 @@ class FirestoreDB {
 
   delMemo(memoID) {
     return this.firestore.collection('texts').doc(memoID).delete()
+  }
+
+  putMemo(id, data) {
+    let v = Object.assign({}, this.defaultMemo, data)
+    let col = this.firestore.collection('texts')
+    let doc = id ? col.doc(id) : col.doc()
+    return doc.set(v)
+  }
+
+  get defaultMemo() {
+    return {
+      string: '',
+      user_id: this.userID,
+      archived: false,
+      archivedAt: new Date(2099, 3),
+      updatedAt: Date.now(),
+      pageXRate: (Math.random() / 7) + (2 / 7),
+      pageYRate: (Math.random() / 5) + (3 / 5),
+    }
   }
 
   createMemo(text) {
