@@ -48,15 +48,11 @@ export default class TA extends React.Component {
       if (this.state.storeState === 'de' || this.state.storeState === 'stored') {
         this.setState({id: this.props.editing.id, value: this.props.editing.string, storeState: 'de', timeoutID: -1})
       } else {
-        // 処理中に変わった
+        // 処理中にdoc変わった
         // 処理失敗があるのでidなど変えたくない
         alert('保存中です。')
       }
-
-      return
-    }
-
-    if (this.props.editing.id && (this.state.storeState === 'shouldSave' || this.state.storeState === 'shouldSaveImi')) {
+    } else if (this.props.editing.id && (this.state.storeState === 'shouldSave' || this.state.storeState === 'shouldSaveImi')) {
       clearTimeout(this.state.timeoutID)
       let id = this.state.id
       let text = this.state.value
