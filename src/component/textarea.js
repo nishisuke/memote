@@ -56,7 +56,7 @@ export default class TA extends React.Component {
       return
     }
 
-    if (this.state.storeState === 'shouldSave' || this.state.storeState === 'shouldSaveImi') {
+    if (this.props.editing.id && (this.state.storeState === 'shouldSave' || this.state.storeState === 'shouldSaveImi')) {
       clearTimeout(this.state.timeoutID)
       let id = this.state.id
       let text = this.state.value
