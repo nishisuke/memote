@@ -14,6 +14,7 @@ export default class Main extends React.Component {
       modalPath: '',
       modalData: {},
       editingID: null,
+      editingText: null,
     };
 
     this.showModal = this.showModal.bind(this);
@@ -23,9 +24,9 @@ export default class Main extends React.Component {
     this.createShowModal = this.createShowModal.bind(this);
   }
 
-  setEditing(id) {
+  setEditing(t) {
     return () => {
-      this.setState({ editingID: id })
+      this.setState({ editingID: t.id, editingText: t.string })
     }
   }
 
@@ -63,8 +64,6 @@ export default class Main extends React.Component {
   }
 
   render() {
-    let editing = this.props.texts.find(t => t.id == this.state.editingID) || {}
-
     return (
       <div className='rootContainer'>
         <div className={`modal ${this.state.modalPath != '' ? 'is-active' : ''}`}>
@@ -80,11 +79,11 @@ export default class Main extends React.Component {
 
         <div className='mainContainer'>
           <div className='textsContainer'>
-            { this.props.texts.map(text => <Text setEdit={this.setEditing(text.id)} key={text.id} data={text} edit={this.showModal(text)}/>)}
+            { this.props.texts.map(text => <Text setEdit={this.setEditing(text)} key={text.id} data={text} edit={this.showModal(text)}/>)}
           </div>
 
           <div className='inputContainer'>
-            <TextEditor id={editing.id} string={editing.string} />
+            <TextEditor id={this.state.editingID} string={this.state.editingText} />
             <div className='fixedActionContainer'>
               <div id='archiveIcon'>
                 <span className='icon is-medium'>
