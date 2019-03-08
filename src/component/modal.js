@@ -11,6 +11,7 @@ export default class Modal extends React.Component {
       timeoutID: -1,
     };
 
+    this.queueCurrentCondition = this.queueCurrentCondition.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.hideModal = this.hideModal.bind(this);
     this.colorClass = this.colorClass.bind(this);
@@ -43,16 +44,9 @@ export default class Modal extends React.Component {
 
   componentDidMount() {
     document.getElementById('ta').focus()
-    window.addEventListener('beforeunload', e => {
-      if (this.state.storeState === 'de' || this.state.storeState === 'stored') {
-      } else {
-        e.returnValue = '本当にページ移動しますか？';
-      }
-    })
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.state.storeState === 'shouldSave' || this.state.storeState === 'shouldSaveImi') {
+  queueCurrentCondition() {
       clearTimeout(this.state.timeoutID)
       let id = this.props.docData.id
       let text = this.state.value
@@ -71,6 +65,11 @@ export default class Modal extends React.Component {
         timeoutID: timeoutID,
         storeState: 'setTimeout',
       })
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.state.storeState === 'shouldSave' || this.state.storeState === 'shouldSaveImi') {
+      this.queueCurrentCondition()
     }
   }
 
