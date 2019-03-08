@@ -45,6 +45,7 @@ export default class Main extends React.Component {
 
   createShowModal() {
     db.createMemo().then(doc => {
+      // callbackでmountするとmount先のdidmountにあるfocusがなぜかされない
       this.setState({
         modalPath: '/new',
         modalData: { id: doc.id },
