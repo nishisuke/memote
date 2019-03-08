@@ -58,7 +58,7 @@ class FirestoreDB {
   }
 
   updateText(memoID, text) {
-    return this.firestore.collection('texts').doc(memoID).update({ string: text })
+    return this.firestore.collection('texts').doc(memoID).update({ string: text, updatedAt: Date.now() })
   }
 
   createMemo() {
@@ -67,6 +67,7 @@ class FirestoreDB {
       user_id: this.userID,
       archived: false,
       archivedAt: new Date(2099, 3),
+      updatedAt: Date.now(),
       pageXRate: (Math.random() / 7) + (2 / 7),
       pageYRate: (Math.random() / 5) + (3 / 5),
     })
