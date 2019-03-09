@@ -13,8 +13,7 @@ export default class Main extends React.Component {
     this.state = {
       modalPath: '',
       modalData: {},
-      editingID: null,
-      editingText: null,
+      editing: {},
     };
 
     this.showModal = this.showModal.bind(this);
@@ -26,7 +25,7 @@ export default class Main extends React.Component {
 
   setEditing(t) {
     return () => {
-      this.setState({ editingID: t.id, editingText: t.string })
+      this.setState({ editing: {...t }})
     }
   }
 
@@ -81,7 +80,7 @@ export default class Main extends React.Component {
           </div>
 
           <div className='inputContainer'>
-            <TextEditor id={this.state.editingID} string={this.state.editingText} />
+            <TextEditor doc={this.state.editing} />
             <div className='fixedActionContainer'>
               <div id='archiveIcon' className='item'>
                 <span className='icon is-medium'>
