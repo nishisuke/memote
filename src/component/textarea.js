@@ -47,14 +47,13 @@ export default class TA extends React.Component {
   }
 
   detectPropChange() {
-    console.log('prop changed')
     document.getElementById('editor').focus()
 
     switch(this.state.innerState) {
       case 'shouldSave':
         if (!this.state.id) {
           db.createMemo(this.state.value).then(() => {
-            this.setState({id: this.props.doc.id, value: this.props.doc.string, innerState: 'waiting', timeoutID: -1})
+            this.setState({id: this.props.targetID, value: this.props.docData.string, innerState: 'waiting', timeoutID: -1})
           })
         }
         break;
@@ -62,7 +61,7 @@ export default class TA extends React.Component {
         alert(`not saved: "${this.state.failText}"`);
         break;
       default:
-        this.setState({id: this.props.doc.id, value: this.props.doc.string, innerState: 'waiting', timeoutID: -1})
+        this.setState({id: this.props.targetID, value: this.props.docData.string, innerState: 'waiting', timeoutID: -1})
     }
   }
 
@@ -93,9 +92,10 @@ export default class TA extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.doc.id != this.props.doc.id) {
+    if (prevProps.targetID != this.props.targetID) {
+      console.log('prop changed')
       this.detectPropChange()
-    } else if (prevProps.doc.string == this.props.doc.string) { // prop のstrの違いに反応しないように
+    } else if (this.props.docData.string !== null && prevProps.docData.string == this.props.docData.string) { // prop のstrの違いに反応しないように
       console.log(this.state.innerState)
       switch(this.state.innerState) {
         case 'shouldSave':
