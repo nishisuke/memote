@@ -49,10 +49,19 @@ export default class Main extends React.Component {
 
   createShowModal() {
     let doc = db.newMemo()
-    this.setState({
-      modalPath: '/new',
-      modalData: { id: doc.id },
-    });
+    var d = {}
+    if (window.innerWidth < 560) {
+      d = {
+        modalPath: '/new',
+        modalData: { id: doc.id },
+      }
+    } else {
+      d = {
+        editingID: db.newMemo().id,
+        editing: { string: '' },
+      }
+    }
+    this.setState(d);
   }
 
   showModal(doc) {
