@@ -8,7 +8,7 @@ export default class TA extends React.PureComponent {
     this.state = {
       id: props.targetID,
       innerState: 'waiting',
-      value: props.docData.string || '',
+      value: props.docData.string,
       doc: props.docData,
       timeoutID: -1,
       failID: null,

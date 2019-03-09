@@ -13,7 +13,7 @@ export default class Main extends React.Component {
     this.state = {
       modalPath: '',
       modalData: {},
-      editing: { string: null },
+      editing: { string: '' },
       editingID: db.newMemo().id,
     };
 
