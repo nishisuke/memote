@@ -9,6 +9,7 @@ export default class TA extends React.PureComponent {
       id: props.targetID,
       innerState: 'waiting',
       value: props.docData.string || '',
+      doc: props.docData,
       timeoutID: -1,
       failID: null,
       failText: null,
@@ -41,18 +42,16 @@ export default class TA extends React.PureComponent {
     document.getElementById('editor').focus()
 
     switch(this.state.innerState) {
-      case 'shouldSave':
-        if (!this.state.id) {
-          db.createMemo(this.state.value).then(() => {
-            this.setState({id: this.props.targetID, value: this.props.docData.string, innerState: 'waiting', timeoutID: -1})
-          })
-        }
-        break;
-      case 'updateFailed':
-        alert(`not saved: "${this.state.failText}"`);
+      case 'waiting':
+      case 'updated':
+      case 'willUpdate':
+        // willupdateはtimeoutIDを変えることで前のjobが死なないようにするからok
+        this.setState({id: this.props.targetID, doc: this.props.docData, value: this.props.docData.string, innerState: 'waiting', timeoutID: -1})
         break;
       default:
-        this.setState({id: this.props.targetID, value: this.props.docData.string, innerState: 'waiting', timeoutID: -1})
+        // shouldSave
+        // updateFailed
+        alert('not saved: this is rare case.') // 雑に対処
     }
   }
 
@@ -72,7 +71,7 @@ export default class TA extends React.PureComponent {
   replaceUpdateJob() {
     clearTimeout(this.state.timeoutID)
     let id = this.state.id
-    let v = Object.assign({}, this.props.docData, { string: this.state.value })
+    let v = Object.assign({}, this.state.doc, { string: this.state.value })
     let timeoutID = setTimeout(() => {
       this.update(id, v)
     }, 1500);
@@ -95,7 +94,7 @@ export default class TA extends React.PureComponent {
         case 'updateFailed':
           let id = this.state.id
           if (this.state.failID === id) {
-            let v = Object.assign({}, this.props.docData, { string: this.state.value })
+            let v = Object.assign({}, this.state.doc, { string: this.state.value })
             this.setState({ innerState: 'willUpdate' })
             this.update(id, v)
           } else {
