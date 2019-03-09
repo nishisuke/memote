@@ -106,6 +106,7 @@ export default class TA extends React.PureComponent {
   }
 
   componentDidMount() {
+    document.getElementById('editor').focus()
     window.addEventListener('beforeunload', e => {
       if (!(this.state.innerState === 'waiting' || this.state.innerState === 'updated')) {
         e.returnValue = 'not saved'
