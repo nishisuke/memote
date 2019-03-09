@@ -14,7 +14,7 @@ export default class Main extends React.Component {
       modalPath: '',
       modalData: {},
       editing: { string: null },
-      editingID: null,
+      editingID: db.newMemo().id,
     };
 
     this.showModal = this.showModal.bind(this);

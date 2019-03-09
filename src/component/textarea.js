@@ -1,14 +1,14 @@
 import React from 'react'
 import db from '../db'
 
-export default class TA extends React.Component {
+export default class TA extends React.PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
-      id: null,
+      id: props.targetID,
       innerState: 'waiting',
-      value: '',
+      value: props.docData.string || '',
       timeoutID: -1,
       failID: null,
       failText: null,
@@ -95,7 +95,7 @@ export default class TA extends React.Component {
     if (prevProps.targetID != this.props.targetID) {
       console.log('prop changed')
       this.detectPropChange()
-    } else if (this.props.docData.string !== null && prevProps.docData.string == this.props.docData.string) { // prop のstrの違いに反応しないように
+    } else { // prop のstrの違いに反応しないように
       console.log(this.state.innerState)
       switch(this.state.innerState) {
         case 'shouldSave':
