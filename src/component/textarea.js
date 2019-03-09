@@ -37,15 +37,6 @@ export default class TA extends React.PureComponent {
     });
   }
 
-  componentDidMount() {
-    window.addEventListener('beforeunload', e => {
-      if (this.state.innerState === 'waiting' || this.state.innerState === 'updated') {
-      } else {
-        e.returnValue = '本当にページ移動しますか？';
-      }
-    })
-  }
-
   detectPropChange() {
     document.getElementById('editor').focus()
 
@@ -65,10 +56,10 @@ export default class TA extends React.PureComponent {
     }
   }
 
-  update(id, t) {
-    db.updateText(id, t)
+  update(id, data) {
+    db.putMemo(id, data)
       .then(() => {
-        if (id === this.state.id && this.state.value === t) {
+        if (id === this.state.id && this.state.value === data.string) {
           this.setState({ innerState: 'updated' })
         }
       })
@@ -81,9 +72,9 @@ export default class TA extends React.PureComponent {
   replaceUpdateJob() {
     clearTimeout(this.state.timeoutID)
     let id = this.state.id
-    let text = this.state.value
+    let v = Object.assign({}, this.props.docData, { string: this.state.value })
     let timeoutID = setTimeout(() => {
-      this.update(id, text)
+      this.update(id, v)
     }, 1500);
     this.setState({
       timeoutID: timeoutID,
@@ -99,22 +90,28 @@ export default class TA extends React.PureComponent {
       console.log(this.state.innerState)
       switch(this.state.innerState) {
         case 'shouldSave':
-          if (this.state.id) {
-            this.replaceUpdateJob()
-          }
+          this.replaceUpdateJob()
           break;
         case 'updateFailed':
           let id = this.state.id
           if (this.state.failID === id) {
-            let val = this.state.value
+            let v = Object.assign({}, this.props.docData, { string: this.state.value })
             this.setState({ innerState: 'willUpdate' })
-            this.update(id, val)
+            this.update(id, v)
           } else {
             alert(`update failed: "${this.state.failText}"`);
           }
           break;
       }
     }
+  }
+
+  componentDidMount() {
+    window.addEventListener('beforeunload', e => {
+      if (!(this.state.innerState === 'waiting' || this.state.innerState === 'updated')) {
+        e.returnValue = 'not saved'
+      }
+    })
   }
 
   render() {
