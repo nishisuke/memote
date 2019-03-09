@@ -61,14 +61,6 @@ class FirestoreDB {
     this.firestore.collection('texts').doc(id).update({ archived: false, archivedAt: new Date(2099, 3) })
   }
 
-  updateText(memoID, text) {
-    return this.firestore.collection('texts').doc(memoID).update({ string: text, updatedAt: Date.now() })
-  }
-
-  delMemo(memoID) {
-    return this.firestore.collection('texts').doc(memoID).delete()
-  }
-
   putMemo(id, data) {
     let v = Object.assign({}, this.defaultMemo, data)
     return this.firestore.collection('texts').doc(id).set(v)
