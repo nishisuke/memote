@@ -82,20 +82,13 @@ class FirestoreDB {
       archivedAt: new Date(2099, 3),
       updatedAt: Date.now(),
       pageXRate: (Math.random() / 7) + (2 / 7),
-      pageYRate: (Math.random() / 5) + (3 / 5),
+      pageYRate: (Math.random() / 14) + (5 / 7),
     }
   }
 
   createMemo(text) {
-    return this.firestore.collection('texts').add({
-      string: text || '',
-      user_id: this.userID,
-      archived: false,
-      archivedAt: new Date(2099, 3),
-      updatedAt: Date.now(),
-      pageXRate: (Math.random() / 7) + (2 / 7),
-      pageYRate: (Math.random() / 5) + (3 / 5),
-    })
+    let v = Object.assign({}, this.defaultMemo, { string: text })
+    return this.firestore.collection('texts').add(v)
   }
 
   archiveMemo(memoID) {
