@@ -9,6 +9,10 @@
     justify-content: space-around;
   }
 
+  .fixedActionContainer .item {
+    width: 96px;
+  }
+
   .moveabs {
     position: fixed;
     z-index: 1;

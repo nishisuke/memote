@@ -83,7 +83,7 @@ export default class Main extends React.Component {
           <div className='inputContainer'>
             <TextEditor id={this.state.editingID} string={this.state.editingText} />
             <div className='fixedActionContainer'>
-              <div id='archiveIcon'>
+              <div id='archiveIcon' className='item'>
                 <span className='icon is-medium'>
                   <i className='fas fa-archive fa-lg'></i>
                 </span>
@@ -92,8 +92,12 @@ export default class Main extends React.Component {
                   move here
                 </small>
               </div>
-              <button className={`button is-medium ${navigator.onLine ? 'is-primary' : 'is-warning'}`} onClick={this.createShowModal}>new</button>
-              <button className='button is-medium' onClick={this.showMenu}>menu</button>
+              <div className='item'>
+                <button className={`button is-medium ${navigator.onLine ? 'is-primary' : 'is-warning'}`} onClick={this.createShowModal}>new</button>
+              </div>
+              <div className='item'>
+                <button className='button is-medium' onClick={this.showMenu}>menu</button>
+              </div>
             </div>
           </div>
         </div>
