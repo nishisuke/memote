@@ -2,6 +2,6 @@
 
 set -eux
 
-npm run prd
+npm run compile
 cp manifest.json prd/
 firebase deploy
