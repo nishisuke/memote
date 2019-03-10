@@ -104,11 +104,15 @@ export default class Main extends React.Component {
                   move here
                 </small>
               </div>
-              <div className='item'>
-                <button className={`button is-medium ${navigator.onLine ? 'is-primary' : 'is-warning'}`} onClick={this.createShowModal}>new</button>
+              <div className='item has-text-primary' onClick={this.createShowModal} >
+                <span className='icon is-large'>
+                  <i className='fas fa-pen fa-2x'></i>
+                </span>
               </div>
-              <div className='item'>
-                <button className='button is-medium' onClick={this.showMenu}>menu</button>
+              <div className='item' onClick={this.showMenu}>
+                <span className='icon is-large'>
+                  <i className='fas fa-bars fa-2x'></i>
+                </span>
               </div>
             </div>
           </div>
