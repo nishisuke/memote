@@ -3,5 +3,5 @@
 set -eux
 
 npm run compile
-cp manifest.json prd/
+cp static/manifest.json prd/
 firebase deploy
