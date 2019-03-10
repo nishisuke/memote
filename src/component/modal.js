@@ -27,13 +27,16 @@ export default class Modal extends React.PureComponent {
   colorClass() {
     switch(this.state.storeState) {
       case 'saved':        return 'is-success';
-      case 'savingFailed': return 'is-danger';
       case 'de':           return '';
       default:             return 'is-warning';
     }
   }
 
   handleChange(event) {
+    if (this.state.storeState === 'willBeFinished') {
+      alert('finishing edit');
+      return;
+    }
     this.setState({
       value: event.target.value,
       storeState: 'shouldBeSaved',
@@ -56,25 +59,20 @@ export default class Modal extends React.PureComponent {
       this.setState({storeState: 'beingSaved', timeoutID: null, failText: null})
       db.putMemo(this.state.docID, d)
         .then(() => {
-          if (this.state.storeState === 'beingSaved') {
+          if (this.state.storeState === 'willBeFinished') {
+            this.props.unmountMe()
+          } else if (this.state.value === text) {
             this.setState({storeState: 'saved'})
-          } else if (this.state.storeState === 'willBeFinished') {
-            this.setState({storeState: 'canBeFinished'})
           }
         })
         .catch(() => {
+          alert(`save fail: ${text}`)
           if (this.state.storeState === 'willBeFinished') {
-            alert(`save fail: ${text}`)
-            this.setState({storeState: 'canBeFinished'})
-          } else {
-            this.setState({storeState: 'savingFailed', failText: text})
+            this.props.unmountMe()
           }
         });
     }, milsec);
-    this.setState({
-      timeoutID: timeoutID,
-      storeState: 'willBeSaved',
-    })
+    return timeoutID;
   }
 
   componentDidMount() {
@@ -82,22 +80,14 @@ export default class Modal extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.docData.id !== this.props.docData.id) {
-      alert('予期しないケースが発生しました。アプリを終了してください');
-      return;
-    }
-
-    console.log(this.state.storeState)
     switch(this.state.storeState) {
       case 'shouldBeSaved':
         this.cancelSaving();
-        this.saveTextAfter(1500)
-        break;
-      case 'savingFailed':
-        if (prevState.storeState === 'beingSaved') {
-          this.cancelSaving();
-          this.saveTextAfter(100)
-        }
+        let tid = this.saveTextAfter(1500)
+        this.setState({
+          timeoutID: tid,
+          storeState: 'willBeSaved',
+        })
         break;
       case 'willBeFinished':
         switch(prevState.storeState) {
@@ -110,17 +100,14 @@ export default class Modal extends React.PureComponent {
               .catch(() => {
                 alert(`save failed: ${text}`)
               });
-            this.setState({ storeState: 'canBeFinished' })
+            this.props.unmountMe()
             break;
           case 'beingSaved':
             break;
           default:
-            this.setState({ storeState: 'canBeFinished' })
+            this.props.unmountMe()
             break;
         }
-        break;
-      case 'canBeFinished':
-        this.props.unmountMe()
         break;
     }
   }
