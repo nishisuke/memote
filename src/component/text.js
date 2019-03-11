@@ -56,6 +56,8 @@ export default class Text extends React.Component {
 
     ele.addEventListener('touchmove', event => {
       event.preventDefault()
+
+      this.props.show()
       if (event.targetTouches.length == 1) {
         let touch = event.targetTouches[0]
         let pageX = touch.pageX - (this.state.offsetX || 0)
@@ -72,6 +74,7 @@ export default class Text extends React.Component {
     }, { passive: false })
 
     ele.addEventListener('touchend', event => {
+      this.props.hide()
       if (event.targetTouches.length == 0) {
         let touch = event.changedTouches[0]
         if (this.shouldArchive(touch)) {
