@@ -110,7 +110,7 @@ export default class Main extends React.Component {
           <div className='inputContainer'>
             <TextEditor targetID={this.state.editingID} docData={this.state.editing} />
             <div className='fixedActionContainer'>
-              <div id='archiveIcon' className={`item ${this.state.showArchive ? '' : 'is-invisible'}`}>
+              <div id='archiveIcon' className={`item has-text-danger ${this.state.showArchive ? '' : 'is-invisible'}`}>
                 <span className='icon is-large'>
                   <i className='fas fa-archive fa-2x'></i>
                 </span>

@@ -64,10 +64,8 @@ export default class Text extends React.Component {
         let pageY = touch.pageY - (this.state.offsetY || 0)
         this.setState(this.restrictedPoint(pageX, pageY))
         if (this.shouldArchive(touch)) {
-          document.getElementById('archiveIcon').classList.add('red')
           ele.classList.add('willArchive')
         } else {
-          document.getElementById('archiveIcon').classList.remove('red')
           ele.classList.remove('willArchive')
         }
       }
@@ -79,7 +77,6 @@ export default class Text extends React.Component {
         let touch = event.changedTouches[0]
         if (this.shouldArchive(touch)) {
           this.archive()
-          document.getElementById('archiveIcon').classList.remove('red')
         } else {
           this.storePoint()
         }
