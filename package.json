@@ -38,7 +38,7 @@
     "firebase": "^5.8.1",
     "firebaseui": "^3.5.2",
     "moment": "^2.24.0",
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0"
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4"
   }
 }
