@@ -10,7 +10,7 @@ export default class TA extends React.PureComponent {
 
     this.state = {
       id: props.targetID,
-      innerState: 'notChanged',
+      saveState: 'notChanged',
       value: props.docData.string,
       doc: props.docData,
       timeoutID: -1,
@@ -26,7 +26,7 @@ export default class TA extends React.PureComponent {
   }
 
   colorClass() {
-    let s = this.state.innerState
+    let s = this.state.saveState
     if ('saved' === s) return 'is-success';
     if ('updateFailed' === s) return 'is-danger';
     if ('willSave' === s) return 'is-warning';
@@ -37,19 +37,19 @@ export default class TA extends React.PureComponent {
   handleChange(event) {
     this.setState({
       value: event.target.value,
-      innerState: 'changed',
+      saveState: 'changed',
     });
   }
 
   detectPropChange() {
     document.getElementById('editor').focus()
 
-    switch(this.state.innerState) {
+    switch(this.state.saveState) {
       case 'notChanged':
       case 'saved':
       case 'willSave':
         // willSaveはtimeoutIDを変えることで前のjobが死なないようにするからok
-        this.setState({id: this.props.targetID, doc: this.props.docData, value: this.props.docData.string, innerState: 'notChanged', timeoutID: -1})
+        this.setState({id: this.props.targetID, doc: this.props.docData, value: this.props.docData.string, saveState: 'notChanged', timeoutID: -1})
         break;
       default:
         // changed
@@ -62,12 +62,12 @@ export default class TA extends React.PureComponent {
     db.putMemo(id, data)
       .then(() => {
         if (id === this.state.id && this.state.value === data.string) {
-          this.setState({ innerState: 'saved' })
+          this.setState({ saveState: 'saved' })
         }
       })
       .catch(e => {
         console.error(e)
-        this.setState({innerState: 'updateFailed', failID: id, failText: t})
+        this.setState({saveState: 'updateFailed', failID: id, failText: t})
       });
   }
 
@@ -80,7 +80,7 @@ export default class TA extends React.PureComponent {
     }, 1500);
     this.setState({
       timeoutID: timeoutID,
-      innerState: 'willSave',
+      saveState: 'willSave',
     })
   }
 
@@ -89,8 +89,8 @@ export default class TA extends React.PureComponent {
       console.log('prop changed')
       this.detectPropChange()
     } else { // prop のstrの違いに反応しないように
-      console.log(this.state.innerState)
-      switch(this.state.innerState) {
+      console.log(this.state.saveState)
+      switch(this.state.saveState) {
         case 'changed':
           this.replaceUpdateJob()
           break;
@@ -98,7 +98,7 @@ export default class TA extends React.PureComponent {
           let id = this.state.id
           if (this.state.failID === id) {
             let v = Object.assign({}, this.state.doc, { string: this.state.value })
-            this.setState({ innerState: 'willSave' })
+            this.setState({ saveState: 'willSave' })
             this.update(id, v)
           } else {
             alert(`update failed: "${this.state.failText}"`);
@@ -111,7 +111,7 @@ export default class TA extends React.PureComponent {
   componentDidMount() {
     document.getElementById('editor').focus()
     window.addEventListener('beforeunload', e => {
-      if (!(this.state.innerState === 'notChanged' || this.state.innerState === 'saved')) {
+      if (!(this.state.saveState === 'notChanged' || this.state.saveState === 'saved')) {
         e.returnValue = 'not saved'
       }
     })
@@ -119,7 +119,7 @@ export default class TA extends React.PureComponent {
 
   render() {
     return (
-      <div className={`editorContainer control ${this.state.innerState === 'willSave' ? 'is-loading' : ''}`}>
+      <div className={`editorContainer control ${this.state.saveState === 'willSave' ? 'is-loading' : ''}`}>
         <textarea className={`textarea has-fixed-size editor ${this.colorClass()}`} onChange={this.handleChange} value={this.state.value} id='editor' />
       </div>
     );

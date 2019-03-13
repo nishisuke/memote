@@ -12,7 +12,7 @@ export default class Modal extends React.PureComponent {
       value: d.string || '',
       docData: d,
       docID: id,
-      storeState: 'notChanged',
+      saveState: 'notChanged',
       timeoutID: null,
       failText: null,
     };
@@ -25,7 +25,7 @@ export default class Modal extends React.PureComponent {
   }
 
   colorClass() {
-    switch(this.state.storeState) {
+    switch(this.state.saveState) {
       case 'saved':        return 'is-success';
       case 'notChanged':           return '';
       default:             return 'is-warning';
@@ -33,18 +33,18 @@ export default class Modal extends React.PureComponent {
   }
 
   handleChange(event) {
-    if (this.state.storeState === 'willBeFinished') {
+    if (this.state.saveState === 'willBeFinished') {
       alert('finishing edit');
       return;
     }
     this.setState({
       value: event.target.value,
-      storeState: 'changed',
+      saveState: 'changed',
     });
   }
 
   hideModal() {
-    this.setState({storeState: 'willBeFinished'})
+    this.setState({saveState: 'willBeFinished'})
   }
 
   cancelSaving() {
@@ -56,18 +56,18 @@ export default class Modal extends React.PureComponent {
     let d = Object.assign({}, this.state.docData, { string: text })
 
     let timeoutID = setTimeout(() => {
-      this.setState({storeState: 'saving', timeoutID: null, failText: null})
+      this.setState({saveState: 'saving', timeoutID: null, failText: null})
       db.putMemo(this.state.docID, d)
         .then(() => {
-          if (this.state.storeState === 'willBeFinished') {
+          if (this.state.saveState === 'willBeFinished') {
             this.props.unmountMe()
           } else if (this.state.value === text) {
-            this.setState({storeState: 'saved'})
+            this.setState({saveState: 'saved'})
           }
         })
         .catch(() => {
           alert(`save fail: ${text}`)
-          if (this.state.storeState === 'willBeFinished') {
+          if (this.state.saveState === 'willBeFinished') {
             this.props.unmountMe()
           }
         });
@@ -80,17 +80,17 @@ export default class Modal extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    switch(this.state.storeState) {
+    switch(this.state.saveState) {
       case 'changed':
         this.cancelSaving();
         let tid = this.saveTextAfter(1500)
         this.setState({
           timeoutID: tid,
-          storeState: 'willSave',
+          saveState: 'willSave',
         })
         break;
       case 'willBeFinished':
-        switch(prevState.storeState) {
+        switch(prevState.saveState) {
           case 'willSave':
             this.cancelSaving()
             let text = this.state.value
@@ -115,7 +115,7 @@ export default class Modal extends React.PureComponent {
   render() {
     return (
       <div className='modal-content'>
-        <div className={`control ${this.state.storeState === 'willSave' ? 'is-loading' : ''}`}>
+        <div className={`control ${this.state.saveState === 'willSave' ? 'is-loading' : ''}`}>
           <textarea id='ta' onChange={this.handleChange} value={this.state.value} onBlur={this.hideModal} className={`textarea has-fixed-size ${this.colorClass()}`} rows='12' />
         </div>
       </div>
