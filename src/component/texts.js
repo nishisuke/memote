@@ -13,8 +13,7 @@ export default class Main extends React.Component {
     this.state = {
       modalPath: '',
       modalData: {},
-      editing: { string: '' },
-      editingID: db.newMemo().id,
+      editing: { id: db.newMemo().id, string: '' },
       showArchive: false,
     };
 
@@ -40,11 +39,8 @@ export default class Main extends React.Component {
   }
 
   setEditing(t) {
-    let copy = { ...t }
-    let id = copy.id
-    delete copy.id
     return () => {
-      this.setState({ editingID: id, editing: copy })
+      this.setState({ editing: t })
     }
   }
 
@@ -71,10 +67,7 @@ export default class Main extends React.Component {
         modalData: { id: doc.id },
       }
     } else {
-      d = {
-        editingID: db.newMemo().id,
-        editing: { string: '' },
-      }
+      d = { editing: { id: db.newMemo().id, string: '' } }
     }
     this.setState(d);
   }
@@ -108,7 +101,7 @@ export default class Main extends React.Component {
           </div>
 
           <div className='inputContainer'>
-            <TextEditor targetID={this.state.editingID} docData={this.state.editing} />
+            <TextEditor docData={this.state.editing} />
             <div className='fixedActionContainer'>
               <div id='archiveIcon' className={`item has-text-danger ${this.state.showArchive ? '' : 'is-invisible'}`}>
                 <span className='icon is-large'>

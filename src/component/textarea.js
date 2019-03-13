@@ -8,7 +8,7 @@ export default class TA extends React.PureComponent {
     super(props);
 
     this.state = {
-      id: props.targetID,
+      id: props.docData.id,
       saveState: 'notChanged',
       value: props.docData.string,
       doc: props.docData,
@@ -53,10 +53,10 @@ export default class TA extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.targetID != this.props.targetID) {
+    if (prevProps.docData.id != this.props.docData.id) {
       document.getElementById('editor').focus()
       console.log('prop changed')
-      this.setState({ saveState: 'willBeFinished', nextID: this.props.targetID, nextDoc: this.props.docData })
+      this.setState({ saveState: 'willBeFinished', nextID: this.props.docData.id, nextDoc: this.props.docData })
     } else {
       console.log(this.state.saveState)
       switch(this.state.saveState) {
