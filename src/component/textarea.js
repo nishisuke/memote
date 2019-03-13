@@ -34,9 +34,17 @@ export default class TA extends React.PureComponent {
     document.getElementById('editor').focus()
 
     switch(this.state.saveState) {
+      case 'willSave':
+        clearTimeout(this.state.timeoutID)
+        let id = this.state.id
+        let t = this.state.value
+        let v = Object.assign({}, this.state.doc, { string: t })
+        db.putMemo(id, v).catch(() => { alert(`fail ${t}`) })
+
+        this.setState({id: this.props.targetID, doc: this.props.docData, value: this.props.docData.string, saveState: 'notChanged', timeoutID: -1})
+        break;
       case 'notChanged':
       case 'saved':
-      case 'willSave':
       case 'saving':
         // willSaveはtimeoutIDを変えることで前のjobが死なないようにするからok
         this.setState({id: this.props.targetID, doc: this.props.docData, value: this.props.docData.string, saveState: 'notChanged', timeoutID: -1})
