@@ -52,9 +52,7 @@ export default class Modal extends React.PureComponent {
       this.setState({saveState: 'saving', timeoutID: null, failText: null})
       db.putMemo(this.state.docID, d)
         .then(() => {
-          if (this.state.saveState === 'willBeFinished') {
-            this.props.unmountMe()
-          } else if (this.state.value === text) {
+          if (this.state.value === text) {
             this.setState({saveState: 'saved'})
           }
         })
@@ -96,6 +94,7 @@ export default class Modal extends React.PureComponent {
             this.props.unmountMe()
             break;
           case 'saving':
+            alert('saving')
             break;
           default:
             this.props.unmountMe()

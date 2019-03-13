@@ -17,9 +17,7 @@ export default class TA extends React.PureComponent {
       failText: null,
     };
  
-    this.update = this.update.bind(this);
     this.replaceUpdateJob = this.replaceUpdateJob.bind(this);
-    this.detectPropChange = this.detectPropChange.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -30,52 +28,23 @@ export default class TA extends React.PureComponent {
     });
   }
 
-  detectPropChange() {
-    document.getElementById('editor').focus()
-
-    switch(this.state.saveState) {
-      case 'willSave':
-        clearTimeout(this.state.timeoutID)
-        let id = this.state.id
-        let t = this.state.value
-        let v = Object.assign({}, this.state.doc, { string: t })
-        db.putMemo(id, v).catch(() => { alert(`fail ${t}`) })
-
-        this.setState({id: this.props.targetID, doc: this.props.docData, value: this.props.docData.string, saveState: 'notChanged', timeoutID: -1})
-        break;
-      case 'notChanged':
-      case 'saved':
-      case 'saving':
-        // willSaveはtimeoutIDを変えることで前のjobが死なないようにするからok
-        this.setState({id: this.props.targetID, doc: this.props.docData, value: this.props.docData.string, saveState: 'notChanged', timeoutID: -1})
-        break;
-      default:
-        // changed
-        alert('not saved: this is rare case.') // 雑に対処
-    }
-  }
-
-  update(id, data) {
-    db.putMemo(id, data)
-      .then(() => {
-        if (id === this.state.id && this.state.value === data.string) {
-          this.setState({ saveState: 'saved' })
-        }
-      })
-      .catch(e => {
-        alert(`update failed: "${data.string}"`);
-        console.error(e)
-      });
-  }
-
   replaceUpdateJob() {
     clearTimeout(this.state.timeoutID)
     let id = this.state.id
     let v = Object.assign({}, this.state.doc, { string: this.state.value })
     let timeoutID = setTimeout(() => {
       this.setState({ saveState: 'saving' })
-    
-      this.update(id, v)
+
+      db.putMemo(id, v)
+        .then(() => {
+          if (id === this.state.id && this.state.value === v.string) {
+            this.setState({ saveState: 'saved' })
+          }
+        })
+        .catch(e => {
+          alert(`update failed: "${v.string}"`);
+          console.error(e)
+        });
     }, 1500);
     this.setState({
       timeoutID: timeoutID,
@@ -83,15 +52,35 @@ export default class TA extends React.PureComponent {
     })
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (prevProps.targetID != this.props.targetID) {
+      document.getElementById('editor').focus()
       console.log('prop changed')
-      this.detectPropChange()
-    } else { // prop のstrの違いに反応しないように
+      this.setState({ saveState: 'willBeFinished', nextID: this.props.targetID, nextDoc: this.props.docData })
+    } else {
       console.log(this.state.saveState)
       switch(this.state.saveState) {
         case 'changed':
           this.replaceUpdateJob()
+          break;
+        case 'willBeFinished':
+          switch(prevState.saveState) {
+            case 'willSave':
+              clearTimeout(this.state.timeoutID)
+
+              let id = this.state.id
+              let t = this.state.value
+              let v = Object.assign({}, this.state.doc, { string: t })
+              db.putMemo(id, v).catch(() => { alert(`fail ${t}`) })
+
+              this.setState({id: this.state.nextID, doc: this.state.nextDoc, value: this.state.nextDoc.string, saveState: 'notChanged', timeoutID: -1})
+              break;
+            case 'saving':
+              alert('saving')
+              break;
+            default:
+              this.setState({id: this.state.nextID, doc: this.state.nextDoc, value: this.state.nextDoc.string, saveState: 'notChanged', timeoutID: -1})
+          }
           break;
       }
     }
