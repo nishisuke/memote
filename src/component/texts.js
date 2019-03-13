@@ -12,7 +12,7 @@ export default class Main extends React.Component {
 
     this.state = {
       showMenu: false,
-      modalPath: '',
+      showTextarea: false,
       editingID: db.newMemo().id,
     };
 
@@ -31,15 +31,15 @@ export default class Main extends React.Component {
 
   hide() {
     this.setState({
-      modalPath: '',
       showMenu: false,
+      showTextarea: false,
     });
   }
 
   showMenu() {
     this.setState({
       showMenu: true,
-      modalPath: '/menu',
+      showTextarea: false,
     });
   }
 
@@ -48,7 +48,7 @@ export default class Main extends React.Component {
     var d = {}
     if (window.innerWidth < 560) {
       d = {
-        modalPath: '/new',
+        showTextarea: true,
         showMenu: false,
         editingID: doc.id,
       }
@@ -61,7 +61,7 @@ export default class Main extends React.Component {
   showModal(doc) {
     return () => {
       this.setState({
-        modalPath: '/new',
+        showTextarea: true,
         showMenu: false,
         editingID: doc.id,
       });
@@ -74,18 +74,15 @@ export default class Main extends React.Component {
 
     return (
       <div className='rootContainer'>
-        <div className={`modal ${this.state.modalPath != '' ? 'is-active' : ''}`}>
-          <div className='modal-background'></div>
-          { this.state.modalPath == '/new' ?
-            <OpenedModal unmountMe={this.hide} docData={editing}/>
-            : ''
-          }
+        <div className={`modal ${this.state.showTextarea ? 'is-active' : ''}`}>
+          <div className='modal-background' onClick={this.hide}></div>
+          { this.state.showTextarea ? <OpenedModal unmountMe={this.hide} docData={editing}/> : '' }
           <button className='modal-close is-large' onClick={this.hide} aria-label="close"></button>
         </div>
 
         <div className={`modal ${this.state.showMenu ? 'is-active' : ''}`}>
-          <div className='modal-background'></div>
-            <Menu close={this.hide} navigator={this.props.navigator} />
+          <div className='modal-background' onClick={this.hide}></div>
+          <Menu close={this.hide} navigator={this.props.navigator} />
           <button className='modal-close is-large' onClick={this.hide} aria-label="close"></button>
         </div>
 
