@@ -11,6 +11,7 @@ export default class Main extends React.Component {
     super(props);
 
     this.state = {
+      showMenu: false,
       modalPath: '',
       editingID: db.newMemo().id,
     };
@@ -31,11 +32,13 @@ export default class Main extends React.Component {
   hide() {
     this.setState({
       modalPath: '',
+      showMenu: false,
     });
   }
 
   showMenu() {
     this.setState({
+      showMenu: true,
       modalPath: '/menu',
     });
   }
@@ -46,6 +49,7 @@ export default class Main extends React.Component {
     if (window.innerWidth < 560) {
       d = {
         modalPath: '/new',
+        showMenu: false,
         editingID: doc.id,
       }
     } else {
@@ -58,6 +62,7 @@ export default class Main extends React.Component {
     return () => {
       this.setState({
         modalPath: '/new',
+        showMenu: false,
         editingID: doc.id,
       });
     }
@@ -73,10 +78,14 @@ export default class Main extends React.Component {
           <div className='modal-background'></div>
           { this.state.modalPath == '/new' ?
             <OpenedModal unmountMe={this.hide} docData={editing}/>
-            : (this.state.modalPath == '/menu' ?
-            <Menu close={this.hide} navigator={this.props.navigator} />
-            : '')
+            : ''
           }
+          <button className='modal-close is-large' onClick={this.hide} aria-label="close"></button>
+        </div>
+
+        <div className={`modal ${this.state.showMenu ? 'is-active' : ''}`}>
+          <div className='modal-background'></div>
+            <Menu close={this.hide} navigator={this.props.navigator} />
           <button className='modal-close is-large' onClick={this.hide} aria-label="close"></button>
         </div>
 
