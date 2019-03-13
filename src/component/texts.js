@@ -12,7 +12,7 @@ export default class Main extends React.Component {
 
     this.state = {
       modalPath: '',
-      editing: { id: db.newMemo().id, string: '' },
+      editingID: db.newMemo().id,
     };
 
     this.showModal = this.showModal.bind(this);
@@ -24,7 +24,7 @@ export default class Main extends React.Component {
 
   setEditing(t) {
     return () => {
-      this.setState({ editing: t })
+      this.setState({ editingID: t.id })
     }
   }
 
@@ -46,10 +46,10 @@ export default class Main extends React.Component {
     if (window.innerWidth < 560) {
       d = {
         modalPath: '/new',
-        editing: { id: doc.id },
+        editingID: doc.id,
       }
     } else {
-      d = { editing: { id: db.newMemo().id, string: '' } }
+      d = { editingID: db.newMemo().id }
     }
     this.setState(d);
   }
@@ -58,18 +58,21 @@ export default class Main extends React.Component {
     return () => {
       this.setState({
         modalPath: '/new',
-        editing: { ...doc },
+        editingID: doc.id,
       });
     }
   }
 
   render() {
+    let editingID = this.state.editingID
+    let editing = this.props.texts.find(t => t.id === editingID) || { id: editingID, string: '' }
+
     return (
       <div className='rootContainer'>
         <div className={`modal ${this.state.modalPath != '' ? 'is-active' : ''}`}>
           <div className='modal-background'></div>
           { this.state.modalPath == '/new' ?
-            <OpenedModal unmountMe={this.hide} docData={this.state.editing}/>
+            <OpenedModal unmountMe={this.hide} docData={editing}/>
             : (this.state.modalPath == '/menu' ?
             <Menu close={this.hide} navigator={this.props.navigator} />
             : '')
@@ -83,7 +86,7 @@ export default class Main extends React.Component {
           </div>
 
           <div className='inputContainer'>
-            <TextEditor docData={this.state.editing} />
+            <TextEditor docData={editing} />
             <div className='fixedActionContainer'>
               <div id='archiveIcon' className='item has-text-danger is-invisible'>
                 <span className='icon is-large'>
