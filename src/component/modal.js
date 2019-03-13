@@ -1,6 +1,8 @@
 import React from 'react'
 import db from '../db'
 
+import { colorClass } from './comt'
+
 export default class Modal extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -21,15 +23,6 @@ export default class Modal extends React.PureComponent {
     this.saveTextAfter = this.saveTextAfter.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.hideModal = this.hideModal.bind(this);
-    this.colorClass = this.colorClass.bind(this);
-  }
-
-  colorClass() {
-    switch(this.state.saveState) {
-      case 'saved':        return 'is-success';
-      case 'notChanged':           return '';
-      default:             return 'is-warning';
-    }
   }
 
   handleChange(event) {
@@ -116,7 +109,7 @@ export default class Modal extends React.PureComponent {
     return (
       <div className='modal-content'>
         <div className={`control ${this.state.saveState === 'willSave' ? 'is-loading' : ''}`}>
-          <textarea id='ta' onChange={this.handleChange} value={this.state.value} onBlur={this.hideModal} className={`textarea has-fixed-size ${this.colorClass()}`} rows='12' />
+          <textarea id='ta' onChange={this.handleChange} value={this.state.value} onBlur={this.hideModal} className={`textarea has-fixed-size ${colorClass(this.state.saveState)}`} rows='12' />
         </div>
       </div>
     )

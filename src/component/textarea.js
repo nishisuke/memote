@@ -1,6 +1,8 @@
 import React from 'react'
 import db from '../db'
 
+import { colorClass } from './comt'
+
 export default class TA extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -19,16 +21,6 @@ export default class TA extends React.PureComponent {
     this.replaceUpdateJob = this.replaceUpdateJob.bind(this);
     this.detectPropChange = this.detectPropChange.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.colorClass = this.colorClass.bind(this);
-  }
-
-  colorClass() {
-    let s = this.state.saveState
-    if ('saved' === s) return 'is-success';
-    if ('willSave' === s) return 'is-warning';
-    if ('saving' === s) return 'is-warning';
-
-    return ''
   }
 
   handleChange(event) {
@@ -109,7 +101,7 @@ export default class TA extends React.PureComponent {
   render() {
     return (
       <div className={`editorContainer control ${this.state.saveState === 'willSave' ? 'is-loading' : ''}`}>
-        <textarea className={`textarea has-fixed-size editor ${this.colorClass()}`} onChange={this.handleChange} value={this.state.value} id='editor' />
+        <textarea className={`textarea has-fixed-size editor ${colorClass(this.state.saveState)}`} onChange={this.handleChange} value={this.state.value} id='editor' />
       </div>
     );
   }
