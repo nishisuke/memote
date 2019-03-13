@@ -37,7 +37,7 @@ export default class Modal extends React.PureComponent {
   }
 
   hideModal() {
-    this.setState({saveState: 'willBeFinished'})
+    this.setState({saveState: 'willBeFinished', nextID: db.newMemo().id, nextDoc: {string: ''}})
   }
 
   cancelSaving() {
@@ -58,53 +58,59 @@ export default class Modal extends React.PureComponent {
         })
         .catch(() => {
           alert(`save fail: ${text}`)
-          if (this.state.saveState === 'willBeFinished') {
-            this.props.unmountMe()
-          }
         });
     }, milsec);
     return timeoutID;
   }
 
-  componentDidMount() {
-    document.getElementById('ta').focus()
-  }
-
   componentDidUpdate(prevProps, prevState) {
-    switch(this.state.saveState) {
-      case 'changed':
-        this.cancelSaving();
-        let tid = this.saveTextAfter(1500)
-        this.setState({
-          timeoutID: tid,
-          saveState: 'willSave',
-        })
-        break;
-      case 'willBeFinished':
-        switch(prevState.saveState) {
-          case 'willSave':
-            this.cancelSaving()
-            let text = this.state.value
-            let d = Object.assign({}, this.state.docData, { string: text })
+    if (prevProps.docData.id != this.props.docData.id) {
+      this.setState({ saveState: 'willBeFinished', nextID: this.props.docData.id, nextDoc: this.props.docData })
+    } else {
+      switch(this.state.saveState) {
+        case 'changed':
+          this.cancelSaving();
+          let tid = this.saveTextAfter(1500)
+          this.setState({
+            timeoutID: tid,
+            saveState: 'willSave',
+          })
+          break;
+        case 'willBeFinished':
+          switch(prevState.saveState) {
+            case 'willSave':
+              this.cancelSaving()
+              let text = this.state.value
+              let d = Object.assign({}, this.state.docData, { string: text })
 
-            db.putMemo(this.state.docID, d)
-              .catch(() => {
-                alert(`save failed: ${text}`)
-              });
-            this.props.unmountMe()
-            break;
-          case 'saving':
-            alert('saving')
-            break;
-          default:
-            this.props.unmountMe()
-            break;
-        }
-        break;
+              db.putMemo(this.state.docID, d)
+                .catch(() => {
+                  alert(`save failed: ${text}`)
+                });
+
+              if (!this.state.nextID) {
+                this.props.unmountMe()
+              }
+              this.setState({saveState: 'notChanged', timeoutID: null, failText: null, value: this.state.nextDoc.string, docData: this.state.nextDoc, docID: this.state.nextID })
+              break;
+            case 'saving':
+              alert('saving')
+              break;
+            default:
+              if (!this.state.nextID) {
+                this.props.unmountMe()
+              }
+              this.setState({saveState: 'notChanged', timeoutID: null, failText: null, value: this.state.nextDoc.string, docData: this.state.nextDoc, docID: this.state.nextID })
+              break;
+          }
+          break;
+      }
     }
   }
 
   render() {
+    if (window.innerWidth >= 560) return <div></div>;
+
     return (
       <div className='modal-content'>
         <div className={`control ${this.state.saveState === 'willSave' ? 'is-loading' : ''}`}>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useReducer } from 'react'
 
 import db from '../db'
 import OpenedModal from './modal'
@@ -6,113 +6,88 @@ import Text from './text'
 import Menu from './menu'
 import TextEditor from './textarea'
 
-export default class Main extends React.Component {
-  constructor(props) {
-    super(props);
+const ACTION_MENU = 'menu'
+const ACTION_HIDE_MENU = 'hideMenu'
+const ACTION_EDITING = 'editing'
+const ACTION_FINISH_EDITING = 'finishEditing'
 
-    this.state = {
-      showMenu: false,
-      showTextarea: false,
-      editingID: db.newMemo().id,
-    };
+const reducer = (state, action) => {
+  switch (action.type) {
+    case ACTION_MENU:
+      if (state.showMenu) return state;
+      return { showMenu: true,  showTextareaModal: false, editingID: null };
+    case ACTION_EDITING:
+      if (state.showTextareaModal) return state;
+      return { showMenu: false, showTextareaModal: true, editingID: action.id };
+    case ACTION_HIDE_MENU:
+      if (!state.showMenu) return state;
+      return { ...state, showMenu: false };
+    case ACTION_FINISH_EDITING:
+      if (!state.showTextareaModal) return state;
+      return { ...state, showTextareaModal: false, editingID: null };
+    default: throw new Error();
+  }
+}
 
-    this.showModal = this.showModal.bind(this);
-    this.hide = this.hide.bind(this);
-    this.showMenu = this.showMenu.bind(this);
-    this.setEditing = this.setEditing.bind(this);
-    this.createShowModal = this.createShowModal.bind(this);
+export default props => {
+  const initialState = {
+    showMenu: false,
+    showTextareaModal: false,
+    editingID: db.newMemo().id,
   }
 
-  setEditing(t) {
+  const [state, dispatch] = useReducer(reducer, initialState)
+
+  const showMenu = () => dispatch({ type: ACTION_MENU })
+  const hideMenu = () => dispatch({ type: ACTION_HIDE_MENU })
+  const setEditingFunc = id => {
     return () => {
-      this.setState({ editingID: t.id })
+      dispatch({ type: ACTION_EDITING, id: id })
     }
   }
+  const finishEditing = () => dispatch({ type: ACTION_FINISH_EDITING })
 
-  hide() {
-    this.setState({
-      showMenu: false,
-      showTextarea: false,
-    });
-  }
+  const editingID = state.editingID
+  const editing = props.texts.find(t => t.id === editingID) || { id: editingID, string: '' }
 
-  showMenu() {
-    this.setState({
-      showMenu: true,
-      showTextarea: false,
-    });
-  }
+  return (
+    <div className='rootContainer'>
+      <div className={`modal ${state.showTextareaModal && window.innerWidth < 560 ? 'is-active' : ''}`}>
+        <div className='modal-background' onClick={finishEditing}></div>
+        <OpenedModal unmountMe={finishEditing} docData={editing}/>
+      </div>
 
-  createShowModal() {
-    let doc = db.newMemo()
-    var d = {}
-    if (window.innerWidth < 560) {
-      d = {
-        showTextarea: true,
-        showMenu: false,
-        editingID: doc.id,
-      }
-    } else {
-      d = { editingID: db.newMemo().id }
-    }
-    this.setState(d);
-  }
+      <div className={`modal ${state.showMenu ? 'is-active' : ''}`}>
+        <div className='modal-background' onClick={hideMenu}></div>
+        <Menu navigator={props.navigator} />
+      </div>
 
-  showModal(doc) {
-    return () => {
-      this.setState({
-        showTextarea: true,
-        showMenu: false,
-        editingID: doc.id,
-      });
-    }
-  }
-
-  render() {
-    let editingID = this.state.editingID
-    let editing = this.props.texts.find(t => t.id === editingID) || { id: editingID, string: '' }
-
-    return (
-      <div className='rootContainer'>
-        <div className={`modal ${this.state.showTextarea ? 'is-active' : ''}`}>
-          <div className='modal-background' onClick={this.hide}></div>
-          { this.state.showTextarea ? <OpenedModal unmountMe={this.hide} docData={editing}/> : '' }
-          <button className='modal-close is-large' onClick={this.hide} aria-label="close"></button>
+      <div className='mainContainer'>
+        <div className='textsContainer'>
+          { props.texts.map(text => <Text setEdit={setEditingFunc(text.id)} key={text.id} data={text} edit={setEditingFunc(text.id)} />)}
         </div>
 
-        <div className={`modal ${this.state.showMenu ? 'is-active' : ''}`}>
-          <div className='modal-background' onClick={this.hide}></div>
-          <Menu close={this.hide} navigator={this.props.navigator} />
-          <button className='modal-close is-large' onClick={this.hide} aria-label="close"></button>
-        </div>
-
-        <div className='mainContainer'>
-          <div className='textsContainer'>
-            { this.props.texts.map(text => <Text setEdit={this.setEditing(text)} key={text.id} data={text} edit={this.showModal(text)} />)}
-          </div>
-
-          <div className='inputContainer'>
-            <TextEditor docData={editing} />
-            <div className='fixedActionContainer'>
-              <div id='archiveIcon' className='item has-text-danger is-invisible'>
-                <span className='icon is-large'>
-                  <i className='fas fa-archive fa-2x'></i>
-                </span>
-              </div>
-              <div className='item has-text-primary' onClick={this.createShowModal} >
-                <span className='icon is-large'>
-                  <i className='fas fa-pen fa-2x'></i>
-                </span>
-              </div>
-              <div className='item' onClick={this.showMenu}>
-                <span className='icon is-large'>
-                  <i className='fas fa-bars fa-2x'></i>
-                </span>
-              </div>
+        <div className='inputContainer'>
+          <TextEditor docData={editing} />
+          <div className='fixedActionContainer'>
+            <div id='archiveIcon' className='item has-text-danger is-invisible'>
+              <span className='icon is-large'>
+                <i className='fas fa-archive fa-2x'></i>
+              </span>
+            </div>
+            <div className='item has-text-primary' onClick={setEditingFunc(db.newMemo().id)} >
+              <span className='icon is-large'>
+                <i className='fas fa-pen fa-2x'></i>
+              </span>
+            </div>
+            <div className='item' onClick={showMenu}>
+              <span className='icon is-large'>
+                <i className='fas fa-bars fa-2x'></i>
+              </span>
             </div>
           </div>
         </div>
       </div>
-    )
-  }
+    </div>
+  )
 }
