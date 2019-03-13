@@ -13,28 +13,13 @@ export default class Main extends React.Component {
     this.state = {
       modalPath: '',
       editing: { id: db.newMemo().id, string: '' },
-      showArchive: false,
     };
 
-    this.showArchiveIcon = this.showArchiveIcon.bind(this);
-    this.hideArchiveIcon = this.hideArchiveIcon.bind(this);
     this.showModal = this.showModal.bind(this);
     this.hide = this.hide.bind(this);
     this.showMenu = this.showMenu.bind(this);
     this.setEditing = this.setEditing.bind(this);
     this.createShowModal = this.createShowModal.bind(this);
-  }
-
-  hideArchiveIcon() {
-    if (this.state.showArchive) {
-      this.setState({ showArchive: false })
-    }
-  }
-
-  showArchiveIcon() {
-    if (!this.state.showArchive) {
-      this.setState({ showArchive: true })
-    }
   }
 
   setEditing(t) {
@@ -94,23 +79,23 @@ export default class Main extends React.Component {
 
         <div className='mainContainer'>
           <div className='textsContainer'>
-            { this.props.texts.map(text => <Text setEdit={this.setEditing(text)} key={text.id} data={text} edit={this.showModal(text)} show={this.showArchiveIcon} hide={this.hideArchiveIcon} />)}
+            { this.props.texts.map(text => <Text setEdit={this.setEditing(text)} key={text.id} data={text} edit={this.showModal(text)} />)}
           </div>
 
           <div className='inputContainer'>
             <TextEditor docData={this.state.editing} />
             <div className='fixedActionContainer'>
-              <div id='archiveIcon' className={`item has-text-danger ${this.state.showArchive ? '' : 'is-invisible'}`}>
+              <div id='archiveIcon' className='item has-text-danger is-invisible'>
                 <span className='icon is-large'>
                   <i className='fas fa-archive fa-2x'></i>
                 </span>
               </div>
-              <div className={`item has-text-primary ${this.state.showArchive ? 'none' : ''}`} onClick={this.createShowModal} >
+              <div className={`item has-text-primary`} onClick={this.createShowModal} >
                 <span className='icon is-large'>
                   <i className='fas fa-pen fa-2x'></i>
                 </span>
               </div>
-              <div className={`item ${this.state.showArchive ? 'none' : ''}`} onClick={this.showMenu}>
+              <div className={`item`} onClick={this.showMenu}>
                 <span className='icon is-large'>
                   <i className='fas fa-bars fa-2x'></i>
                 </span>
