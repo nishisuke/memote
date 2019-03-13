@@ -12,7 +12,6 @@ export default class Main extends React.Component {
 
     this.state = {
       modalPath: '',
-      modalData: {},
       editing: { id: db.newMemo().id, string: '' },
       showArchive: false,
     };
@@ -47,14 +46,12 @@ export default class Main extends React.Component {
   hide() {
     this.setState({
       modalPath: '',
-      modalData: {},
     });
   }
 
   showMenu() {
     this.setState({
       modalPath: '/menu',
-      modalData: {},
     });
   }
 
@@ -64,7 +61,7 @@ export default class Main extends React.Component {
     if (window.innerWidth < 560) {
       d = {
         modalPath: '/new',
-        modalData: { id: doc.id },
+        editing: { id: doc.id },
       }
     } else {
       d = { editing: { id: db.newMemo().id, string: '' } }
@@ -76,7 +73,7 @@ export default class Main extends React.Component {
     return () => {
       this.setState({
         modalPath: '/new',
-        modalData: { ...doc },
+        editing: { ...doc },
       });
     }
   }
@@ -87,7 +84,7 @@ export default class Main extends React.Component {
         <div className={`modal ${this.state.modalPath != '' ? 'is-active' : ''}`}>
           <div className='modal-background'></div>
           { this.state.modalPath == '/new' ?
-            <OpenedModal unmountMe={this.hide} docData={this.state.modalData}/>
+            <OpenedModal unmountMe={this.hide} docData={this.state.editing}/>
             : (this.state.modalPath == '/menu' ?
             <Menu close={this.hide} navigator={this.props.navigator} />
             : '')
