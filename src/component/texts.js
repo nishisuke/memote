@@ -90,12 +90,12 @@ export default class Main extends React.Component {
                   <i className='fas fa-archive fa-2x'></i>
                 </span>
               </div>
-              <div className={`item has-text-primary`} onClick={this.createShowModal} >
+              <div className='item has-text-primary' onClick={this.createShowModal} >
                 <span className='icon is-large'>
                   <i className='fas fa-pen fa-2x'></i>
                 </span>
               </div>
-              <div className={`item`} onClick={this.showMenu}>
+              <div className='item' onClick={this.showMenu}>
                 <span className='icon is-large'>
                   <i className='fas fa-bars fa-2x'></i>
                 </span>
