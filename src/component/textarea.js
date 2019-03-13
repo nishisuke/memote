@@ -5,9 +5,6 @@ export default class TA extends React.PureComponent {
   constructor(props) {
     super(props);
 
-
-
-
     this.state = {
       id: props.targetID,
       saveState: 'notChanged',
@@ -28,8 +25,8 @@ export default class TA extends React.PureComponent {
   colorClass() {
     let s = this.state.saveState
     if ('saved' === s) return 'is-success';
-    if ('updateFailed' === s) return 'is-danger';
     if ('willSave' === s) return 'is-warning';
+    if ('saving' === s) return 'is-warning';
 
     return ''
   }
@@ -48,12 +45,12 @@ export default class TA extends React.PureComponent {
       case 'notChanged':
       case 'saved':
       case 'willSave':
+      case 'saving':
         // willSaveはtimeoutIDを変えることで前のjobが死なないようにするからok
         this.setState({id: this.props.targetID, doc: this.props.docData, value: this.props.docData.string, saveState: 'notChanged', timeoutID: -1})
         break;
       default:
         // changed
-        // updateFailed
         alert('not saved: this is rare case.') // 雑に対処
     }
   }
@@ -66,8 +63,8 @@ export default class TA extends React.PureComponent {
         }
       })
       .catch(e => {
+        alert(`update failed: "${data.string}"`);
         console.error(e)
-        this.setState({saveState: 'updateFailed', failID: id, failText: t})
       });
   }
 
@@ -76,6 +73,8 @@ export default class TA extends React.PureComponent {
     let id = this.state.id
     let v = Object.assign({}, this.state.doc, { string: this.state.value })
     let timeoutID = setTimeout(() => {
+      this.setState({ saveState: 'saving' })
+    
       this.update(id, v)
     }, 1500);
     this.setState({
@@ -93,16 +92,6 @@ export default class TA extends React.PureComponent {
       switch(this.state.saveState) {
         case 'changed':
           this.replaceUpdateJob()
-          break;
-        case 'updateFailed':
-          let id = this.state.id
-          if (this.state.failID === id) {
-            let v = Object.assign({}, this.state.doc, { string: this.state.value })
-            this.setState({ saveState: 'willSave' })
-            this.update(id, v)
-          } else {
-            alert(`update failed: "${this.state.failText}"`);
-          }
           break;
       }
     }
