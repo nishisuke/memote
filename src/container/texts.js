@@ -41,9 +41,7 @@ export default props => {
 
   const showMenu = () => dispatch({ type: ACTION_MENU })
   const hideMenu = () => dispatch({ type: ACTION_HIDE_MENU })
-  const setEditingFunc = id => {
-    return () => dispatch({ type: ACTION_EDITING, id: id })
-  }
+  const setEditingFunc = id => (() => dispatch({ type: ACTION_EDITING, id: id }))
   const setNewEditing = () => setEditingFunc(db.newMemo().id)()
   const finishEditing = () => dispatch({ type: ACTION_FINISH_EDITING })
 
