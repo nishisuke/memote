@@ -1,44 +1,83 @@
 import React, { useReducer, useEffect } from 'react'
 
 import db from '../db'
-import Texts from '../component/texts'
+import OpenedModal from '../component/modal'
+import Text from '../component/text'
+import Menu from '../component/menu'
+import TextEditor from '../component/textarea'
+import useSubscribeTexts from '../hooks/useSubscribeTexts'
 
-const ACTION_ADD    = 'add'
-const ACTION_CHANGE = 'change'
-const ACTION_REMOVE = 'remove'
+const ACTION_MENU = 'menu'
+const ACTION_HIDE_MENU = 'hideMenu'
+const ACTION_EDITING = 'editing'
+const ACTION_FINISH_EDITING = 'finishEditing'
 
-const textsReducer = (state, action) => {
+const reducer = (state, action) => {
   switch (action.type) {
-    case ACTION_ADD:
-      const atexts = [...state.texts]
-      const i = atexts.findIndex(t => t.updatedAt <= action.text.updatedAt)
-      atexts.splice(i, 0, action.text);
-      return { texts: atexts }
-    case ACTION_CHANGE:
-      const texts = state.texts.filter(t => t.id != action.text.id)
-      const is = texts.findIndex(t => t.updatedAt <= action.text.updatedAt)
-     texts.splice(is, 0, action.text);
-      return { texts: texts }
-    case ACTION_REMOVE: return { texts: state.texts.filter(t => t.id != action.id)};
+    case ACTION_MENU:
+      if (state.showMenu) return state;
+      return { showMenu: true,  showTextareaModal: false, editingID: null };
+    case ACTION_EDITING:
+      if (state.showTextareaModal) return state;
+      return { showMenu: false, showTextareaModal: true, editingID: action.id };
+    case ACTION_HIDE_MENU:
+      if (!state.showMenu) return state;
+      return { ...state, showMenu: false };
+    case ACTION_FINISH_EDITING:
+      if (!state.showTextareaModal) return state;
+      return { ...state, showTextareaModal: false, editingID: null };
     default: throw new Error();
   }
 }
 
 export default props => {
-  const [state, dispatch] = useReducer(textsReducer, { texts: [] })
-  const texts = state.texts
+  const texts = useSubscribeTexts()
 
-  useEffect(() => {
-    // return unsubscribe
-    return db.subscribeMemos((id, data, type, meta) => {
-      switch(type) {
-        case 'added': dispatch({ type: ACTION_ADD, text: {...data, id: id} }); break;
-        case 'modified': dispatch({ type: ACTION_CHANGE, text: {...data, id: id} }); break;
-        case 'removed': dispatch({ type: ACTION_REMOVE, id: id }); break;
-        default: throw new Error();
-      }
-    })
-  }, [])
+  const initialState = {
+    showMenu: false,
+    showTextareaModal: false,
+    editingID: db.newMemo().id,
+  }
 
-  return <Texts texts={texts} navigator={props.navigator} />;
+  const [state, dispatch] = useReducer(reducer, initialState)
+
+  const showMenu = () => dispatch({ type: ACTION_MENU })
+  const hideMenu = () => dispatch({ type: ACTION_HIDE_MENU })
+  const setEditingFunc = id => {
+    return () => {
+      dispatch({ type: ACTION_EDITING, id: id })
+    }
+  }
+  const setNewEditing = () => setEditingFunc(db.newMemo().id)()
+  const finishEditing = () => dispatch({ type: ACTION_FINISH_EDITING })
+
+  const editingID = state.editingID
+  const editing = texts.find(t => t.id === editingID) || { id: editingID, string: '' }
+
+  return (
+    <div className='rootContainer'>
+      <div className={`modal ${state.showTextareaModal && window.innerWidth < 560 ? 'is-active' : ''}`}>
+        <div className='modal-background' onClick={finishEditing}></div>
+        <OpenedModal unmountMe={finishEditing} docData={editing}/>
+      </div>
+
+      <div className={`modal ${state.showMenu ? 'is-active' : ''}`}>
+        <div className='modal-background' onClick={hideMenu}></div>
+        <Menu navigator={props.navigator} />
+      </div>
+
+      <div className='CMain'>
+        <div className='CTexts'>{ texts.map(text => <Text setEdit={setEditingFunc(text.id)} key={text.id} data={text} edit={setEditingFunc(text.id)} />)}</div>
+        <div className='inputContainer'>
+          <TextEditor docData={editing} />
+
+          <div className='fixedActionContainer'>
+            <div id='archiveIcon' className='has-text-danger is-invisible'><span className='icon is-large'><i className='fas fa-archive fa-2x'></i></span></div>
+            <div className='has-text-primary' onClick={setNewEditing}><span className='icon is-large'><i className='fas fa-pen fa-2x'></i></span></div>
+            <div onClick={showMenu}><span className='icon is-large'><i className='fas fa-bars fa-2x'></i></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }

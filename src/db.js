@@ -37,7 +37,8 @@ class FirestoreDB {
             let somePastDate = new Date(2018, 1);
             d.updatedAt = somePastDate.getTime();
           }
-          eachCallback(change.doc.id, d, change.type, change.doc.metadata)
+          d.id = change.doc.id
+          eachCallback(d, change.type === 'removed')
         })
       }, e => {
         // nothing

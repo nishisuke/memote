@@ -9,7 +9,7 @@
     justify-content: space-between;
   }
 
-  .fixedActionContainer .item {
+  .fixedActionContainer div {
     width: 80px;
   }
 
