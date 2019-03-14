@@ -33,13 +33,11 @@ const reducer = (state, action) => {
 export default props => {
   const texts = useSubscribeTexts()
 
-  const initialState = {
+  const [state, dispatch] = useReducer(reducer, {
     showMenu: false,
     showTextareaModal: false,
     editingID: db.newMemo().id,
-  }
-
-  const [state, dispatch] = useReducer(reducer, initialState)
+  })
 
   const showMenu = () => dispatch({ type: ACTION_MENU })
   const hideMenu = () => dispatch({ type: ACTION_HIDE_MENU })
