@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect, useMemo } from 'react'
+import React, { useReducer, useEffect, useMemo, useCallback } from 'react'
 
 import db from '../db'
 import useSubscribeTexts from '../hooks/useSubscribeTexts'
@@ -43,7 +43,7 @@ export default props => {
   const showMenu = () => dispatch({ type: ACTION_MENU })
   const hideMenu = () => dispatch({ type: ACTION_HIDE_MENU })
   const setNewEditing = () => setEditingFunc(db.newMemo().id)()
-  const finishEditing = useMemo(() => (() => dispatch({ type: ACTION_FINISH_EDITING })), [])
+  const finishEditing = useCallback(() => dispatch({ type: ACTION_FINISH_EDITING }), [])
   const setEditingFunc = id => (() => dispatch({ type: ACTION_EDITING, id: id }))
 
   const editing = texts.find(t => t.id === state.editingID) || { id: state.editingID, string: '' }
