@@ -51,7 +51,7 @@ export default props => {
   const setNewEditing = () => setEditingFunc(db.newMemo().id)()
   const finishEditing = () => dispatch({ type: ACTION_FINISH_EDITING })
 
-  let editing = useMemo(() => texts.find(t => t.id === state.editingID) || { id: state.editingID, string: '' }, [state.editingID])
+  const editing = useMemo(() => (texts.find(t => t.id === state.editingID) || { id: state.editingID, string: '' }), [state.editingID])
 
   return (
     <div className='rootContainer'>
