@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from 'react'
+import React, { useReducer, useEffect, useMemo } from 'react'
 
 import db from '../db'
 import OpenedModal from '../component/modal'
@@ -51,8 +51,7 @@ export default props => {
   const setNewEditing = () => setEditingFunc(db.newMemo().id)()
   const finishEditing = () => dispatch({ type: ACTION_FINISH_EDITING })
 
-  const editingID = state.editingID
-  const editing = texts.find(t => t.id === editingID) || { id: editingID, string: '' }
+  let editing = useMemo(() => texts.find(t => t.id === state.editingID) || { id: state.editingID, string: '' }, [state.editingID])
 
   return (
     <div className='rootContainer'>
