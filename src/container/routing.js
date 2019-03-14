@@ -1,4 +1,5 @@
 import React from 'react'
+import firebase from 'firebase/app'
 
 import Archive from './archived'
 import Texts from './texts'
@@ -9,6 +10,7 @@ export default class Routing extends React.Component {
 
     this.state = {
       innerPath: this.props.path || '/texts',
+      signed: false,
     }
 
     this.isMain = this.isMain.bind(this);
@@ -28,7 +30,19 @@ export default class Routing extends React.Component {
     return nav
   }
 
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.setState({ signed: true })
+      } else {
+        this.setState({ signed: false })
+      }
+    })
+  }
+
   render() {
+    if (!this.state.signed) return <p>signing in</p>;
+
     return this.isMain() ? <Texts navigator={this.navigator} />
       : (this.isArchive() ? <Archive navigator={this.navigator} />
         : '')

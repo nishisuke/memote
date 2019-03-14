@@ -28,11 +28,16 @@ class FirestoreDB {
     return u ? u.uid : ''
   }
 
-  subscribeMemos(onChanged) {
+  subscribeMemos(eachCallback) {
     return this.firestore.collection('texts').where('user_id', '==', this.userID).where('archived', '==', false)
       .onSnapshot({ includeMetadataChanges: true }, snapshot => {
         snapshot.docChanges().forEach(change => {
-          onChanged(change.doc.id, change.doc.data(), change.type == 'removed', change.doc.metadata)
+          let d = change.doc.data();
+          if (!d.updatedAt) {
+            let somePastDate = new Date(2018, 1);
+            d.updatedAt = somePastDate.getTime();
+          }
+          eachCallback(change.doc.id, d, change.type, change.doc.metadata)
         })
       }, e => {
         // nothing
