@@ -1,4 +1,5 @@
 import React from 'react'
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import firebase from 'firebase/app'
 
 import Archive from './archived'
@@ -9,25 +10,8 @@ export default class Routing extends React.Component {
     super(props)
 
     this.state = {
-      innerPath: this.props.path || '/texts',
       signed: false,
     }
-
-    this.isMain = this.isMain.bind(this);
-    this.goMain = this.goMain.bind(this);
-    this.isArchive = this.isArchive.bind(this);
-    this.goArchive = this.goArchive.bind(this);
-  }
-
-  isMain() { return this.state.innerPath === '/texts' }
-  goMain() { this.setState({ innerPath: '/texts' }) }
-  isArchive() { return this.state.innerPath === '/archive' }
-  goArchive() { this.setState({ innerPath: '/archive' }) }
-  get navigator() {
-    let nav = {}
-    nav.goMain = this.goMain
-    nav.goArchive = this.goArchive
-    return nav
   }
 
   componentDidMount() {
@@ -43,8 +27,13 @@ export default class Routing extends React.Component {
   render() {
     if (!this.state.signed) return <p>signing in</p>;
 
-    return this.isMain() ? <Texts navigator={this.navigator} />
-      : (this.isArchive() ? <Archive navigator={this.navigator} />
-        : '')
+    return (
+      <Router>
+        <div>
+          <Route path='/' exact component={Texts} />
+          <Route path='/archives/' component={Archive} />
+        </div>
+      </Router>
+    )
   }
 }

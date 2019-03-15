@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 import firebase from 'firebase/app';
 
 export default class Text extends React.Component {
@@ -25,7 +26,7 @@ export default class Text extends React.Component {
     return (
       <div className='modal-content'>
         <button className='button is-medium' onClick={this.out}>sign out</button>
-        <button className='button is-medium' onClick={this.props.navigator.goArchive}>archive</button>
+        <Link to='/archives/'>archives</Link>
         <p>{str}</p>
       </div>
     )

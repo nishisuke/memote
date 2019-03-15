@@ -49,7 +49,7 @@ export default props => {
 
       <div className={`modal ${showMenu ? 'is-active' : ''}`}>
         <div className='modal-background' onClick={() => setShowMenu(false)}></div>
-        <Menu navigator={props.navigator} />
+        <Menu />
       </div>
 
       <div className='CMain'>
