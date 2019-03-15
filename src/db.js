@@ -1,5 +1,6 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore'; // Required for side-effects
+import Text from './records/text'
 
 class FirestoreDB {
   setup() {
@@ -32,13 +33,8 @@ class FirestoreDB {
     return this.firestore.collection('texts').where('user_id', '==', this.userID).where('archived', '==', false)
       .onSnapshot({ includeMetadataChanges: true }, snapshot => {
         snapshot.docChanges().forEach(change => {
-          let d = change.doc.data();
-          if (!d.updatedAt) {
-            let somePastDate = new Date(2018, 1);
-            d.updatedAt = somePastDate.getTime();
-          }
-          d.id = change.doc.id
-          eachCallback(d, change.type === 'removed')
+          const t = new Text();
+          eachCallback(t.fromFirestore(change.doc), change.type === 'removed')
         })
       }, e => {
         // nothing
@@ -55,21 +51,24 @@ class FirestoreDB {
       .limit(10)
 
     query.get().then(snapshot => {
-      snapshot.forEach(d => eachCallback(d.id, d.data()))
+      snapshot.forEach(d => {
+        const t = new Text();
+        eachCallback(t.fromFirestore(d))
+      })
     })
   }
 
   newMemo() {
-    return this.firestore.collection('texts').doc()
+    const t = new Text();
+    return t.fromFirestore(this.firestore.collection('texts').doc())
   }
 
   activateMemo(id) {
     this.firestore.collection('texts').doc(id).update({ archived: false, archivedAt: new Date(2099, 3) })
   }
 
-  putMemo(id, data) {
-    let v = Object.assign({}, this.defaultMemo, data)
-    return this.firestore.collection('texts').doc(id).set(v)
+  putMemo(t) {
+    return this.firestore.collection('texts').doc(t.id).set(t.storeObject)
   }
 
   get defaultMemo() {

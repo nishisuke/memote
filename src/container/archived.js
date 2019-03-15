@@ -36,7 +36,7 @@ export default class Archived extends React.Component {
         <Link to='/'>back</Link>
         { this.state.texts.map(t =>
           <div key={t.id}>
-            <p>{t.string}<small>{moment.unix(t.archivedAt.seconds).fromNow()}</small></p>
+            <p>{t.text}<small>{moment.unix(t.archivedAt.seconds).fromNow()}</small></p>
             <button onClick={this.toggleArchiveFunc(t.id)}>復活</button>
           </div>
         ) }

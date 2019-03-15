@@ -18,7 +18,13 @@ export default class Text extends TextRecord {
     return this.merge({ text: text, updatedAt: new Date() })
   }
 
-  get stored() {
+  get storeObject() {
+    const d = this.toObject()
+    delete d.id
+    const t = this.text
+    delete d.text
+    t.string = t
+    return d
   }
 
   fromFirestore(doc) {

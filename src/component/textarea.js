@@ -10,7 +10,7 @@ export default class TA extends React.PureComponent {
     this.state = {
       id: props.docData.id,
       saveState: 'notChanged',
-      value: props.docData.string,
+      value: props.docData.text,
       doc: props.docData,
       timeoutID: -1,
       failID: null,
@@ -31,18 +31,18 @@ export default class TA extends React.PureComponent {
   replaceUpdateJob() {
     clearTimeout(this.state.timeoutID)
     let id = this.state.id
-    let v = Object.assign({}, this.state.doc, { string: this.state.value })
+    let v = Object.assign({}, this.state.doc, { text: this.state.value })
     let timeoutID = setTimeout(() => {
       this.setState({ saveState: 'saving' })
 
       db.putMemo(id, v)
         .then(() => {
-          if (id === this.state.id && this.state.value === v.string) {
+          if (id === this.state.id && this.state.value === v.text) {
             this.setState({ saveState: 'saved' })
           }
         })
         .catch(e => {
-          alert(`update failed: "${v.string}"`);
+          alert(`update failed: "${v.text}"`);
           console.error(e)
         });
     }, 1500);
@@ -70,16 +70,16 @@ export default class TA extends React.PureComponent {
 
               let id = this.state.id
               let t = this.state.value
-              let v = Object.assign({}, this.state.doc, { string: t })
+              let v = Object.assign({}, this.state.doc, { text: t })
               db.putMemo(id, v).catch(() => { alert(`fail ${t}`) })
 
-              this.setState({id: this.state.nextID, doc: this.state.nextDoc, value: this.state.nextDoc.string, saveState: 'notChanged', timeoutID: -1})
+              this.setState({id: this.state.nextID, doc: this.state.nextDoc, value: this.state.nextDoc.text, saveState: 'notChanged', timeoutID: -1})
               break;
             case 'saving':
               alert('saving')
               break;
             default:
-              this.setState({id: this.state.nextID, doc: this.state.nextDoc, value: this.state.nextDoc.string, saveState: 'notChanged', timeoutID: -1})
+              this.setState({id: this.state.nextID, doc: this.state.nextDoc, value: this.state.nextDoc.text, saveState: 'notChanged', timeoutID: -1})
           }
           break;
       }
