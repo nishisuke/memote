@@ -37,6 +37,7 @@
     "bulma": "^0.7.4",
     "firebase": "^5.8.1",
     "firebaseui": "^3.5.2",
+    "immutable": "^4.0.0-rc.12",
     "moment": "^2.24.0",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
