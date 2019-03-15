@@ -3,9 +3,10 @@ import React, { useState, useReducer, useEffect, useMemo, useCallback } from 're
 import db from '../db'
 import useSubscribeTexts from '../hooks/useSubscribeTexts'
 
-import OpenedModal from '../component/modal'
+import OpenedModal from '../component/modaltext'
 import Text from '../component/text'
 import Menu from '../component/menu'
+import Modal from '../component/Modal'
 import TextEditor from '../component/textarea'
 
 const ACTION_EDITING = 'editing'
@@ -47,10 +48,9 @@ export default props => {
         <OpenedModal unmountMe={finishEditing} docData={memoEditing}/>
       </div>
 
-      <div className={`modal ${showMenu ? 'is-active' : ''}`}>
-        <div className='modal-background' onClick={() => setShowMenu(false)}></div>
+      <Modal isActive={showMenu} inactivate={() => setShowMenu(false)}>
         <Menu />
-      </div>
+      </Modal>
 
       <div className='CMain'>
         <div className='CTexts'>{ texts.map(text => <Text setEdit={setEditingFunc(text.id)} key={text.id} data={text} edit={setEditingFunc(text.id)} />)}</div>

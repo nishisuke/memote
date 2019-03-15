@@ -2,33 +2,28 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import firebase from 'firebase/app';
 
-export default class Text extends React.Component {
-  constructor(props) {
-    super(props); 
-    this.state = {
-    };
-    this.out = this.out.bind(this);
-  }
+const version = () => {
+  const scriptTags = document.getElementsByTagName('script')
+  const lastScriptTag = scriptTags[scriptTags.length - 1]
+  const paths = lastScriptTag.src.split('/')
+  const filenameArr = paths[paths.length - 1].split('.')
+  return filenameArr[0]
+}
 
-  out() {
-    firebase.auth().signOut().then(function() {
-      // Sign-out successful.
-    }).catch(function(error) {
-      // An error happened.
-    });
-  }
+const signout = () => {
+  firebase.auth().signOut().then(function() {
+    // Sign-out successful.
+  }).catch(e => {
+    // An error happened.
+  })
+}
 
-  render() {
-    let tags = document.getElementsByTagName('script')
-    let pathArr = tags[tags.length - 1].src.split('/')
-    let arr = pathArr[pathArr.length - 1].split('.')
-    let str = arr[0]
-    return (
-      <div className='modal-content'>
-        <button className='button is-medium' onClick={this.out}>sign out</button>
-        <Link to='/archives/'>archives</Link>
-        <p>{str}</p>
-      </div>
-    )
-  }
+export default () => {
+  return (
+    <div>
+      <button className='button is-medium' onClick={signout}>sign out</button>
+      <Link to='/archives/'>archives</Link>
+      <p>{version()}</p>
+    </div>
+  )
 }
