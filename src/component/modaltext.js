@@ -7,7 +7,7 @@ export default props => {
   const [text, change] = useState('');
 
   useEffect(() => {
-    props.changeCallback(text)
+    props.changedCallback(text)
   }, [text])
 
   return (

@@ -1,6 +1,6 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore'; // Required for side-effects
-import Text from './records/text'
+import ImmutableText from './records/ImmutableText'
 
 class FirestoreDB {
   setup() {
@@ -33,7 +33,7 @@ class FirestoreDB {
     return this.firestore.collection('texts').where('user_id', '==', this.userID).where('archived', '==', false)
       .onSnapshot({ includeMetadataChanges: true }, snapshot => {
         snapshot.docChanges().forEach(change => {
-          const t = new Text();
+          const t = new ImmutableText();
           eachCallback(t.fromFirestore(change.doc), change.type === 'removed')
         })
       }, e => {
@@ -52,7 +52,7 @@ class FirestoreDB {
 
     query.get().then(snapshot => {
       snapshot.forEach(d => {
-        const t = new Text();
+        const t = new ImmutableText();
         eachCallback(t.fromFirestore(d))
       })
     })
@@ -60,7 +60,7 @@ class FirestoreDB {
 
   newMemo() {
     const s = this.firestore.collection('texts').doc()
-    return new Text({id: s.id})
+    return new ImmutableText({id: s.id})
   }
 
   activateMemo(id) {
@@ -68,7 +68,7 @@ class FirestoreDB {
   }
 
   putMemo(t) {
-    return this.firestore.collection('texts').doc(t.id).set(t.storeObject)
+    return this.firestore.collection('texts').doc(t.id).set(t.storeObject(this.userID))
   }
 
   get defaultMemo() {

@@ -13,17 +13,18 @@ const TextRecord = Record({
   pageYRate: null,
 })
 
-export default class Text extends TextRecord {
+export default class ImmutableText extends TextRecord {
   getEdited(text) {
     return this.merge({ text: text, updatedAt: new Date() })
   }
 
-  get storeObject() {
+  storeObject(userID) {
     const d = this.toObject()
     delete d.id
     const t = this.text
     delete d.text
-    t.string = t
+    d.string = t
+    d.user_id = userID
     return d
   }
 

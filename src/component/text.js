@@ -1,15 +1,16 @@
 import React from 'react'
 import db from '../db';
 
-export default class Text extends React.Component {
+export default class TextComponent extends React.Component {
   constructor(props) {
     super(props);
-
-    let p = this.restrictedPoint((props.data.pageXRate || 0) * window.innerWidth, (props.data.pageYRate || 0) * window.innerHeight)
+    const d = props.data
+    const x = (d ? d.pageXRate * window.innerWidth : 0)
+    const y = (d ? d.pageYRate * window.innerHeight : 0)
 
     this.state = {
-      pageX: p.pageX,
-      pageY: p.pageY,
+      pageX: x,
+      pageY: y,
     };
 
     this.archive = this.archive.bind(this);
