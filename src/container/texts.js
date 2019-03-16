@@ -43,7 +43,7 @@ export default props => {
       </Modal>
 
       <div className='CMain'>
-        <div className='CTexts'>{ texts.map(text => <Text key={text.id} data={text} />)}</div>
+        <div className='CTexts'>{ texts.map(t => <Text key={t.id} data={t} />)}</div>
         <div className='inputContainer'>
           <div className='fixedActionContainer'>
             <div id='archiveIcon' className='has-text-danger is-invisible'><span className='icon is-large'><i className='fas fa-archive fa-2x'></i></span></div>

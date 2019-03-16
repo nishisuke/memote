@@ -59,8 +59,8 @@ class FirestoreDB {
   }
 
   newMemo() {
-    const t = new Text();
-    return t.fromFirestore(this.firestore.collection('texts').doc())
+    const s = this.firestore.collection('texts').doc()
+    return new Text({id: s.id})
   }
 
   activateMemo(id) {
