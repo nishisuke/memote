@@ -4,7 +4,7 @@ import db from '../db'
 import { colorClass } from './comt'
 
 export default props => {
-  const [text, change] = useState('');
+  const [text, change] = useState(props.defaultValue);
 
   useEffect(() => {
     props.changedCallback(text)

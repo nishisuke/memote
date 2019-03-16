@@ -6,7 +6,7 @@ export default props => {
     <div className={`modal ${activeClass}`}>
       <div className='modal-background' onClick={props.inactivate}></div>
       <div className='modal-content'>
-        {props.children}
+        {props.content}
       </div>
     </div>
   )
