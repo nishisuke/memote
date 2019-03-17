@@ -38,6 +38,10 @@ export default props => {
     dispatch({ type: 'edit', editingID: newText.id, lockingValue: newText.text, value: newText.text })
   }
 
+  const edit = text => {
+    dispatch({ type: 'edit', editingID: text.id, lockingValue: text.text, value: text.text })
+  }
+
   const storedText = texts.find(t => t.id === autoSave.editingID)
   const storedTextValue = storedText ? storedText.text : null
   useEffect(() => {
@@ -101,7 +105,7 @@ export default props => {
       <Modal isActive={showMenu} inactivate={() => setShowMenu(false)} content={menu} />
 
       <div className='CMain'>
-        <div className='CTexts'>{ texts.map(t => <TextComponent key={t.id} data={t} />)}</div>
+        <div className='CTexts'>{ texts.map(t => <TextComponent edit={edit} key={t.id} data={t} />)}</div>
         <div className='inputContainer'>
           <div className='fixedActionContainer'>
             <div id='archiveIcon' className='has-text-danger is-invisible'><span className='icon is-large'><i className='fas fa-archive fa-2x'></i></span></div>

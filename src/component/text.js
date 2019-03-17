@@ -20,11 +20,7 @@ export default class TextComponent extends React.Component {
   }
 
   hoge() {
-    if (window.innerWidth < 560) {
-      this.props.edit()
-    } else {
-      this.props.setEdit()
-    }
+    this.props.edit(this.props.data)
   }
 
   restrictedPoint(numX, numY) {
