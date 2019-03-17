@@ -1,18 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import db from '../db'
+import React from 'react'
 
 import { colorClass } from './comt'
 
 export default props => {
-  const [text, change] = useState(props.defaultValue);
-
-  useEffect(() => {
-    props.changedCallback(text)
-  }, [text])
-
   return (
     <div className={`control `}>
-      <textarea id='ta' onChange={e => change(e.target.value)} value={text} className={`textarea has-fixed-size `} rows='12' />
+      <textarea id='ta' onChange={props.handleChange} value={props.value} className={`textarea has-fixed-size `} rows='12' />
     </div>
   )
 }

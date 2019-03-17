@@ -11,9 +11,10 @@ import Menu from '../component/menu'
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'willSave': return {...state, state: 'willSave', timeoutID: action.timeoutID};
-    case 'setPromise': return {...state, state: 'setPromise' }
-    case 'saved': return { ...state, state: 'saved', savedValue: action.savedValue }
+    case 'willSave': return {...state, state: 'willSave', value: action.value, timeoutID: action.timeoutID};
+    case 'setPromise': return {...state, state: 'setPromise', lockingValue: action.lockingValue }
+    case 'saved': return { ...state, state: 'saved' }
+    case 'edit': return { ...state, state: 'edit', editingID: action.editingID, value: action.value }
     default: throw new Error();
   }
 }
@@ -25,37 +26,41 @@ let promise = new Promise(resolve => {
 export default props => {
   const texts = useSubscribeTexts()
 
-  const [state, dispatch] = useReducer(reducer, {state: 'notChanged', timeoutID: -1, savedValue: ''});
-
-  const [editingID, setEditing] = useState(null);
+  const [autoSave, dispatch] = useReducer(reducer, {state: 'notChanged', editingID: null, lockingValue: null, timeoutID: -1, value: ''});
 
   const [showMenu, setShowMenu] = useState(false);
   const [showEditor, setShowEditor] = useState(false);
 
-  useEffect(() => {
-    setShowEditor(!!editingID)
-  }, [editingID])
+  useEffect(() => setShowEditor(!!autoSave.editingID) , [autoSave.editingID])
 
   const editorOpen = () => {
-    setEditing(db.newMemo().id) 
+    const newText = db.newMemo()
+    dispatch({ type: 'edit', editingID: newText.id, lockingValue: newText.text, value: newText.text })
   }
 
-  const editing = editingID ? (texts.find(t => t.id === editingID) || new ImmutableText({id: editingID})) : null
+  const storedText = texts.find(t => t.id === autoSave.editingID)
+  const storedTextValue = storedText ? storedText.text : null
+  useEffect(() => {
+    if (storedTextValue && storedTextValue !== autoSave.lockingValue) {
+      alert('other editor may be still working! invalidate this editor for safety.')
+    }
+  }, [storedTextValue])
 
-  const cb = t => {
-    if (!editing) return;
-    if (editing.text !== state.savedValue) { alert('other editor may be still working! invalidate this editor for safety.'); return; }
+  const editingText = texts.find(t => t.id === autoSave.editingID) || new ImmutableText({id: autoSave.editingID})
 
-    clearTimeout(state.timeoutID)
+  const cb = e => {
+    const t = e.target.value;
+
+    clearTimeout(autoSave.timeoutID)
 
     const timeoutID = setTimeout(() => {
-      dispatch({ type: 'setPromise' })
+      dispatch({ type: 'setPromise', lockingValue: t })
 
       promise = promise.then(num => {
         return new Promise(resolve => {
-          db.putMemo(editing.getEdited(t))
+          db.putMemo(editingText.getEdited(t))
             .then(() => {
-              dispatch({ type: 'saved', savedValue: t })
+              dispatch({ type: 'saved' })
               resolve(true)
             }).catch(e => {
               alert(`save failed!!: ${t}`)
@@ -65,21 +70,33 @@ export default props => {
       })
     }, 1500)
 
-    dispatch({ type: 'willSave', timeoutID: timeoutID })
+    dispatch({ type: 'willSave', timeoutID: timeoutID, value: t })
   }
 
   const superFunc = () => {
-    setEditing(null)
+    switch (autoSave.state) {
+      case 'willSave':
+        clearTimeout(autoSave.timeoutID)
+        db.putMemo(editingText.getEdited(autoSave.value)).then(() => {
+          dispatch({ type: 'edit', editingID: null, lockingValue: null })
+        })
+      case 'setPromise':
+        promise = promise.then(() => {
+          dispatch({ type: 'edit', editingID: null, lockingValue: null })
+          return new Promise(resolve => {
+            resolve(1)
+          })
+        })
+      default:
+        dispatch({ type: 'edit', editingID: null, lockingValue: null })
+    }
   }
-
-  const aa = useCallback(cb, [editingID, state.timeoutID])
-  const editor = useMemo(() => <OpenedModal changedCallback={aa} defaultValue={state.savedValue} />, [aa, state.savedValue])
 
   const menu = useMemo(() => <Menu />, [])
 
   return (
     <div className='rootContainer'>
-      <Modal isActive={showEditor} inactivate={superFunc} content={editor} />
+      <Modal isActive={showEditor} inactivate={superFunc} content={<OpenedModal handleChange={cb} value={autoSave.value} />} />
 
       <Modal isActive={showMenu} inactivate={() => setShowMenu(false)} content={menu} />
 
