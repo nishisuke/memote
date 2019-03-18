@@ -37,8 +37,6 @@ class FirestoreDB {
     return this.texts.where('user_id', '==', this.userID).where('archived', '==', false)
       .onSnapshot({ includeMetadataChanges: true }, snapshot => {
         snapshot.docChanges().forEach(change => {
-          console.log(change.doc.metadata.hasPendingWrites)
-          console.log(change.doc.metadata.fromCache)
           const t = new ImmutableText();
           eachCallback(t.fromFirestore(change.doc), change.type === 'removed')
         })

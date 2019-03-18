@@ -66,7 +66,6 @@ export default props => {
         return new Promise(resolve => {
           db.putMemo(editingText.getEdited(t))
             .then(() => {
-              console.log('d')
               dispatch({ type: 'saved' })
               resolve(true)
             }).catch(e => {
