@@ -38,7 +38,10 @@ export default props => {
   const [showMenu, setShowMenu] = useState(false);
   const [showEditor, setShowEditor] = useState(false);
 
-  useEffect(() => setShowEditor(!!autoSave.editingID) , [autoSave.editingID])
+  useEffect(() => setShowEditor(!!autoSave.editingID), [autoSave.editingID])
+  useEffect(() => {
+    if (showEditor) document.getElementById('ta').focus();
+  }, [showEditor])
 
   const edit = text => {
     dispatch({ type: 'edit', editingID: text.id, value: text.text })
