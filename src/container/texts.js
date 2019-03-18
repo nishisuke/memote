@@ -11,10 +11,10 @@ import Menu from '../component/menu'
 
 const reducer = (state, action) => {
   switch (action.type) {
+    case 'edit': return { ...state, state: 'edit', editingID: action.editingID, value: action.value }
     case 'willSave': return {...state, state: 'willSave', value: action.value, timeoutID: action.timeoutID};
     case 'setPromise': return {...state, state: 'setPromise' }
     case 'saved': return { ...state, state: 'saved' }
-    case 'edit': return { ...state, state: 'edit', editingID: action.editingID, value: action.value }
     default: throw new Error();
   }
 }
@@ -40,17 +40,9 @@ export default props => {
 
   useEffect(() => setShowEditor(!!autoSave.editingID) , [autoSave.editingID])
 
-  const editorOpen = () => {
-    const newText = db.newMemo()
-    dispatch({ type: 'edit', editingID: newText.id, value: newText.text })
-  }
-
   const edit = text => {
     dispatch({ type: 'edit', editingID: text.id, value: text.text })
   }
-
-  const storedText = texts.find(t => t.id === autoSave.editingID)
-  const storedTextValue = storedText ? storedText.text : null
 
   const editingText = texts.find(t => t.id === autoSave.editingID) || new ImmutableText({id: autoSave.editingID})
 
@@ -125,7 +117,7 @@ export default props => {
         <div className='inputContainer'>
           <div className='fixedActionContainer'>
             <div id='archiveIcon' className='has-text-danger is-invisible'><span className='icon is-large'><i className='fas fa-archive fa-2x'></i></span></div>
-            <div className='has-text-primary' onClick={editorOpen}><span className='icon is-large'><i className='fas fa-pen fa-2x'></i></span></div>
+            <div className='has-text-primary' onClick={() => edit(db.newMemo())}><span className='icon is-large'><i className='fas fa-pen fa-2x'></i></span></div>
             <div onClick={() => setShowMenu(true)}><span className='icon is-large'><i className='fas fa-bars fa-2x'></i></span></div>
           </div>
         </div>
