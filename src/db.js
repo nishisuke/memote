@@ -24,20 +24,24 @@ class FirestoreDB {
     this.firestore = firestore
   }
 
+  get texts() {
+    return this.firestore.collection('texts')
+  }
+
   get userID() {
     let u = firebase.auth().currentUser
     return u ? u.uid : ''
   }
 
   subscribeMemos(eachCallback) {
-    return this.firestore.collection('texts').where('user_id', '==', this.userID).where('archived', '==', false)
+    return this.texts.where('user_id', '==', this.userID).where('archived', '==', false)
       .onSnapshot({ includeMetadataChanges: true }, snapshot => {
         snapshot.docChanges().forEach(change => {
           const t = new ImmutableText();
           eachCallback(t.fromFirestore(change.doc), change.type === 'removed')
         })
       }, e => {
-        // nothing
+        console.error(e)
       })
   }
 
