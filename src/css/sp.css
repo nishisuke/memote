@@ -18,6 +18,25 @@
     z-index: 1;
   }
 
+  .ani {
+    animation: bounce 1s ease-out 0s;
+  }
+
+  @keyframes bounce {
+    0% {
+      right: 10px;
+      left: 10px;
+      top: 10px;
+      bottom: 10px;
+    }
+    100% {
+      right: 180px;
+      left: 100px;
+      top: 400px;
+      bottom: 200px;
+    }
+  }
+
   .textlabel {
     width: 160px;
     background-color: rgba(255, 255, 255, 0.6);
