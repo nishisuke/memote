@@ -35,21 +35,18 @@ export default props => {
 
   const [autoSave, dispatch] = useReducer(reducer, initialState);
 
-  const [showMenu, setShowMenu] = useState(false);
-  const [showEditor, setShowEditor] = useState(false);
+  const edit = useCallback(text => dispatch({ type: 'edit', editingID: text.id, value: text.text }), [])
 
-  useEffect(() => setShowEditor(!!autoSave.editingID), [autoSave.editingID])
-  useEffect(() => {
-    if (showEditor) document.getElementById('ta').focus();
-  }, [showEditor])
+  const editingText = useMemo(() => {
+    return (texts.find(t => t.id === autoSave.editingID) ||
+      new ImmutableText({
+        id: autoSave.editingID,
+        pageXRate: 0.3 + (Math.random() / 20),
+        pageYRate: 0.7 + (Math.random() / 20)
+      }))
+  }, [autoSave.editingID]) // textsは依存じゃない？
 
-  const edit = text => {
-    dispatch({ type: 'edit', editingID: text.id, value: text.text })
-  }
-
-  const editingText = texts.find(t => t.id === autoSave.editingID) || new ImmutableText({id: autoSave.editingID, pageXRate: 0.3 + (Math.random() / 20), pageYRate: 0.7 + (Math.random() / 20)})
-
-  const cb = e => {
+  const cb = useCallback(e => {
     const t = e.target.value;
 
     clearTimeout(autoSave.timeoutID)
@@ -72,9 +69,9 @@ export default props => {
     }, 1500)
 
     dispatch({ type: 'willSave', timeoutID: timeoutID, value: t })
-  }
+  }, [autoSave.timeoutID, autoSave.editingID])
 
-  const superFunc = () => {
+  const superFunc = useCallback(() => {
     switch (autoSave.state) {
       case 'willSave':
         // max1.5秒の遅延が起きる。モーダルを閉じても反映されてないという体験はいけてないので
@@ -105,9 +102,16 @@ export default props => {
         // other: 普通に閉じておk
         dispatch({ type: 'edit', editingID: null })
     }
-  }
+  }, [autoSave.state, autoSave.timeoutID, autoSave.value, autoSave.editingID])
 
+  const [showMenu, setShowMenu] = useState(false);
   const menu = useMemo(() => <Menu />, [])
+
+  const showEditor = useMemo(() => !!autoSave.editingID, [autoSave.editingID]);
+
+  useEffect(() => {
+    if (showEditor) document.getElementById('ta').focus();
+  }, [showEditor])
 
   return (
     <div className='rootContainer'>
