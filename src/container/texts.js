@@ -47,7 +47,7 @@ export default props => {
     dispatch({ type: 'edit', editingID: text.id, value: text.text })
   }
 
-  const editingText = texts.find(t => t.id === autoSave.editingID) || new ImmutableText({id: autoSave.editingID})
+  const editingText = texts.find(t => t.id === autoSave.editingID) || new ImmutableText({id: autoSave.editingID, pageXRate: 0.3 + (Math.random() / 20), pageYRate: 0.7 + (Math.random() / 20)})
 
   const cb = e => {
     const t = e.target.value;
