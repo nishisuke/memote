@@ -25,6 +25,12 @@ export default class ImmutableText extends TextRecord {
     delete d.text
     d.string = t
     d.user_id = userID
+
+    if (!d.pageXRate) {
+      d.pageXRate = 0.3 + (Math.random() / 20)
+      d.pageYRate = 0.7 + (Math.random() / 20)
+    }
+
     return d
   }
 
