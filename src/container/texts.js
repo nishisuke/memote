@@ -83,18 +83,32 @@ export default props => {
   const superFunc = () => {
     switch (autoSave.state) {
       case 'willSave':
+        // max1.5秒の遅延が起きる。モーダルを閉じても反映されてないという体験はいけてないので
+        // 直ちにsave実行
+        // ただし前のジョブより先に実行したくないので一応直列処理
+        // (1.5秒なのでないと思うけど)
         clearTimeout(autoSave.timeoutID)
-        db.putMemo(editingText.getEdited(autoSave.value)).then(() => {
-          dispatch({ type: 'edit', editingID: null })
-        })
-      case 'setPromise':
-        promise = promise.then(() => {
-          dispatch({ type: 'edit', editingID: null })
+
+        promise = promise.then(num => {
           return new Promise(resolve => {
-            resolve(1)
+            db.putMemo(editingText.getEdited(autoSave.value))
+              .then(() => resolve(true))
+              .catch(e => {
+                alert(`save failed!!: ${t}`)
+                resolve(false)
+              })
           })
         })
+
+        // 書き込みを待ってからモーダルを閉じたくないので即閉じる
+        dispatch({ type: 'edit', editingID: null })
       default:
+        // setPromise:
+        // firestoreのレイテンシ補正（ローカル書き込みイベントが早めに起こる）があるので、
+        // モーダル閉じた直後に反映されてないと感じる体験は起きないので即終了
+        // willsaveみたいにpromise.thenしても良い
+        //
+        // other: 普通に閉じておk
         dispatch({ type: 'edit', editingID: null })
     }
   }
