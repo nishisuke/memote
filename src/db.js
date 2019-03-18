@@ -8,18 +8,18 @@ class FirestoreDB {
 
     let firestore = firebase.firestore()
 
-    firestore.enablePersistence()
-      .catch(err => {
-        if (err.code == 'failed-precondition') {
-          console.log(err.code)
-          // Multiple tabs open, persistence can only be enabled
-          // in one tab at a a time.
-        } else if (err.code == 'unimplemented') {
-          console.log(err.code)
-          // The current browser does not support all of the
-          // features required to enable persistence
-        }
-      });
+    //firestore.enablePersistence()
+    //  .catch(err => {
+    //    if (err.code == 'failed-precondition') {
+    //      console.log(err.code)
+    //      // Multiple tabs open, persistence can only be enabled
+    //      // in one tab at a a time.
+    //    } else if (err.code == 'unimplemented') {
+    //      console.log(err.code)
+    //      // The current browser does not support all of the
+    //      // features required to enable persistence
+    //    }
+    //  });
 
     this.firestore = firestore
   }
@@ -37,6 +37,8 @@ class FirestoreDB {
     return this.texts.where('user_id', '==', this.userID).where('archived', '==', false)
       .onSnapshot({ includeMetadataChanges: true }, snapshot => {
         snapshot.docChanges().forEach(change => {
+          console.log(change.doc.metadata.hasPendingWrites)
+          console.log(change.doc.metadata.fromCache)
           const t = new ImmutableText();
           eachCallback(t.fromFirestore(change.doc), change.type === 'removed')
         })

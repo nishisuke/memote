@@ -12,7 +12,7 @@ import Menu from '../component/menu'
 const reducer = (state, action) => {
   switch (action.type) {
     case 'willSave': return {...state, state: 'willSave', value: action.value, timeoutID: action.timeoutID};
-    case 'setPromise': return {...state, state: 'setPromise', lockingValue: action.lockingValue }
+    case 'setPromise': return {...state, state: 'setPromise' }
     case 'saved': return { ...state, state: 'saved' }
     case 'edit': return { ...state, state: 'edit', editingID: action.editingID, value: action.value }
     default: throw new Error();
@@ -23,10 +23,17 @@ let promise = new Promise(resolve => {
   resolve(1)
 })
 
+const initialState = {
+  state: 'notChanged',
+  editingID: null,
+  timeoutID: -1,
+  value: '', // 終了時にcleartimeoutして即時実行する時必要
+}
+
 export default props => {
   const texts = useSubscribeTexts()
 
-  const [autoSave, dispatch] = useReducer(reducer, {state: 'notChanged', editingID: null, lockingValue: null, timeoutID: -1, value: ''});
+  const [autoSave, dispatch] = useReducer(reducer, initialState);
 
   const [showMenu, setShowMenu] = useState(false);
   const [showEditor, setShowEditor] = useState(false);
@@ -35,20 +42,15 @@ export default props => {
 
   const editorOpen = () => {
     const newText = db.newMemo()
-    dispatch({ type: 'edit', editingID: newText.id, lockingValue: newText.text, value: newText.text })
+    dispatch({ type: 'edit', editingID: newText.id, value: newText.text })
   }
 
   const edit = text => {
-    dispatch({ type: 'edit', editingID: text.id, lockingValue: text.text, value: text.text })
+    dispatch({ type: 'edit', editingID: text.id, value: text.text })
   }
 
   const storedText = texts.find(t => t.id === autoSave.editingID)
   const storedTextValue = storedText ? storedText.text : null
-  useEffect(() => {
-    if (storedTextValue && storedTextValue !== autoSave.lockingValue) {
-      alert('other editor may be still working! invalidate this editor for safety.')
-    }
-  }, [storedTextValue])
 
   const editingText = texts.find(t => t.id === autoSave.editingID) || new ImmutableText({id: autoSave.editingID})
 
@@ -58,12 +60,13 @@ export default props => {
     clearTimeout(autoSave.timeoutID)
 
     const timeoutID = setTimeout(() => {
-      dispatch({ type: 'setPromise', lockingValue: t })
+      dispatch({ type: 'setPromise'})
 
       promise = promise.then(num => {
         return new Promise(resolve => {
           db.putMemo(editingText.getEdited(t))
             .then(() => {
+              console.log('d')
               dispatch({ type: 'saved' })
               resolve(true)
             }).catch(e => {
@@ -82,17 +85,17 @@ export default props => {
       case 'willSave':
         clearTimeout(autoSave.timeoutID)
         db.putMemo(editingText.getEdited(autoSave.value)).then(() => {
-          dispatch({ type: 'edit', editingID: null, lockingValue: null })
+          dispatch({ type: 'edit', editingID: null })
         })
       case 'setPromise':
         promise = promise.then(() => {
-          dispatch({ type: 'edit', editingID: null, lockingValue: null })
+          dispatch({ type: 'edit', editingID: null })
           return new Promise(resolve => {
             resolve(1)
           })
         })
       default:
-        dispatch({ type: 'edit', editingID: null, lockingValue: null })
+        dispatch({ type: 'edit', editingID: null })
     }
   }
 
