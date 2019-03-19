@@ -104,14 +104,14 @@ export default props => {
     }
   }, [autoSave.state, autoSave.timeoutID, autoSave.value, autoSave.editingID])
 
-  const [showMenu, setShowMenu] = useState(false);
-  const menu = useMemo(() => <Menu />, [])
-
   const showEditor = useMemo(() => !!autoSave.editingID, [autoSave.editingID]);
 
   useEffect(() => {
     if (showEditor) document.getElementById('ta').focus();
   }, [showEditor])
+
+  const [showMenu, setShowMenu] = useState(false);
+  const menu = useMemo(() => <Menu />, [])
 
   return (
     <div className='rootContainer'>
