@@ -10,7 +10,6 @@ import Modal from '../component/Modal'
 import Menu from '../component/menu'
 
 const reducer = (state, action) => {
-    console.log(action.type)
   switch (action.type) {
     case 'waiting':    return { ...state, state: 'waiting'                                                    }
     case 'begin':      return { ...state, state: 'begin',    value: action.text.text, id: action.text.id      }
@@ -73,7 +72,7 @@ export default props => {
     }, 1500)
 
     dispatch({ type: 'willSave', timeoutID: timeoutID, value: t })
-  }, [autoSave.timeoutID, autoSave.id])
+  }, [autoSave.timeoutID, editingText.id])
 
   useEffect(() => {
     if (autoSave.state !== 'stopped') return;
