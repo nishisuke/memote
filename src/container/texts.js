@@ -12,12 +12,12 @@ import Menu from '../component/menu'
 const reducer = (state, action) => {
     console.log(action.type)
   switch (action.type) {
-    case 'waiting': return { ...state, state: 'waiting' }
-    case 'begin': return { ...state, id: action.text.id, state: 'begin', value: action.text.text }
-    case 'willSave': return {...state, state: 'willSave', value: action.value, timeoutID: action.timeoutID};
-    case 'setPromise': return {...state, state: 'setPromise' }
-    case 'saved': return { ...state, state: 'saved' }
-    case 'stopped': return { ...state, state: 'stopped', prevState: state.state }
+    case 'waiting':    return { ...state, state: 'waiting'                                                    }
+    case 'begin':      return { ...state, state: 'begin',    value: action.text.text, id: action.text.id      }
+    case 'willSave':   return { ...state, state: 'willSave', value: action.value, timeoutID: action.timeoutID }
+    case 'setPromise': return { ...state, state: 'setPromise'                                                 }
+    case 'saved':      return { ...state, state: 'saved'                                                      }
+    case 'stopped':    return { ...state, state: 'stopped',  prevState: state.state                           }
     default: throw new Error();
   }
 }
@@ -80,10 +80,6 @@ export default props => {
 
     switch (autoSave.prevState) {
       case 'willSave':
-        // max1.5秒の遅延が起きる。モーダルを閉じても反映されてないという体験はいけてないので
-        // 直ちにsave実行
-        // ただし前のジョブより先に実行したくないので一応直列処理
-        // (1.5秒なのでないと思うけど)
         clearTimeout(autoSave.timeoutID)
 
         promise = promise.then(num => {
@@ -110,12 +106,6 @@ export default props => {
         })
         break;
       default:
-        // setPromise:
-        // firestoreのレイテンシ補正（ローカル書き込みイベントが早めに起こる）があるので、
-        // モーダル閉じた直後に反映されてないと感じる体験は起きないので即終了
-        // willsaveみたいにpromise.thenしても良い
-        //
-        // other: 普通に閉じておk
         dispatch({ type: 'waiting' })
         break;
     }
