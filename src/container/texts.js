@@ -10,11 +10,14 @@ import Modal from '../component/Modal'
 import Menu from '../component/menu'
 
 const reducer = (state, action) => {
+    console.log(action.type)
   switch (action.type) {
-    case 'edit': return { ...state, state: 'edit', editingID: action.editingID, value: action.value }
+    case 'waiting': return { ...state, state: 'waiting' }
+    case 'begin': return { ...state, id: action.text.id, state: 'begin', value: action.text.text }
     case 'willSave': return {...state, state: 'willSave', value: action.value, timeoutID: action.timeoutID};
     case 'setPromise': return {...state, state: 'setPromise' }
     case 'saved': return { ...state, state: 'saved' }
+    case 'stopped': return { ...state, state: 'stopped', prevState: state.state }
     default: throw new Error();
   }
 }
@@ -24,8 +27,7 @@ let promise = new Promise(resolve => {
 })
 
 const initialState = {
-  state: 'notChanged',
-  editingID: null,
+  state: 'waiting',
   timeoutID: -1,
   value: '', // 終了時にcleartimeoutして即時実行する時必要
 }
@@ -35,16 +37,18 @@ export default props => {
 
   const [autoSave, dispatch] = useReducer(reducer, initialState);
 
-  const edit = useCallback(text => dispatch({ type: 'edit', editingID: text.id, value: text.text }), [])
+  const edit = text => {
+    dispatch({type: 'begin', text: text})
+  }
 
   const editingText = useMemo(() => {
-    return (texts.find(t => t.id === autoSave.editingID) ||
+    return (texts.find(t => t.id === autoSave.id) ||
       new ImmutableText({
-        id: autoSave.editingID,
+        id: autoSave.id,
         pageXRate: 0.3 + (Math.random() / 20),
         pageYRate: 0.7 + (Math.random() / 20)
       }))
-  }, [autoSave.editingID]) // textsは依存じゃない？
+  }, [autoSave.id]) // textsは依存じゃない？
 
   const cb = useCallback(e => {
     const t = e.target.value;
@@ -69,10 +73,12 @@ export default props => {
     }, 1500)
 
     dispatch({ type: 'willSave', timeoutID: timeoutID, value: t })
-  }, [autoSave.timeoutID, autoSave.editingID])
+  }, [autoSave.timeoutID, autoSave.id])
 
-  const superFunc = useCallback(() => {
-    switch (autoSave.state) {
+  useEffect(() => {
+    if (autoSave.state !== 'stopped') return;
+
+    switch (autoSave.prevState) {
       case 'willSave':
         // max1.5秒の遅延が起きる。モーダルを閉じても反映されてないという体験はいけてないので
         // 直ちにsave実行
@@ -83,7 +89,10 @@ export default props => {
         promise = promise.then(num => {
           return new Promise(resolve => {
             db.putMemo(editingText.getEdited(autoSave.value))
-              .then(() => resolve(true))
+              .then(() => {
+                dispatch({ type: 'waiting' })
+                resolve(true)
+              })
               .catch(e => {
                 alert(`save failed!!: ${t}`)
                 resolve(false)
@@ -91,8 +100,15 @@ export default props => {
           })
         })
 
-        // 書き込みを待ってからモーダルを閉じたくないので即閉じる
-        dispatch({ type: 'edit', editingID: null })
+        break;
+      case 'setPromise':
+        promise = promise.then(() => {
+          return new Promise(resolve => {
+            dispatch({ type: 'waiting' })
+            resolve(1)
+          })
+        })
+        break;
       default:
         // setPromise:
         // firestoreのレイテンシ補正（ローカル書き込みイベントが早めに起こる）があるので、
@@ -100,22 +116,24 @@ export default props => {
         // willsaveみたいにpromise.thenしても良い
         //
         // other: 普通に閉じておk
-        dispatch({ type: 'edit', editingID: null })
+        dispatch({ type: 'waiting' })
+        break;
     }
-  }, [autoSave.state, autoSave.timeoutID, autoSave.value, autoSave.editingID])
+  }, [autoSave.state])
 
-  const showEditor = useMemo(() => !!autoSave.editingID, [autoSave.editingID]);
-
+  // editor 表示
+  const showEditor = useMemo(() => !(autoSave.state === 'waiting' || autoSave.state === 'stopped'), [autoSave.state]);
   useEffect(() => {
     if (showEditor) document.getElementById('ta').focus();
   }, [showEditor])
 
+  // menu
   const [showMenu, setShowMenu] = useState(false);
   const menu = useMemo(() => <Menu />, [])
 
   return (
     <div className='rootContainer'>
-      <Modal isActive={showEditor} inactivate={superFunc} content={<OpenedModal handleChange={cb} value={autoSave.value} />} />
+      <Modal isActive={showEditor} inactivate={() => dispatch({ type: 'stopped' })} content={<OpenedModal handleChange={cb} value={autoSave.value} />} />
 
       <Modal isActive={showMenu} inactivate={() => setShowMenu(false)} content={menu} />
 
