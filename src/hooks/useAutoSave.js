@@ -27,9 +27,7 @@ const reducer = (state, action) => {
   }
 }
 
-let promise = new Promise(resolve => {
-  resolve(1)
-})
+let promise = Promise.resolve(true)
 
 const initialState = {
   statusName: STANDBY_STATUS,
@@ -58,13 +56,9 @@ export default () => {
       promise = promise.then(num => {
         return new Promise(resolve => {
           db.putMemo(edited)
-            .then(() => {
-              dispatch({ type: SUCCESS_SAVING_ACT})
-              resolve(true)
-            }).catch(e => {
-              alert(`save failed!!: ${edited.text}`)
-              resolve(false)
-            })
+            .then(() => dispatch({ type: SUCCESS_SAVING_ACT }))
+            .catch(e => alert(`save failed!!: ${edited.text}`))
+            .finally(() => resolve(true))
         })
       })
     }, 1500)
@@ -82,25 +76,15 @@ export default () => {
         promise = promise.then(num => {
           return new Promise(resolve => {
             db.putMemo(autoSave.editingText)
-              .then(() => {
-                dispatch({ type: STANDBY_ACT })
-                resolve(true)
-              })
-              .catch(e => {
-                alert(`save failed!!: ${t}`)
-                resolve(false)
-              })
+              .then(() => dispatch({ type: STANDBY_ACT }))
+              .catch(e => alert(`save failed!!: ${t}`))
+              .finally(() => resolve(true))
           })
         })
 
         break;
       case SAVING_STATUS:
-        promise = promise.then(() => {
-          return new Promise(resolve => {
-            dispatch({ type: STANDBY_ACT })
-            resolve(1)
-          })
-        })
+        promise = promise.then(() => dispatch({ type: STANDBY_ACT }))
         break;
       default:
         dispatch({ type: STANDBY_ACT })
