@@ -4,7 +4,7 @@ import db from '../db'
 const reducer = (state, action) => {
   switch (action.type) {
     case 'waiting':    return { ...state, statusName: 'waiting'                                                    }
-    case 'begin':      return { ...state, statusName: 'begin',    id: action.text.id, editingText: action.text }
+    case 'begin':      return { ...state, statusName: 'begin',    editingText: action.text }
     case 'willSave':   return { ...state, statusName: 'willSave', timeoutID: action.timeoutID, editingText: action.editingText }
     case 'setPromise': return { ...state, statusName: 'setPromise'                                                 }
     case 'saved':      return { ...state, statusName: 'saved'                                                      }
@@ -26,8 +26,6 @@ const initialState = {
 export default () => {
   const [autoSave, dispatch] = useReducer(reducer, initialState);
 
-  const editingText = autoSave.editingText
-
   const change = useCallback(e => {
     const t = e.target.value;
 
@@ -38,7 +36,7 @@ export default () => {
 
       promise = promise.then(num => {
         return new Promise(resolve => {
-          db.putMemo(editingText.getEdited(t))
+          db.putMemo(autoSave.editingText.getEdited(t))
             .then(() => {
               dispatch({ type: 'saved' })
               resolve(true)
@@ -50,8 +48,8 @@ export default () => {
       })
     }, 1500)
 
-    dispatch({ type: 'willSave', timeoutID: timeoutID, editingText: editingText.getEdited(t) })
-  }, [autoSave.timeoutID, editingText.id])
+    dispatch({ type: 'willSave', timeoutID: timeoutID, editingText: autoSave.editingText.getEdited(t) })
+  }, [autoSave.timeoutID, autoSave.editingText.id])
 
   useEffect(() => {
     if (autoSave.statusName !== 'stopped') return;
@@ -62,7 +60,7 @@ export default () => {
 
         promise = promise.then(num => {
           return new Promise(resolve => {
-            db.putMemo(editingText)
+            db.putMemo(autoSave.editingText)
               .then(() => {
                 dispatch({ type: 'waiting' })
                 resolve(true)
