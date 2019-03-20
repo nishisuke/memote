@@ -64,7 +64,11 @@ class FirestoreDB {
 
   newMemo() {
     const s = this.firestore.collection('texts').doc()
-    return new ImmutableText({id: s.id})
+    return new ImmutableText({
+      id: s.id,
+      pageXRate: 0.3 + (Math.random() / 20),
+      pageYRate: 0.7 + (Math.random() / 20),
+    })
   }
 
   activateMemo(id) {
