@@ -11,18 +11,16 @@ import Modal from '../component/Modal'
 import Menu from '../component/menu'
 
 export default () => {
-  const [statusName, value, startEditing, change, finishEditing] = useAutoSave()
+  const autoSave = useAutoSave()
 
-  return <TextContainer statusName={statusName} value={value} startEditing={startEditing} change={change} finishEditing={finishEditing} />
+  return <TextContainer autoSave={autoSave} />
 }
 
-const TextContainer = props => {
-  const {statusName, value, startEditing, change, finishEditing} = props
-
+const TextContainer = ({ autoSave }) => {
   const texts = useSubscribeTexts()
 
   // editor
-  const showEditor = useMemo(() => !(statusName === 'waiting' || statusName === 'stopped'), [statusName])
+  const showEditor = useMemo(() => !(autoSave.statusName === 'waiting' || autoSave.statusName === 'stopped'), [autoSave.statusName])
   useEffect(() => {
     if (showEditor) document.getElementById('ta').focus()
   }, [showEditor])
@@ -33,16 +31,16 @@ const TextContainer = props => {
 
   return (
     <div className='rootContainer'>
-      <Modal isActive={showEditor} inactivate={finishEditing} content={<OpenedModal handleChange={change} value={value} />} />
+      <Modal isActive={showEditor} inactivate={autoSave.finishEditing} content={<OpenedModal handleChange={autoSave.change} value={autoSave.value} />} />
 
       <Modal isActive={showMenu} inactivate={() => setShowMenu(false)} content={menu} />
 
       <div className='CMain'>
-        <div className='CTexts'>{ texts.map(t => <TextComponent edit={startEditing} key={t.id} data={t} />)}</div>
+        <div className='CTexts'>{ texts.map(t => <TextComponent edit={autoSave.startEditing} key={t.id} data={t} />)}</div>
         <div className='inputContainer'>
           <div className='fixedActionContainer'>
             <div id='archiveIcon' className='has-text-danger is-invisible'><span className='icon is-large'><i className='fas fa-archive fa-2x'></i></span></div>
-            <div className='has-text-primary' onClick={() => startEditing(db.newMemo())}><span className='icon is-large'><i className='fas fa-pen fa-2x'></i></span></div>
+            <div className='has-text-primary' onClick={() => autoSave.startEditing(db.newMemo())}><span className='icon is-large'><i className='fas fa-pen fa-2x'></i></span></div>
             <div onClick={() => setShowMenu(true)}><span className='icon is-large'><i className='fas fa-bars fa-2x'></i></span></div>
           </div>
         </div>

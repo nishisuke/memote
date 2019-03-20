@@ -94,5 +94,11 @@ export default () => {
     }
   }, [autoSave.state])
 
-  return [autoSave.state, autoSave.value, edit, cb, () => dispatch({ type: 'stopped' })]
+  return {
+    statusName: autoSave.state,
+    value: autoSave.value,
+    change: cb,
+    startEditing: edit,
+    finishEditing: () => dispatch({ type: 'stopped' }),
+  }
 }
