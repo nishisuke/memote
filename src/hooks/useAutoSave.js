@@ -3,12 +3,12 @@ import db from '../db'
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'waiting':    return { ...state, state: 'waiting'                                                    }
-    case 'begin':      return { ...state, state: 'begin',    value: action.text.text, id: action.text.id, editingText: action.text }
-    case 'willSave':   return { ...state, state: 'willSave', value: action.value, timeoutID: action.timeoutID }
-    case 'setPromise': return { ...state, state: 'setPromise'                                                 }
-    case 'saved':      return { ...state, state: 'saved'                                                      }
-    case 'stopped':    return { ...state, state: 'stopped',  prevState: state.state                           }
+    case 'waiting':    return { ...state, statusName: 'waiting'                                                    }
+    case 'begin':      return { ...state, statusName: 'begin',    value: action.text.text, id: action.text.id, editingText: action.text }
+    case 'willSave':   return { ...state, statusName: 'willSave', value: action.value, timeoutID: action.timeoutID }
+    case 'setPromise': return { ...state, statusName: 'setPromise'                                                 }
+    case 'saved':      return { ...state, statusName: 'saved'                                                      }
+    case 'stopped':    return { ...state, statusName: 'stopped',  prevState: state.statusName                           }
     default: throw new Error();
   }
 }
@@ -18,7 +18,7 @@ let promise = new Promise(resolve => {
 })
 
 const initialState = {
-  state: 'waiting',
+  statusName: 'waiting',
   editingText: {},
   timeoutID: -1,
   value: '', // 終了時にcleartimeoutして即時実行する時必要
@@ -27,13 +27,9 @@ const initialState = {
 export default () => {
   const [autoSave, dispatch] = useReducer(reducer, initialState);
 
-  const edit = text => {
-    dispatch({type: 'begin', text: text})
-  }
-
   const editingText = autoSave.editingText
 
-  const cb = useCallback(e => {
+  const change = useCallback(e => {
     const t = e.target.value;
 
     clearTimeout(autoSave.timeoutID)
@@ -59,7 +55,7 @@ export default () => {
   }, [autoSave.timeoutID, editingText.id])
 
   useEffect(() => {
-    if (autoSave.state !== 'stopped') return;
+    if (autoSave.statusName !== 'stopped') return;
 
     switch (autoSave.prevState) {
       case 'willSave':
@@ -92,13 +88,13 @@ export default () => {
         dispatch({ type: 'waiting' })
         break;
     }
-  }, [autoSave.state])
+  }, [autoSave.statusName])
 
   return {
-    statusName: autoSave.state,
+    statusName: autoSave.statusName,
     value: autoSave.value,
-    change: cb,
-    startEditing: edit,
+    change: change,
+    startEditing: t => dispatch({ type: 'begin', text: t }),
     finishEditing: () => dispatch({ type: 'stopped' }),
   }
 }
