@@ -40,7 +40,14 @@ const initialState = {
 export default () => {
   const [autoSave, dispatch] = useReducer(reducer, initialState);
 
+  const isEditing = useMemo(() => !(autoSave.statusName === STOPPED_STATUS || autoSave.statusName === STANDBY_STATUS), [autoSave.statusName])
+
   const change = useCallback(e => {
+    if (!isEditing) {
+      alert('editing is not started. this may be bug.')
+      return
+    }
+
     const t = e.target.value;
 
     clearTimeout(autoSave.timeoutID)
@@ -63,7 +70,7 @@ export default () => {
     }, 1500)
 
     dispatch({ type: SET_SAVING_JOB, timeoutID: timeoutID, editingText: autoSave.editingText.getEdited(t) })
-  }, [autoSave.timeoutID, autoSave.editingText.id])
+  }, [autoSave.timeoutID, isEditing, autoSave.editingText.id])
 
   useEffect(() => {
     if (autoSave.statusName !== STOPPED_STATUS) return;
@@ -103,6 +110,7 @@ export default () => {
 
   return {
     statusName: autoSave.statusName,
+    isEditing: isEditing,
     value: autoSave.editingText.text,
     change: change,
     startEditing: t => dispatch({ type: START_ACT, text: t }),

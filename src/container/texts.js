@@ -23,10 +23,9 @@ const TextContainer = ({ autoSave }) => {
 
   // editor
   const editor = useMemo(() => <OpenedModal handleChange={autoSave.change} value={autoSave.value} />, [autoSave.change, autoSave.value])
-  const showEditor = useMemo(() => !(autoSave.statusName === 'STANDBY_STATUS' || autoSave.statusName === 'STOPPED_STATUS'), [autoSave.statusName])
   useEffect(() => {
-    if (showEditor) document.getElementById('ta').focus()
-  }, [showEditor])
+    if (autoSave.isEditing) document.getElementById('ta').focus()
+  }, [autoSave.isEditing])
 
   // menu
   const [showMenu, setShowMenu] = useState(false)
@@ -34,7 +33,7 @@ const TextContainer = ({ autoSave }) => {
 
   return (
     <div className='rootContainer'>
-      <Modal isActive={showEditor} inactivate={autoSave.finishEditing} content={editor} />
+      <Modal isActive={autoSave.isEditing} inactivate={autoSave.finishEditing} content={editor} />
       <Modal isActive={showMenu} inactivate={() => setShowMenu(false)} content={menu} />
 
       <div className='CMain'>
