@@ -11,6 +11,8 @@ import Modal from '../component/Modal'
 import Menu from '../component/menu'
 
 export default () => {
+  // なんでtextsとコンポーネント分けたか
+  // textsのレンダーのたびにstatusもリコールされてeffectが走るのを避けるため
   const autoSave = useAutoSave()
 
   return <TextContainer autoSave={autoSave} />
