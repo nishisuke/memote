@@ -10,10 +10,16 @@ import TextComponent from '../component/text'
 import Modal from '../component/Modal'
 import Menu from '../component/menu'
 
-export default props => {
-  const texts = useSubscribeTexts()
-
+export default () => {
   const [statusName, value, startEditing, change, finishEditing] = useAutoSave()
+
+  return <TextContainer statusName={statusName} value={value} startEditing={startEditing} change={change} finishEditing={finishEditing} />
+}
+
+const TextContainer = props => {
+  const {statusName, value, startEditing, change, finishEditing} = props
+
+  const texts = useSubscribeTexts()
 
   // editor
   const showEditor = useMemo(() => !(statusName === 'waiting' || statusName === 'stopped'), [statusName])
