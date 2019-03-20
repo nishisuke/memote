@@ -8,18 +8,18 @@ class FirestoreDB {
 
     let firestore = firebase.firestore()
 
-    //firestore.enablePersistence()
-    //  .catch(err => {
-    //    if (err.code == 'failed-precondition') {
-    //      console.log(err.code)
-    //      // Multiple tabs open, persistence can only be enabled
-    //      // in one tab at a a time.
-    //    } else if (err.code == 'unimplemented') {
-    //      console.log(err.code)
-    //      // The current browser does not support all of the
-    //      // features required to enable persistence
-    //    }
-    //  });
+    firestore.enablePersistence()
+      .catch(err => {
+        if (err.code == 'failed-precondition') {
+          console.log(err.code)
+          // Multiple tabs open, persistence can only be enabled
+          // in one tab at a a time.
+        } else if (err.code == 'unimplemented') {
+          console.log(err.code)
+          // The current browser does not support all of the
+          // features required to enable persistence
+        }
+      });
 
     this.firestore = firestore
   }
