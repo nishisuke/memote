@@ -48,28 +48,28 @@ export default () => {
       return
     }
 
-    const t = e.target.value;
+    const edited = autoSave.editingText.getEdited(e.target.value)
 
     clearTimeout(autoSave.timeoutID)
 
     const timeoutID = setTimeout(() => {
-      dispatch({ type: SAVE_ACT})
+      dispatch({ type: SAVE_ACT })
 
       promise = promise.then(num => {
         return new Promise(resolve => {
-          db.putMemo(autoSave.editingText.getEdited(t))
+          db.putMemo(edited)
             .then(() => {
               dispatch({ type: SUCCESS_SAVING_ACT})
               resolve(true)
             }).catch(e => {
-              alert(`save failed!!: ${t}`)
+              alert(`save failed!!: ${edited.text}`)
               resolve(false)
             })
         })
       })
     }, 1500)
 
-    dispatch({ type: SET_SAVING_JOB, timeoutID: timeoutID, editingText: autoSave.editingText.getEdited(t) })
+    dispatch({ type: SET_SAVING_JOB, timeoutID: timeoutID, editingText: edited })
   }, [autoSave.timeoutID, isEditing, autoSave.editingText.id])
 
   useEffect(() => {
