@@ -12,7 +12,7 @@ export default () => {
     firebase.auth().onAuthStateChanged(user => setSigned(!!user))
   }, [])
 
-  if (!signed) return <p>signing in</p>;
+  if (!signed) return <div></div>;
 
   return (
     <Router>
