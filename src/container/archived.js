@@ -25,8 +25,8 @@ export default class Archived extends React.Component {
   }
 
   componentDidMount() {
-    db.fetchArchivedMemos((id, data) => {
-      this.setState({texts: [...this.state.texts, {...data, id: id}]})
+    db.fetchArchivedMemos(t => {
+      this.setState({texts: [...this.state.texts, t]})
     })
   }
 
