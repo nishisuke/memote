@@ -8,7 +8,7 @@ firebase.initializeApp({
 });
 
 
-import firebaseui from 'firebaseui';
+import * as firebaseui from 'firebaseui';
 
 firebase.auth().onAuthStateChanged(user => {
   if (!user) {
@@ -44,6 +44,7 @@ ReactDOM.render(<Routing />, document.getElementById('main'))
 
 
 import './main.css'
+import 'firebaseui/dist/firebaseui.css'
 
 
 import runtime from 'serviceworker-webpack-plugin/lib/runtime';
