@@ -5,7 +5,7 @@ import useSubscribeTexts from '../hooks/useSubscribeTexts'
 import useAutoSave from '../hooks/useAutoSave'
 import ImmutableText from '../records/ImmutableText'
 
-import Editor from '../component/modaltext'
+import Editor from '../component/editor'
 import TextComponent from '../component/text'
 import Modal from '../component/Modal'
 import Menu from '../component/menu'
@@ -33,7 +33,7 @@ const TextContainer = ({ autoSave }) => {
 
   return (
     <div className='rootContainer'>
-      <Modal isActive={autoSave.isEditing} inactivate={autoSave.finishEditing} content={<Editor ref={editorRef} handleChange={autoSave.change} value={autoSave.value} />} />
+      <Modal isActive={autoSave.isEditing} inactivate={autoSave.finishEditing} content={<Editor finish={autoSave.finishEditing} ref={editorRef} handleChange={autoSave.change} value={autoSave.value} />} />
       <Modal isActive={showMenu} inactivate={() => setShowMenu(false)} content={menu} />
 
       <div className='CMain'>
