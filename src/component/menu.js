@@ -1,6 +1,6 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
-import firebase from 'firebase/app';
+import { Link } from 'react-router-dom'
+import firebase from 'firebase/app'
 
 export default () => {
   const scriptTags = document.getElementsByTagName('script')
@@ -10,18 +10,19 @@ export default () => {
   const version = filenameArr[0]
 
   const signout = () => {
-    firebase.auth().signOut().then(function() {
-      // Sign-out successful.
-    }).catch(e => {
-      // An error happened.
-    })
+    firebase.auth().signOut()
   }
 
   return (
-    <div>
-      <button className='button is-medium' onClick={signout}>sign out</button>
-      <Link to='/archives/'>archives</Link>
-      <p>{version}</p>
+    <div className='section'>
+      <div className='buttons'>
+        <Link className='button is-light is-fullwidth' to='/archives/'>archived items</Link>
+        <button className='button is-light is-fullwidth' onClick={signout}>sign out</button>
+      </div>
+      <div className='tags has-addons'>
+        <div className='tag'>deployed at</div>
+        <div className='tag is-success'>{version}</div>
+      </div>
     </div>
   )
 }
