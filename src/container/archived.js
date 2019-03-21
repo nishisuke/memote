@@ -32,14 +32,16 @@ export default class Archived extends React.Component {
 
   render() {
     return (
-      <div>
-        <Link to='/'>back</Link>
+      <div className='scrollContainer'>
+      <div className='section'>
+        <Link to='/' className='button'>back</Link>
         { this.state.texts.map(t =>
-          <div key={t.id}>
-            <p>{t.text}<small>{moment.unix(t.archivedAt.seconds).fromNow()}</small></p>
-            <button onClick={this.toggleArchiveFunc(t.id)}>復活</button>
+          <div key={t.id} className='box'>
+            <p>{t.text}</p>
+            <small>{moment.unix(t.archivedAt.seconds).fromNow()}</small><button className='button is-small' onClick={this.toggleArchiveFunc(t.id)}>戻す</button>
           </div>
         ) }
+      </div>
       </div>
     )
   }

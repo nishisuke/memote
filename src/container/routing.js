@@ -16,7 +16,7 @@ export default () => {
 
   return (
     <Router>
-      <div>
+      <div style={{height: '100%'}}>
         <Route path='/' exact component={Texts} />
         <Route path='/archives/' component={Archive} />
       </div>
