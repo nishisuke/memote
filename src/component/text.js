@@ -55,6 +55,8 @@ export default class TextComponent extends React.Component {
       event.preventDefault()
 
       document.getElementById('archiveIcon').classList.remove('is-invisible')
+      document.getElementById('add').classList.add('is-invisible')
+      document.getElementById('menu').classList.add('is-invisible')
       if (event.targetTouches.length == 1) {
         let touch = event.targetTouches[0]
         let pageX = touch.pageX - (this.state.offsetX || 0)
@@ -70,6 +72,8 @@ export default class TextComponent extends React.Component {
 
     ele.addEventListener('touchend', event => {
       document.getElementById('archiveIcon').classList.add('is-invisible')
+      document.getElementById('add').classList.remove('is-invisible')
+      document.getElementById('menu').classList.remove('is-invisible')
       if (event.targetTouches.length == 0) {
         let touch = event.changedTouches[0]
         if (this.shouldArchive(touch)) {
