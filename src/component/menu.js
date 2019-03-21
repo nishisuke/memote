@@ -16,8 +16,8 @@ export default () => {
   return (
     <div className='section'>
       <div className='buttons'>
-        <Link className='button is-light is-fullwidth' to='/archives/'>archived items</Link>
-        <button className='button is-light is-fullwidth' onClick={signout}>sign out</button>
+        <Link className='button is-light is-medium is-fullwidth' to='/archives/'>archived items</Link>
+        <button className='button is-danger is-medium is-fullwidth' onClick={signout}>sign out</button>
       </div>
       <div className='tags has-addons'>
         <div className='tag'>deployed at</div>
