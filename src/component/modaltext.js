@@ -1,11 +1,20 @@
-import React from 'react'
+import React, { useRef, useImperativeHandle, forwardRef } from 'react'
 
 import { colorClass } from './comt'
 
-export default props => {
+const Editor = (props, ref) => {
+  const inputRef = useRef();
+  useImperativeHandle(ref, () => ({
+    focus: () => {
+      inputRef.current.focus();
+    }
+  }))
+
   return (
     <div className={`control `}>
-      <textarea id='ta' onChange={props.handleChange} value={props.value} className={`textarea has-fixed-size `} rows='12' />
+      <textarea ref={inputRef} id='ta' onChange={props.handleChange} value={props.value} className={`textarea has-fixed-size `} rows='12' />
     </div>
   )
 }
+
+export default forwardRef(Editor)

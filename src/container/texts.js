@@ -1,11 +1,11 @@
-import React, { useState, useReducer, useEffect, useMemo, useCallback } from 'react'
+import React, { useLayoutEffect, useRef, useState, useReducer, useEffect, useMemo, useCallback } from 'react'
 
 import db from '../db'
 import useSubscribeTexts from '../hooks/useSubscribeTexts'
 import useAutoSave from '../hooks/useAutoSave'
 import ImmutableText from '../records/ImmutableText'
 
-import OpenedModal from '../component/modaltext'
+import Editor from '../component/modaltext'
 import TextComponent from '../component/text'
 import Modal from '../component/Modal'
 import Menu from '../component/menu'
@@ -22,9 +22,9 @@ const TextContainer = ({ autoSave }) => {
   const texts = useSubscribeTexts()
 
   // editor
-  const editor = useMemo(() => <OpenedModal handleChange={autoSave.change} value={autoSave.value} />, [autoSave.change, autoSave.value])
-  useEffect(() => {
-    if (autoSave.isEditing) document.getElementById('ta').focus()
+  const editorRef = useRef(null)
+  useLayoutEffect(() => {
+    if (autoSave.isEditing) editorRef.current.focus();
   }, [autoSave.isEditing])
 
   // menu
@@ -33,7 +33,7 @@ const TextContainer = ({ autoSave }) => {
 
   return (
     <div className='rootContainer'>
-      <Modal isActive={autoSave.isEditing} inactivate={autoSave.finishEditing} content={editor} />
+      <Modal isActive={autoSave.isEditing} inactivate={autoSave.finishEditing} content={<Editor ref={editorRef} handleChange={autoSave.change} value={autoSave.value} />} />
       <Modal isActive={showMenu} inactivate={() => setShowMenu(false)} content={menu} />
 
       <div className='CMain'>
