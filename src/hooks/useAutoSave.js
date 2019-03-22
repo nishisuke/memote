@@ -55,7 +55,8 @@ export default () => {
   const isEditing = useMemo(() => !(autoSave.statusName === STOPPED_STATUS || autoSave.statusName === STANDBY_STATUS), [autoSave.statusName])
 
   const change = useCallback(e => {
-    if (!isEditing) {
+    if (autoSave.statusName === STANDBY_STATUS) {
+      // STOPPEDはだめ。iphone でキーボードの完了ボタン押すとchangeとfinishが同時くらいに走りそう（予想）
       alert('editing is not started. this may be bug.')
       return
     }
@@ -77,7 +78,7 @@ export default () => {
     }, 1500)
 
     dispatch({ type: SET_SAVING_JOB, timeoutID: timeoutID, editingText: edited })
-  }, [autoSave.timeoutID, isEditing, autoSave.editingText.id])
+  }, [autoSave.timeoutID, autoSave.statusName, autoSave.editingText.id])
 
   useEffect(() => {
     if (autoSave.statusName !== STOPPED_STATUS) return;
