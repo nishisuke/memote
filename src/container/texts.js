@@ -1,25 +1,16 @@
 import React, { useLayoutEffect, useRef, useState, useReducer, useEffect, useMemo, useCallback } from 'react'
 
 import db from '../db'
-import useSubscribeTexts from '../hooks/useSubscribeTexts'
 import useAutoSave from '../hooks/useAutoSave'
 import ImmutableText from '../records/ImmutableText'
 
 import Editor from '../component/editor'
-import TextComponent from '../component/text'
+import TextsComponent from '../component/TextsComponent'
 import Modal from '../component/Modal'
 import Menu from '../component/menu'
 
 export default () => {
-  // なんでtextsとコンポーネント分けたか
-  // textsのレンダーのたびにstatusもリコールされてeffectが走るのを避けるため
   const autoSave = useAutoSave()
-
-  return <TextContainer autoSave={autoSave} />
-}
-
-const TextContainer = ({ autoSave }) => {
-  const texts = useSubscribeTexts()
 
   // editor
   const editorRef = useRef(null)
@@ -37,7 +28,7 @@ const TextContainer = ({ autoSave }) => {
       <Modal isActive={showMenu} inactivate={() => setShowMenu(false)} content={menu} />
 
       <div className='CMain'>
-        <div className='CTexts'>{ texts.map(t => <TextComponent edit={autoSave.startEditing} key={t.id} data={t} />)}</div>
+        <TextsComponent startEditing={autoSave.startEditing} />
         <div className='inputContainer'>
           <div className='fixedActionContainer'>
             <div id='archiveIcon' className='has-text-danger is-invisible'><span className='icon is-large'><i className='fas fa-archive fa-2x'></i></span></div>
