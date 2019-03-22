@@ -42,7 +42,7 @@
     background-color: rgba(255, 255, 255, 0.6);
     height: 28px;
     line-height: 28px;
-    padding-left: 8px;
+    padding-left: 4px;
     overflow: hidden;
   }
   .textlabel.willArchive {
@@ -60,5 +60,9 @@
   .scrollContainer {
     height: 100%;
     overflow-y: scroll;
+  }
+
+  .CEditor {
+    padding: 0 4px;
   }
 }

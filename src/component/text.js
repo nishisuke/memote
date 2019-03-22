@@ -24,10 +24,10 @@ export default class TextComponent extends React.Component {
   }
 
   restrictedPoint(numX, numY) {
-    let maxX = window.innerWidth - 176 // 16 + 160(width)
-    let maxY = window.innerHeight - 44 // 16 + 28(height)
-    let x = numX < 16 ? 16 : (numX > maxX ? maxX : numX )
-    let y = numY < 16 ? 16 : (numY > maxY ? maxY : numY )
+    let maxX = window.innerWidth - 164 // 4 + 160(width)
+    let maxY = window.innerHeight - 32 // 4 + 28(height)
+    let x = numX < 4 ? 4 : (numX > maxX ? maxX : numX )
+    let y = numY < 4 ? 4 : (numY > maxY ? maxY : numY )
     return { pageX: x, pageY: y }
   }
 
