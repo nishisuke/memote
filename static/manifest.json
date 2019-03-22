@@ -1,6 +1,6 @@
 {
-  "short_name": "SBA",
-  "name": "Save brain app",
+  "short_name": "memote",
+  "name": "memo app",
   "display": "standalone",
   "start_url": "/"
 }
