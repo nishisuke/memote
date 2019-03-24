@@ -40,7 +40,7 @@ import ReactDOM from 'react-dom';
 
 import Routing from './container/routing'
 
-ReactDOM.render(<Routing />, document.getElementById('main'))
+ReactDOM.render(<Routing />, document.getElementById('root'))
 
 
 import './main.css'

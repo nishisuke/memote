@@ -12,14 +12,14 @@ export default () => {
     firebase.auth().onAuthStateChanged(user => setSigned(!!user))
   }, [])
 
-  if (!signed) return <div></div>;
+  if (!signed) return '';
 
   return (
     <BrowserRouter>
-      <div style={{height: '100%'}}>
+      <React.Fragment>
         <Route path='/' exact component={Texts} />
         <Route path='/archives/' component={Archive} />
-      </div>
+      </React.Fragment>
     </BrowserRouter>
   )
 }
