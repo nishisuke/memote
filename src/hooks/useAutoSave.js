@@ -18,11 +18,11 @@ const STOPPED_STATUS        = 'STOPPED_STATUS'
 const reducer = (state, action) => {
   switch (action.type) {
     case STANDBY_ACT:    return { ...state, statusName: STANDBY_STATUS }
-    case START_ACT:      return { ...state, statusName: STARTED_STATUS,    editingText: action.text }
+    case START_ACT:      return { ...state, statusName: STARTED_STATUS, editingText: action.text }
     case SET_SAVING_JOB:   return { ...state, statusName: SET_SAVING_JOB_STATUS, timeoutID: action.timeoutID, editingText: action.editingText }
     case SAVE_ACT: return { ...state, statusName: SAVING_STATUS}
     case SUCCESS_SAVING_ACT:      return { ...state, statusName: SAVED_STATUS}
-    case FINISH_ACT:    return { ...state, statusName: STOPPED_STATUS,  prevState: state.statusName                           }
+    case FINISH_ACT:    return { ...state, statusName: STOPPED_STATUS, prevState: state.statusName }
     default: throw new Error();
   }
 }

@@ -16,6 +16,10 @@ export default () => {
 const PC = () => {
   const autoSave = useAutoSave()
 
+  useEffect(() => {
+    autoSave.startEditing(db.newMemo())
+  }, []) // pcの場合最初からediting
+
   // editor
   const editorRef = useRef(null)
   useLayoutEffect(() => {
