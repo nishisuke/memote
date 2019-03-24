@@ -1,4 +1,10 @@
 @media (min-width: 560px) {
+  html, body, #root {
+    width:100vw;
+    height:100%;
+    overflow:hidden;
+  }
+
   .rootContainer {
     height: 100%;
   }
