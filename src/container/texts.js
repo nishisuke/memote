@@ -27,13 +27,15 @@ const PC = () => {
   const menu = useMemo(() => <Menu />, [])
 
   return (
-    <div className='rootContainer'>
+    <React.Fragment>
       <Modal isActive={showMenu} inactivate={() => setShowMenu(false)} content={menu} />
 
       <div className='CMain'>
         <TextsComponent startEditing={autoSave.startEditing} />
         <div className='inputContainer'>
-          <div className='editorContainer'><textarea ref={editorRef} onChange={autoSave.change} value={autoSave.value} /></div>
+          <div className='editorContainer'>
+            <textarea placeholder='hogehoge..' rows='8' className='textarea has-fixed-size editor' ref={editorRef} onChange={autoSave.change} value={autoSave.value} />
+          </div>
           <div className='fixedActionContainer'>
             <div id='archiveIcon' className='has-text-danger is-invisible'><span className='icon is-large'><i className='fas fa-archive fa-2x'></i></span></div>
             <div id='add' className='has-text-primary' onClick={() => autoSave.startEditing(db.newMemo())}><span className='icon is-large'><i className='fas fa-pen fa-2x'></i></span></div>
@@ -41,7 +43,7 @@ const PC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </React.Fragment>
   )
 }
 
