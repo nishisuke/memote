@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 import firebase from 'firebase/app'
 
 import Archive from './archived'
@@ -15,11 +15,11 @@ export default () => {
   if (!signed) return <div></div>;
 
   return (
-    <Router>
+    <BrowserRouter>
       <div style={{height: '100%'}}>
         <Route path='/' exact component={Texts} />
         <Route path='/archives/' component={Archive} />
       </div>
-    </Router>
+    </BrowserRouter>
   )
 }
