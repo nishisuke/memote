@@ -44,7 +44,7 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(['prd']),
     new HtmlWebpackPlugin({
-      template: 'src/index.html',
+      template: 'src/tmpl.html',
     }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css',

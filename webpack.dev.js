@@ -32,7 +32,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'src/index.html',
+      template: 'src/tmpl.html',
     }),
     new ServiceWorkerWebpackPlugin({
       entry: path.join(__dirname, 'src/sw.js'),
