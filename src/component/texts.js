@@ -4,10 +4,10 @@ import db from '../db'
 import useAutoSave from '../hooks/useAutoSave'
 import ImmutableText from '../records/ImmutableText'
 
-import Editor from '../component/editor'
-import TextsComponent from '../component/TextsComponent'
-import Modal from '../component/Modal'
-import Menu from '../component/menu'
+import Editor from './editor'
+import TextsComponent from './TextsComponent'
+import Modal from './Modal'
+import Menu from './menu'
 
 export default () => {
   return window.innerWidth < 560 ? <SP /> : <PC />

@@ -1,14 +1,24 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 import firebase from 'firebase/app';
+import * as firebaseui from 'firebaseui';
+import runtime from 'serviceworker-webpack-plugin/lib/runtime';
+
 import ENV from 'ENV';
+import db from './db'
+
+import Archive from './component/archived'
+import Texts from './component/texts'
+
+import './main.css'
+import 'firebaseui/dist/firebaseui.css'
 
 firebase.initializeApp({
   apiKey: ENV.SBA_NODE_FB_APIKEY,
   authDomain: ENV.SBA_NODE_FB_AUTHDOMAIN,
   projectId: ENV.SBA_NODE_FB_PROJECTID
 });
-
-
-import * as firebaseui from 'firebaseui';
 
 firebase.auth().onAuthStateChanged(user => {
   if (!user) {
@@ -30,25 +40,29 @@ firebase.auth().onAuthStateChanged(user => {
   }
 }, console.error);
 
-
-import db from './db'
 db.setup()
 
+if ('serviceWorker' in navigator) {
+  runtime.register();
+}
 
-import React from 'react';
-import ReactDOM from 'react-dom';
+const Routing = () => {
+  const [signed, setSigned] = React.useState(false);
 
-import Routing from './container/routing'
+  React.useEffect(() => {
+    firebase.auth().onAuthStateChanged(user => setSigned(!!user))
+  }, [])
+
+  if (!signed) return '';
+
+  return (
+    <BrowserRouter>
+      <React.Fragment>
+        <Route path='/' exact component={Texts} />
+        <Route path='/archives/' component={Archive} />
+      </React.Fragment>
+    </BrowserRouter>
+  )
+}
 
 ReactDOM.render(<Routing />, document.getElementById('root'))
-
-
-import './main.css'
-import 'firebaseui/dist/firebaseui.css'
-
-
-import runtime from 'serviceworker-webpack-plugin/lib/runtime';
-
-if ('serviceWorker' in navigator) {
-  const registration = runtime.register();
-}
