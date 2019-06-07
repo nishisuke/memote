@@ -4,6 +4,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import firebase from 'firebase/app';
 import * as firebaseui from 'firebaseui';
 import runtime from 'serviceworker-webpack-plugin/lib/runtime';
+import ReactGA from 'react-ga';
 
 import ENV from 'ENV';
 import db from './db'
@@ -13,6 +14,8 @@ import Texts from './component/texts'
 
 import './main.css'
 import 'firebaseui/dist/firebaseui.css'
+
+const GAID = 'UA-141672362-1'
 
 firebase.initializeApp({
   apiKey: ENV.SBA_NODE_FB_APIKEY,
@@ -52,6 +55,14 @@ const Routing = () => {
   React.useEffect(() => {
     firebase.auth().onAuthStateChanged(user => setSigned(!!user))
   }, [])
+
+  const u = firebase.auth().currentUser
+  const opt = (signed && u) ? { userId: u.uid } : {}
+  ReactGA.initialize(GAID, {
+    debug: ENV.SBA_NODE_DEBUG,
+    titleCase: false,
+    gaOptions: opt,
+  });
 
   if (!signed) return '';
 

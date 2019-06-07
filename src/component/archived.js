@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 
 import React from 'react'
+import ReactGA from 'react-ga';
 import db from '../db'
 
 export default class Archived extends React.Component {
@@ -25,6 +26,7 @@ export default class Archived extends React.Component {
   }
 
   componentDidMount() {
+    ReactGA.pageview('/archived')
     db.fetchArchivedMemos(t => {
       this.setState({texts: [...this.state.texts, t]})
     })
