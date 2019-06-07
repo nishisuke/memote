@@ -5,23 +5,30 @@ import SwipeableViews from 'react-swipeable-views';
 import db from '../../db'
 import useAutoSave from '../../hooks/useAutoSave'
 import ImmutableText from '../../records/ImmutableText'
+import useSubscribeTexts from '../../hooks/useSubscribeTexts'
 
 import Editor from '../editor'
 import TextsComponent from '../TextsComponent'
 import Modal from '../Modal'
 import Menu from '../menu'
-
+import OldMemoListPage from '../OldMemoListPage'
 
 const styles = {
    mainPage: {
      height: '100vh',
    },
-   oldMemoListPage: {
-     height: '100vh',
-   },
+}
+
+const isOld = (day, second) => {
+  if (second < (Date.now() / 1000) - 3600 * 24 * day) {
+    return true
+  } else {
+    return false
+  }
 }
 
 export default () => {
+  const texts = useSubscribeTexts()
   const autoSave = useAutoSave()
 
   // editor
@@ -42,6 +49,9 @@ export default () => {
       label: 'sp'
     });
   }
+  const days = 7
+  const oldTexts = texts.filter(t => isOld(days, t.updatedAt.seconds))
+  const newTexts = texts.filter(t => !isOld(days, t.updatedAt.seconds))
 
   return (
     <React.Fragment>
@@ -50,7 +60,7 @@ export default () => {
 
       <SwipeableViews>
         <div style={{ ...styles.mainPage }}>
-          <TextsComponent startEditing={autoSave.startEditing} />
+          <TextsComponent texts={newTexts} startEditing={autoSave.startEditing} />
           <div className='fixedActionContainer'>
             <div id='archiveIcon' className='has-text-danger is-invisible'>
               <span className='icon is-large'>
@@ -69,8 +79,7 @@ export default () => {
             </div>
           </div>
         </div>
-        <div style={{...styles.oldMemoListPage}}>
-        </div>
+        <OldMemoListPage texts={oldTexts} days={days} />
       </SwipeableViews>
     </React.Fragment>
   )
