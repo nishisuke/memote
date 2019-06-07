@@ -56,13 +56,14 @@ const Routing = () => {
     firebase.auth().onAuthStateChanged(user => setSigned(!!user))
   }, [])
 
-  const u = firebase.auth().currentUser
-  const opt = (signed && u) ? { userId: u.uid } : {}
   ReactGA.initialize(GAID, {
     debug: ENV.SBA_NODE_DEBUG,
     titleCase: false,
-    gaOptions: opt,
   });
+  const u = firebase.auth().currentUser
+  if (signed && u) {
+    ReactGA.set({ userId: u.uid });
+  }
 
   if (!signed) return '';
 
