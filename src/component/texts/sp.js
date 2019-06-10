@@ -60,8 +60,17 @@ export default () => {
     });
   }
   const days = 7
-  const oldTexts = texts.filter(t => isOld(days, t.updatedAt.seconds))
-  const newTexts = texts.filter(t => !isOld(days, t.updatedAt.seconds))
+
+  const noAutoDeleteTexts = texts.filter(t => {
+    if (!t.autoDeleteAt) return true;
+    return Date.now() < t.autoDeleteAt
+  })
+  const autoDeleted = texts.filter(t => {
+    if (!t.autoDeleteAt) return false;
+    return t.autoDeleteAt <= Date.now()
+  })
+  const oldTexts = noAutoDeleteTexts.filter(t => isOld(days, t.updatedAt.seconds))
+  const newTexts = noAutoDeleteTexts.filter(t => !isOld(days, t.updatedAt.seconds))
 
   return (
     <React.Fragment>
