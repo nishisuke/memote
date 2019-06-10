@@ -71,6 +71,16 @@ class FirestoreDB {
     })
   }
 
+  newAutoDeleteMemo() {
+    const s = this.firestore.collection('texts').doc()
+    return new ImmutableText({
+      id: s.id,
+      pageXRate: 0.3 + (Math.random() / 20),
+      pageYRate: 0.7 + (Math.random() / 20),
+      autoDeleteAt: Date.now() + 3 * 24 * 3600 * 1000,
+    })
+  }
+
   activateMemo(id) {
     this.firestore.collection('texts').doc(id).update({ archived: false, archivedAt: new Date(2099, 3) })
   }

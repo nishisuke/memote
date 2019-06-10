@@ -42,6 +42,15 @@ export default () => {
   const [showMenu, setShowMenu] = React.useState(false)
   const menu = React.useMemo(() => <Menu />, [])
 
+  const onCreateAutoDelete = () => {
+    autoSave.startEditing(db.newAutoDeleteMemo())
+    ReactGA.event({
+      category: 'memo',
+      action: 'new-auto-delete',
+      label: 'sp'
+    });
+  }
+
   const onCreate = () => {
     autoSave.startEditing(db.newMemo())
     ReactGA.event({
@@ -70,6 +79,11 @@ export default () => {
             <div id='archiveIcon' className='has-text-danger is-invisible'>
               <span className='icon is-large'>
                 <i className='fas fa-archive fa-2x'></i>
+              </span>
+            </div>
+            <div id='add' className='has-text-secondary' onClick={onCreateAutoDelete}>
+              <span className='icon is-large'>
+                <i className='fas fa-pen fa-2x'></i>
               </span>
             </div>
             <div id='add' className='has-text-primary' onClick={onCreate}>

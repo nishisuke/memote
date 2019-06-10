@@ -11,6 +11,7 @@ const TextRecord = Record({
   archivedAt: defaultArchivedAt.getTime(),
   pageXRate: null,
   pageYRate: null,
+  autoDeleteAt: null,
 })
 
 export default class ImmutableText extends TextRecord {
