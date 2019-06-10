@@ -60,8 +60,8 @@ export default () => {
       <Modal isActive={showMenu} inactivate={() => setShowMenu(false)} content={menu} />
 
       <div className="mytabs">
-        <div className={ tabs === 0 ? 'mytab selected' : 'mytab' }>直近</div>
-        <div className={ tabs === 1 ? 'mytab selected' : 'mytab' }>直近以外</div>
+        <div onClick={() => setTabs(0)} className={ tabs === 0 ? 'mytab' : 'mytab unselected' }>直近</div>
+        <div onClick={() => setTabs(1)} className={ tabs === 1 ? 'mytab' : 'mytab unselected' }>直近以外</div>
       </div>
       <SwipeableViews containerStyle={styles.mainPage} index={tabs} onChangeIndex={i => setTabs(i)}>
         <div>

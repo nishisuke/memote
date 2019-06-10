@@ -88,9 +88,8 @@
     height: 40px;
     line-height: 40px;
   }
-  .mytab.selected {
-    color: white;
-    border-bottom: white solid 1px;
+  .mytab.unselected {
+    background-color: rgba(255, 255, 255, 0.6);
   }
   .mytabs {
     display: flex;
