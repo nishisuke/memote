@@ -15,7 +15,7 @@ import OldMemoListPage from '../OldMemoListPage'
 
 const styles = {
    mainPage: {
-     height: '100vh',
+     height: 'calc(100vh - 40px)',
    },
 }
 
@@ -59,12 +59,12 @@ export default () => {
       <Modal isActive={autoSave.isEditing} inactivate={autoSave.finishEditing} content={<Editor finish={autoSave.finishEditing} ref={editorRef} handleChange={autoSave.change} value={autoSave.value} />} />
       <Modal isActive={showMenu} inactivate={() => setShowMenu(false)} content={menu} />
 
-      <div className="tabs">
-        <div className={ tabs === 0 ? 'tab selected' : 'tab' }>直近</div>
-        <div className={ tabs === 1 ? 'tab selected' : 'tab' }>直近以外</div>
+      <div className="mytabs">
+        <div className={ tabs === 0 ? 'mytab selected' : 'mytab' }>直近</div>
+        <div className={ tabs === 1 ? 'mytab selected' : 'mytab' }>直近以外</div>
       </div>
-      <SwipeableViews index={tabs} onChangeIndex={i => setTabs(i)}>
-        <div style={{ ...styles.mainPage }}>
+      <SwipeableViews containerStyle={styles.mainPage} index={tabs} onChangeIndex={i => setTabs(i)}>
+        <div>
           <TextsComponent texts={newTexts} startEditing={autoSave.startEditing} />
           <div className='fixedActionContainer'>
             <div id='archiveIcon' className='has-text-danger is-invisible'>

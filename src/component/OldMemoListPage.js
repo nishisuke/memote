@@ -4,7 +4,7 @@ import useSubscribeTexts from '../hooks/useSubscribeTexts'
 
 const styles = {
    oldMemoListPage: {
-     height: '100vh',
+     height: 'calc(100vh - 40px)',
      'overflowY': 'scroll',
      padding: '8px 4px',
   },
