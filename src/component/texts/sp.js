@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactGA from 'react-ga'
 
 import db from '../../db'
 import useAutoSave from '../../hooks/useAutoSave'
@@ -22,6 +23,15 @@ export default () => {
   const [showMenu, setShowMenu] = React.useState(false)
   const menu = React.useMemo(() => <Menu />, [])
 
+  const onCreate = () => {
+    autoSave.startEditing(db.newMemo())
+    ReactGA.event({
+      category: 'memo',
+      action: 'new',
+      label: 'sp'
+    });
+  }
+
   return (
     <React.Fragment>
       <Modal isActive={autoSave.isEditing} inactivate={autoSave.finishEditing} content={<Editor finish={autoSave.finishEditing} ref={editorRef} handleChange={autoSave.change} value={autoSave.value} />} />
@@ -30,7 +40,7 @@ export default () => {
       <TextsComponent startEditing={autoSave.startEditing} />
       <div className='fixedActionContainer'>
         <div id='archiveIcon' className='has-text-danger is-invisible'><span className='icon is-large'><i className='fas fa-archive fa-2x'></i></span></div>
-        <div id='add' className='has-text-primary' onClick={() => autoSave.startEditing(db.newMemo())}><span className='icon is-large'><i className='fas fa-pen fa-2x'></i></span></div>
+        <div id='add' className='has-text-primary' onClick={onCreate}><span className='icon is-large'><i className='fas fa-pen fa-2x'></i></span></div>
         <div id='menu' onClick={() => setShowMenu(true)}><span className='icon is-large'><i className='fas fa-bars fa-2x'></i></span></div>
       </div>
     </React.Fragment>
