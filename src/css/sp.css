@@ -81,4 +81,19 @@
   .old-memo:not(:last-child) {
     margin-bottom: 8px;
   }
+
+  .tab {
+    flex: 1;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+  }
+  .tab.selected {
+    color: white;
+    border-bottom: white solid 1px;
+  }
+  .tabs {
+    display: flex;
+    height: 40px;
+  }
 }

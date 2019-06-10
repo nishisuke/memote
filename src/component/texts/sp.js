@@ -30,6 +30,7 @@ const isOld = (day, second) => {
 export default () => {
   const texts = useSubscribeTexts()
   const autoSave = useAutoSave()
+  const [tabs, setTabs] = React.useState(0)
 
   // editor
   const editorRef = React.useRef(null)
@@ -58,7 +59,11 @@ export default () => {
       <Modal isActive={autoSave.isEditing} inactivate={autoSave.finishEditing} content={<Editor finish={autoSave.finishEditing} ref={editorRef} handleChange={autoSave.change} value={autoSave.value} />} />
       <Modal isActive={showMenu} inactivate={() => setShowMenu(false)} content={menu} />
 
-      <SwipeableViews>
+      <div className="tabs">
+        <div className={ tabs === 0 ? 'tab selected' : 'tab' }>直近</div>
+        <div className={ tabs === 1 ? 'tab selected' : 'tab' }>直近以外</div>
+      </div>
+      <SwipeableViews index={tabs} onChangeIndex={i => setTabs(i)}>
         <div style={{ ...styles.mainPage }}>
           <TextsComponent texts={newTexts} startEditing={autoSave.startEditing} />
           <div className='fixedActionContainer'>
