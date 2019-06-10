@@ -6,16 +6,16 @@ const defaultArchivedAt = new Date(2099, 3);
 const TextRecord = Record({
   id: null,
   text: '',
-  updatedAt: defaultUpdatedAt,
+  updatedAt: defaultUpdatedAt.getTime(),
   archived: false,
-  archivedAt: defaultArchivedAt,
+  archivedAt: defaultArchivedAt.getTime(),
   pageXRate: null,
   pageYRate: null,
 })
 
 export default class ImmutableText extends TextRecord {
   getEdited(text) {
-    return this.merge({ text: text, updatedAt: new Date() })
+    return this.merge({ text: text, updatedAt: Date.now() })
   }
 
   storeObject(userID) {
