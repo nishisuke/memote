@@ -79,7 +79,7 @@ export default () => {
             </div>
           </div>
         </div>
-        <OldMemoListPage texts={oldTexts} days={days} />
+        <OldMemoListPage texts={oldTexts} edit={autoSave.startEditing} />
       </SwipeableViews>
     </React.Fragment>
   )
