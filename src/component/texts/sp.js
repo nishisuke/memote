@@ -81,7 +81,7 @@ export default () => {
       <div className="mytabs">
         <div onClick={() => setTabs(0)} className={ tabs === 0 ? 'mytab' : 'mytab unselected' }>直近</div>
         <div onClick={() => setTabs(1)} className={ tabs === 1 ? 'mytab' : 'mytab unselected' }>直近以外</div>
-        <div onClick={() => setTabs(2)} className={ tabs === 2 ? 'mytab' : 'mytab unselected' }>自動削除済</div>
+        <div onClick={() => setTabs(2)} className={ tabs === 2 ? 'mytab aut-del' : 'mytab aut-del unselected' }>自動削除済</div>
       </div>
       <SwipeableViews containerStyle={styles.mainPage} index={tabs} onChangeIndex={i => setTabs(i)}>
         <div>
@@ -92,9 +92,13 @@ export default () => {
                 <i className='fas fa-archive fa-2x'></i>
               </span>
             </div>
-            <div id='add' className='has-text-secondary' onClick={onCreateAutoDelete}>
+            <div id='add' className='pink-button' onClick={onCreateAutoDelete}>
               <span className='icon is-large'>
                 <i className='fas fa-pen fa-2x'></i>
+              </span>
+              <br />
+              <span className="font-small">
+                三日で消える
               </span>
             </div>
             <div id='add' className='has-text-primary' onClick={onCreate}>
