@@ -12,6 +12,7 @@ import TextsComponent from '../TextsComponent'
 import Modal from '../Modal'
 import Menu from '../menu'
 import OldMemoListPage from '../OldMemoListPage'
+import AutoDeletedMemoListPage from '../AutoDeletedMemoListPage'
 
 const styles = {
    mainPage: {
@@ -80,6 +81,7 @@ export default () => {
       <div className="mytabs">
         <div onClick={() => setTabs(0)} className={ tabs === 0 ? 'mytab' : 'mytab unselected' }>直近</div>
         <div onClick={() => setTabs(1)} className={ tabs === 1 ? 'mytab' : 'mytab unselected' }>直近以外</div>
+        <div onClick={() => setTabs(2)} className={ tabs === 2 ? 'mytab' : 'mytab unselected' }>自動削除済</div>
       </div>
       <SwipeableViews containerStyle={styles.mainPage} index={tabs} onChangeIndex={i => setTabs(i)}>
         <div>
@@ -108,6 +110,7 @@ export default () => {
           </div>
         </div>
         <OldMemoListPage texts={oldTexts} edit={autoSave.startEditing} />
+        <AutoDeletedMemoListPage texts={autoDeleted} />
       </SwipeableViews>
     </React.Fragment>
   )

@@ -1,7 +1,7 @@
 import React from 'react'
 
 const styles = {
-   oldMemoListPage: {
+   autoDeletedPage: {
      height: 'calc(100vh - 40px)',
      'overflowY': 'scroll',
      padding: '8px 4px',
@@ -10,10 +10,10 @@ const styles = {
 
 export default ({ texts, edit }) => {
   return (
-    <div style={{...styles.oldMemoListPage}}>
+    <div style={{...styles.autoDeletedPage }}>
       { texts.map(t => {
         return (
-          <div key={t.id} className="old-memo" onClick={() => edit(t)}>
+          <div key={t.id} className="auto-deleted-memo">
             { t.text }
           </div>
         )
