@@ -91,8 +91,9 @@ export default class TextComponent extends React.Component {
   }
 
   render() {
+    const autoDelClassName = this.props.data.autoDeleteAt ? 'auto-del' : ''
     return (
-      <div style={{ left: this.state.pageX + 'px', top: this.state.pageY + 'px' }} className='moveabs textlabel is-size-7' onClick={this.hoge} id={this.props.data.id}>
+      <div style={{ left: this.state.pageX + 'px', top: this.state.pageY + 'px' }} className={`${autoDelClassName} moveabs textlabel is-size-7` } onClick={this.hoge} id={this.props.data.id}>
       {this.props.data.text.split('\n')[0]}
       </div>
     )

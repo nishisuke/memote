@@ -12,6 +12,7 @@ import TextsComponent from '../TextsComponent'
 import Modal from '../Modal'
 import Menu from '../menu'
 import OldMemoListPage from '../OldMemoListPage'
+import AutoDeletedMemoListPage from '../AutoDeletedMemoListPage'
 
 const styles = {
    mainPage: {
@@ -42,6 +43,15 @@ export default () => {
   const [showMenu, setShowMenu] = React.useState(false)
   const menu = React.useMemo(() => <Menu />, [])
 
+  const onCreateAutoDelete = () => {
+    autoSave.startEditing(db.newAutoDeleteMemo())
+    ReactGA.event({
+      category: 'memo',
+      action: 'new-auto-delete',
+      label: 'sp'
+    });
+  }
+
   const onCreate = () => {
     autoSave.startEditing(db.newMemo())
     ReactGA.event({
@@ -51,8 +61,17 @@ export default () => {
     });
   }
   const days = 7
-  const oldTexts = texts.filter(t => isOld(days, t.updatedAt.seconds))
-  const newTexts = texts.filter(t => !isOld(days, t.updatedAt.seconds))
+
+  const noAutoDeleteTexts = texts.filter(t => {
+    if (!t.autoDeleteAt) return true;
+    return Date.now() < t.autoDeleteAt
+  })
+  const autoDeleted = texts.filter(t => {
+    if (!t.autoDeleteAt) return false;
+    return t.autoDeleteAt <= Date.now()
+  })
+  const oldTexts = noAutoDeleteTexts.filter(t => isOld(days, t.updatedAt.seconds))
+  const newTexts = noAutoDeleteTexts.filter(t => !isOld(days, t.updatedAt.seconds))
 
   return (
     <React.Fragment>
@@ -62,6 +81,7 @@ export default () => {
       <div className="mytabs">
         <div onClick={() => setTabs(0)} className={ tabs === 0 ? 'mytab' : 'mytab unselected' }>直近</div>
         <div onClick={() => setTabs(1)} className={ tabs === 1 ? 'mytab' : 'mytab unselected' }>直近以外</div>
+        <div onClick={() => setTabs(2)} className={ tabs === 2 ? 'mytab aut-del' : 'mytab aut-del unselected' }>自動削除済</div>
       </div>
       <SwipeableViews containerStyle={styles.mainPage} index={tabs} onChangeIndex={i => setTabs(i)}>
         <div>
@@ -70,6 +90,15 @@ export default () => {
             <div id='archiveIcon' className='has-text-danger is-invisible'>
               <span className='icon is-large'>
                 <i className='fas fa-archive fa-2x'></i>
+              </span>
+            </div>
+            <div id='add' className='pink-button' onClick={onCreateAutoDelete}>
+              <span className='icon is-large'>
+                <i className='fas fa-pen fa-2x'></i>
+              </span>
+              <br />
+              <span className="font-small">
+                三日で消える
               </span>
             </div>
             <div id='add' className='has-text-primary' onClick={onCreate}>
@@ -85,6 +114,7 @@ export default () => {
           </div>
         </div>
         <OldMemoListPage texts={oldTexts} edit={autoSave.startEditing} />
+        <AutoDeletedMemoListPage texts={autoDeleted} />
       </SwipeableViews>
     </React.Fragment>
   )

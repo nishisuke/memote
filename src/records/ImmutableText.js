@@ -11,11 +11,16 @@ const TextRecord = Record({
   archivedAt: defaultArchivedAt.getTime(),
   pageXRate: null,
   pageYRate: null,
+  autoDeleteAt: null,
 })
 
 export default class ImmutableText extends TextRecord {
   getEdited(text) {
-    return this.merge({ text: text, updatedAt: Date.now() })
+    if (this.autoDeleteAt) {
+      return this.merge({ text: text, updatedAt: Date.now(), autoDeleteAt: Date.now() + 3 * 24 * 3600 * 1000 })
+    } else {
+      return this.merge({ text: text, updatedAt: Date.now() })
+    }
   }
 
   storeObject(userID) {
