@@ -54,6 +54,9 @@
   .textlabel.willArchive {
     background-color: rgba(255, 0, 0, 0.6);
   }
+  .textlabel.auto-del {
+    background-color: rgba(255, 0, 144, 0.5);
+  }
 
   .editor {
     display: none;
