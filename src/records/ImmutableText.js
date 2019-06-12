@@ -37,4 +37,19 @@ export default class ImmutableText extends TextRecord {
     const d = doc.data()
     return this.merge({ ...d, id: doc.id, text: d.string })
   }
+
+  headText() {
+    let truncated = false
+    const arr = this.text.split('\n')
+    const noEmpty = arr.filter(t => t)
+    const head = noEmpty[0]
+    if (noEmpty.length > 1) {
+      truncated = true
+    }
+    if (truncated) {
+      return `${head} ...`
+    } else {
+      return head
+    }
+  }
 }
