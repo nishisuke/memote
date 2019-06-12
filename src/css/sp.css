@@ -1,120 +1,118 @@
-@media (max-width: 559px) {
-  html, body, #root {
-    width:100vw;
-    height:100%;
-    overflow:hidden;
-  }
+html, body, #root {
+  width:100vw;
+  height:100%;
+  overflow:hidden;
+}
 
-  .fixedActionContainer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    text-align: center;
-    padding: 16px 32px;
-    display: flex;
-    justify-content: space-between;
-  }
+.fixedActionContainer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  padding: 16px 32px;
+  display: flex;
+  justify-content: space-between;
+}
 
-  .fixedActionContainer div {
-    width: 80px;
-  }
+.fixedActionContainer div {
+  width: 80px;
+}
 
-  .moveabs {
-    position: fixed;
-    z-index: 1;
-  }
+.moveabs {
+  position: fixed;
+  z-index: 1;
+}
 
-  .ani {
-    animation: bounce 1s ease-out 0s;
-  }
+.ani {
+  animation: bounce 1s ease-out 0s;
+}
 
-  @keyframes bounce {
-    0% {
-      right: 10px;
-      left: 10px;
-      top: 10px;
-      bottom: 10px;
-    }
-    100% {
-      right: 180px;
-      left: 100px;
-      top: 400px;
-      bottom: 200px;
-    }
+@keyframes bounce {
+  0% {
+    right: 10px;
+    left: 10px;
+    top: 10px;
+    bottom: 10px;
   }
+  100% {
+    right: 180px;
+    left: 100px;
+    top: 400px;
+    bottom: 200px;
+  }
+}
 
-  .textlabel {
-    width: 160px;
-    background-color: rgba(255, 255, 255, 0.6);
-    height: 28px;
-    line-height: 28px;
-    padding-left: 4px;
-    overflow: hidden;
-  }
-  .textlabel.willArchive {
-    background-color: rgba(255, 0, 0, 0.6);
-  }
-  .textlabel.auto-del {
-    background-color: rgba(255, 0, 144, 0.5);
-  }
-  .pink-button {
-    color: rgba(255, 0, 144, 0.5);
-  }
+.textlabel {
+  width: 160px;
+  background-color: rgba(255, 255, 255, 0.6);
+  height: 28px;
+  line-height: 28px;
+  padding-left: 4px;
+  overflow: hidden;
+}
+.textlabel.willArchive {
+  background-color: rgba(255, 0, 0, 0.6);
+}
+.textlabel.auto-del {
+  background-color: rgba(255, 0, 144, 0.5);
+}
+.pink-button {
+  color: rgba(255, 0, 144, 0.5);
+}
 
-  .editor {
-    display: none;
-  }
+.editor {
+  display: none;
+}
 
-  .none {
-    display: none;
-  }
+.none {
+  display: none;
+}
 
-  .scrollContainer {
-    height: 100%;
-    overflow-y: scroll;
-  }
+.scrollContainer {
+  height: 100%;
+  overflow-y: scroll;
+}
 
-  .CEditor {
-    padding: 0 4px;
-  }
-  .old-memo {
-    background-color: rgba(255, 255, 255, 0.6);
-    height: 36px;
-    line-height: 36px;
-    padding-left: 4px;
-    overflow: hidden;
-  }
-  .old-memo:not(:last-child) {
-    margin-bottom: 8px;
-  }
-  .auto-deleted-memo {
-    background-color: rgba(255, 0, 144, 0.5);
-    height: 36px;
-    line-height: 36px;
-    padding-left: 4px;
-    overflow: hidden;
-  }
-  .auto-deleted-memo:not(:last-child) {
-    margin-bottom: 8px;
-  }
+.CEditor {
+  padding: 0 4px;
+}
+.old-memo {
+  background-color: rgba(255, 255, 255, 0.6);
+  height: 36px;
+  line-height: 36px;
+  padding-left: 4px;
+  overflow: hidden;
+}
+.old-memo:not(:last-child) {
+  margin-bottom: 8px;
+}
+.auto-deleted-memo {
+  background-color: rgba(255, 0, 144, 0.5);
+  height: 36px;
+  line-height: 36px;
+  padding-left: 4px;
+  overflow: hidden;
+}
+.auto-deleted-memo:not(:last-child) {
+  margin-bottom: 8px;
+}
 
-  .mytab {
-    flex: 1;
-    text-align: center;
-    height: 40px;
-    line-height: 40px;
-  }
-  .mytab.aut-del {
-    color: rgba(255, 0, 144, 0.5);
-  }
-  .mytab.unselected {
-    background-color: rgba(255, 255, 255, 0.6);
-  }
-  .mytabs {
-    display: flex;
-    height: 40px;
-  }
-  .font-small {
-    font-size: 12px;
-  }
+.mytab {
+  flex: 1;
+  text-align: center;
+  height: 40px;
+  line-height: 40px;
+}
+.mytab.aut-del {
+  color: rgba(255, 0, 144, 0.5);
+}
+.mytab.unselected {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+.mytabs {
+  display: flex;
+  height: 40px;
+}
+.font-small {
+  font-size: 12px;
 }

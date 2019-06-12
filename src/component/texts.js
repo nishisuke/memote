@@ -2,17 +2,17 @@ import React from 'react'
 import ReactGA from 'react-ga'
 import SwipeableViews from 'react-swipeable-views';
 
-import db from '../../db'
-import useAutoSave from '../../hooks/useAutoSave'
-import ImmutableText from '../../records/ImmutableText'
-import useSubscribeTexts from '../../hooks/useSubscribeTexts'
+import db from '../db'
+import useAutoSave from '../hooks/useAutoSave'
+import ImmutableText from '../records/ImmutableText'
+import useSubscribeTexts from '../hooks/useSubscribeTexts'
 
-import Editor from '../editor'
-import TextsComponent from '../TextsComponent'
-import Modal from '../Modal'
-import Menu from '../menu'
-import OldMemoListPage from '../OldMemoListPage'
-import AutoDeletedMemoListPage from '../AutoDeletedMemoListPage'
+import Editor from './editor'
+import TextsComponent from './TextsComponent'
+import Modal from './Modal'
+import Menu from './menu'
+import OldMemoListPage from './OldMemoListPage'
+import AutoDeletedMemoListPage from './AutoDeletedMemoListPage'
 
 const styles = {
    mainPage: {
@@ -29,6 +29,10 @@ const isOld = (day, second) => {
 }
 
 export default () => {
+  React.useEffect(() => {
+    ReactGA.pageview('/texts')
+  }, [])
+
   const texts = useSubscribeTexts()
   const autoSave = useAutoSave()
   const [tabs, setTabs] = React.useState(0)
