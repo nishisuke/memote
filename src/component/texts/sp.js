@@ -32,6 +32,7 @@ export default () => {
   const texts = useSubscribeTexts()
   const autoSave = useAutoSave()
   const [tabs, setTabs] = React.useState(0)
+  const [slidable, setSlidable] = React.useState(true)
 
   // editor
   const editorRef = React.useRef(null)
@@ -83,9 +84,9 @@ export default () => {
         <div onClick={() => setTabs(1)} className={ tabs === 1 ? 'mytab' : 'mytab unselected' }>直近以外</div>
         <div onClick={() => setTabs(2)} className={ tabs === 2 ? 'mytab aut-del' : 'mytab aut-del unselected' }>自動削除済</div>
       </div>
-      <SwipeableViews containerStyle={styles.mainPage} index={tabs} onChangeIndex={i => setTabs(i)}>
+      <SwipeableViews disabled={!slidable} containerStyle={styles.mainPage} index={tabs} onChangeIndex={i => setTabs(i)}>
         <div>
-          <TextsComponent texts={newTexts} startEditing={autoSave.startEditing} />
+          <TextsComponent setSlidable={setSlidable} texts={newTexts} startEditing={autoSave.startEditing} />
           <div className='fixedActionContainer'>
             <div id='archiveIcon' className='has-text-danger is-invisible'>
               <span className='icon is-large'>

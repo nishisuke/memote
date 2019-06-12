@@ -44,6 +44,7 @@ export default class TextComponent extends React.Component {
   componentDidMount() {
     let ele = document.getElementById(this.props.data.id)
     ele.addEventListener('touchstart', event => {
+      this.props.setSlidable(false)
       if (event.targetTouches.length == 1) {
         let touch = event.targetTouches[0]
         this.setState({ offsetX: touch.pageX - this.state.pageX, offsetY: touch.pageY - this.state.pageY })
@@ -71,6 +72,7 @@ export default class TextComponent extends React.Component {
     }, { passive: false })
 
     ele.addEventListener('touchend', event => {
+      this.props.setSlidable(true)
       document.getElementById('archiveIcon').classList.add('is-invisible')
       document.getElementById('add').classList.remove('is-invisible')
       document.getElementById('menu').classList.remove('is-invisible')
