@@ -1,6 +1,20 @@
 import React from 'react'
 import db from '../db';
 
+const restrictedPoint = (numX, numY) => {
+  let maxX = window.innerWidth - 164 // 4 + 160(width)
+  let maxY = window.innerHeight - 32 // 4 + 28(height)
+  let x = numX < 4 ? 4 : (numX > maxX ? maxX : numX )
+  let y = numY < 4 ? 4 : (numY > maxY ? maxY : numY )
+  return { pageX: x, pageY: y }
+}
+
+const shouldArchive = (touch, state) => {
+  let left = touch.pageX - (state.offsetX || 0)
+  let bottom = touch.pageY - (state.offsetY || 0) + 28
+  return (left < 96 + ((window.innerWidth - 248) / 6) && window.innerHeight - bottom < 72)
+}
+
 export default class TextComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -13,32 +27,6 @@ export default class TextComponent extends React.Component {
       pageY: y,
     };
 
-    this.archive = this.archive.bind(this);
-    this.hoge = this.hoge.bind(this);
-    this.storePoint = this.storePoint.bind(this);
-    this.shouldArchive = this.shouldArchive.bind(this);
-  }
-
-  hoge() {
-    this.props.edit(this.props.data)
-  }
-
-  restrictedPoint(numX, numY) {
-    let maxX = window.innerWidth - 164 // 4 + 160(width)
-    let maxY = window.innerHeight - 32 // 4 + 28(height)
-    let x = numX < 4 ? 4 : (numX > maxX ? maxX : numX )
-    let y = numY < 4 ? 4 : (numY > maxY ? maxY : numY )
-    return { pageX: x, pageY: y }
-  }
-
-  archive() {
-    db.archiveMemo(this.props.data.id)
-  }
-
-  shouldArchive(touch) {
-    let left = touch.pageX - (this.state.offsetX || 0)
-    let bottom = touch.pageY - (this.state.offsetY || 0) + 28
-    return (left < 96 + ((window.innerWidth - 248) / 6) && window.innerHeight - bottom < 72)
   }
 
   componentDidMount() {
@@ -62,8 +50,8 @@ export default class TextComponent extends React.Component {
         let touch = event.targetTouches[0]
         let pageX = touch.pageX - (this.state.offsetX || 0)
         let pageY = touch.pageY - (this.state.offsetY || 0)
-        this.setState(this.restrictedPoint(pageX, pageY))
-        if (this.shouldArchive(touch)) {
+        this.setState(restrictedPoint(pageX, pageY))
+        if (shouldArchive(touch, this.state)) {
           ele.classList.add('willArchive')
         } else {
           ele.classList.remove('willArchive')
@@ -78,24 +66,20 @@ export default class TextComponent extends React.Component {
       document.getElementById('menu').classList.remove('is-invisible')
       if (event.targetTouches.length == 0) {
         let touch = event.changedTouches[0]
-        if (this.shouldArchive(touch)) {
-          this.archive()
+        if (shouldArchive(touch, this.state)) {
+          db.archiveMemo(this.props.data.id)
         } else {
-          this.storePoint()
+          db.updatePoint(this.props.data.id, this.state.pageX / window.innerWidth, this.state.pageY / window.innerHeight)
         }
       }
       return false
     }, { passive: false })
   }
 
-  storePoint() {
-    db.updatePoint(this.props.data.id, this.state.pageX / window.innerWidth, this.state.pageY / window.innerHeight)
-  }
-
   render() {
     const autoDelClassName = this.props.data.autoDeleteAt ? 'auto-del' : ''
     return (
-      <div style={{ left: this.state.pageX + 'px', top: this.state.pageY + 'px' }} className={`${autoDelClassName} moveabs textlabel is-size-7` } onClick={this.hoge} id={this.props.data.id}>
+      <div style={{ left: this.state.pageX + 'px', top: this.state.pageY + 'px' }} className={`${autoDelClassName} moveabs textlabel is-size-7` } onClick={() => this.props.edit(this.props.data)} id={this.props.data.id}>
       { this.props.data.headText() }
       </div>
     )
