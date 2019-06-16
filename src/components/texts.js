@@ -77,6 +77,7 @@ export default () => {
   })
   const oldTexts = noAutoDeleteTexts.filter(t => isOld(days, t.updatedAt.seconds))
   const newTexts = noAutoDeleteTexts.filter(t => !isOld(days, t.updatedAt.seconds))
+  const invisibleClassName = slidable ? '' : 'is-invisible'
 
   return (
     <React.Fragment>
@@ -92,12 +93,12 @@ export default () => {
         <div>
           <TextsComponent setSlidable={setSlidable} texts={newTexts} startEditing={autoSave.startEditing} />
           <div className='fixedActionContainer'>
-            <div id='archiveIcon' className='has-text-danger is-invisible'>
+            <div id='archiveIcon' className={`has-text-danger ${slidable ? 'is-invisible' : ''}`}>
               <span className='icon is-large'>
                 <i className='fas fa-archive fa-2x'></i>
               </span>
             </div>
-            <div id='add' className='pink-button' onClick={onCreateAutoDelete}>
+            <div id='add-auto-del' className={`${invisibleClassName} pink-button`} onClick={onCreateAutoDelete}>
               <span className='icon is-large'>
                 <i className='fas fa-pen fa-2x'></i>
               </span>
@@ -106,12 +107,12 @@ export default () => {
                 三日で消える
               </span>
             </div>
-            <div id='add' className='has-text-primary' onClick={onCreate}>
+            <div id='add' className={`${invisibleClassName} has-text-primary`} onClick={onCreate}>
               <span className='icon is-large'>
                 <i className='fas fa-pen fa-2x'></i>
               </span>
             </div>
-            <div id='menu' onClick={() => setShowMenu(true)}>
+            <div id='menu' className={`${invisibleClassName}`} onClick={() => setShowMenu(true)}>
               <span className='icon is-large'>
                 <i className='fas fa-bars fa-2x'></i>
               </span>

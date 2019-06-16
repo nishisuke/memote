@@ -38,10 +38,6 @@ export default (props) => {
     return false
   }
   const onTouchMove = event => {
-    document.getElementById('archiveIcon').classList.remove('is-invisible')
-    document.getElementById('add').classList.add('is-invisible')
-    document.getElementById('menu').classList.add('is-invisible')
-
     if (event.targetTouches.length != 1) return false
 
     let touch = event.targetTouches[0]
@@ -54,9 +50,6 @@ export default (props) => {
   }
   const onTouchEnd = event => {
     props.setSlidable(true)
-    document.getElementById('archiveIcon').classList.add('is-invisible')
-    document.getElementById('add').classList.remove('is-invisible')
-    document.getElementById('menu').classList.remove('is-invisible')
     if (event.targetTouches.length != 0) return false
 
     let touch = event.changedTouches[0]
