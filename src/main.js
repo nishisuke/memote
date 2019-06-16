@@ -9,8 +9,8 @@ import ReactGA from 'react-ga';
 import ENV from 'ENV';
 import db from './db'
 
-import Archive from './component/archived'
-import Texts from './component/texts'
+import Archive from './components/archived'
+import Texts from './components/texts'
 
 import './main.css'
 import 'firebaseui/dist/firebaseui.css'
